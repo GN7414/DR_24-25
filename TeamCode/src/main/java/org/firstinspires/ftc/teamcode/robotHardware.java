@@ -80,8 +80,8 @@ public class robotHardware extends LinearOpMode
 
     //PID general Variables
 
-    public static double GeneralF = 0.001; // = 32767 / maxV      (do not edit from this number)
-    public static double GeneralP = 0.0025; // = 0.1 * F           (raise till real's apex touches Var apex)
+    public static double GeneralF = 0.25; // = 32767 / maxV      (do not edit from this number)
+    public static double GeneralP = 0.02; // = 0.1 * F           (raise till real's apex touches Var apex)
     public static double GeneralI = 0;// = 0.1 * P           (fine ajustment of P)
     public static double GeneralD = 0.0000; // = 0                     (raise to reduce ocolation)
 
@@ -143,9 +143,9 @@ public class robotHardware extends LinearOpMode
 
 
         //odometry init (use the motors objects that the odometers are plugged into)
-        leftEncoder = motorRB;
+        leftEncoder = motorLB;
         rightEncoder = motorLF;
-        perpendicularEncoder = motorLB;
+        perpendicularEncoder = motorRF;
 
         odometers[0] = leftEncoder;
         odometers[1] = rightEncoder;
@@ -356,9 +356,9 @@ public class robotHardware extends LinearOpMode
 
         //add the robots movement this loop to the global location
         double theta = (dtheta / 2.0);
-        GlobalHeading += dtheta;
-        GlobalX -= dx * Math.cos(GlobalHeading) + dy * Math.sin(GlobalHeading);
-        GlobalY += dx * Math.sin(GlobalHeading) - dy * Math.cos(GlobalHeading);
+        GlobalHeading -= dtheta;//switch sign to make sure counterclockwise is + heading
+        GlobalX += dx * Math.cos(GlobalHeading) - dy * Math.sin(GlobalHeading); //switch the signs until ford is +
+        GlobalY += dx * Math.sin(GlobalHeading) + dy * Math.cos(GlobalHeading); //switch the signs until strafe left is +
 
 
         //makes heading 180 to -180
@@ -462,7 +462,7 @@ public class robotHardware extends LinearOpMode
             }
 
             //set the motors to the correct powers to move toward the target
-            mecanumDrive(movementXpower, movementYpower, -movementTurnPower, voltComp);
+            mecanumDrive(-movementXpower, -movementYpower, -movementTurnPower, voltComp);
         }
 
         //at the end of the movement stop the motors

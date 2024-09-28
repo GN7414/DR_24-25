@@ -1,19 +1,17 @@
 package org.firstinspires.ftc.teamcode;
 
 
-import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-@TeleOp(name="RI30Hdrive")
+@TeleOp(name="RI30HV2")
 //@Disabled
 
-public class RI30Hdrive extends LinearOpMode
+public class RI30HV2 extends LinearOpMode
 {
     public boolean buttonB = true;
     public boolean buttonA = true;
@@ -36,6 +34,24 @@ public class RI30Hdrive extends LinearOpMode
 
     public boolean down = false;
     public boolean open = false;
+
+
+    public enum AutoGrab
+    {
+        START,
+        GRAB_SAMPLE,
+        DROP_SAMPLE,
+        TOP_SLIDE_POS,
+        MIDDLE_SLIDE_POS,
+        BOTTOM_SLIDE_POS,
+        ARM_TOP_POS,
+        ARM_MIDDLE_POS,
+        ARM_BOTTOM_POS,
+        MANUAL
+    }
+    AutoGrab autoGrab = AutoGrab.START;
+
+    ElapsedTime timer = new ElapsedTime();
 
     @Override
     public void runOpMode() throws InterruptedException
@@ -94,7 +110,7 @@ public class RI30Hdrive extends LinearOpMode
         while (opModeIsActive())
         {
 
-            robot.mecanumDrive(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, speed); //normal people
+            //robot.mecanumDrive(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, speed); //normal people
             //robot.mecanumDrive(-gamepad1.right_stick_y, gamepad1.right_stick_x, gamepad1.left_stick_x, speed); //nolan
 
             //Bucket
@@ -114,10 +130,10 @@ public class RI30Hdrive extends LinearOpMode
             //    armFingerR.setPosition(0.4); //smaller number goes inside
             //}
 
-            //Slides
+            //slide fine addjust
             if (gamepad1.a && buttonA){
                 buttonA = false;
-               //slideEncoder -= 200;
+                //slideEncoder -= 200;
             }
             else if (gamepad1.y && buttonB){
 
@@ -130,63 +146,35 @@ public class RI30Hdrive extends LinearOpMode
             else if (!gamepad1.y && !buttonB){
                 buttonB = true;
             }
+
+
             //One button press
-            if ((gamepad1.right_trigger > .5 && buttonC) || (open && !down) ){
+            if (gamepad1.right_trigger > .5 && buttonC){
                 buttonC = false;
                 if (openClose) {
-                    armFingerL.setPosition(0.5);
-                    armFingerR.setPosition(0.5);
-                    openClose = false;
+                    autoGrab = AutoGrab.DROP_SAMPLE;
                 }
                 else if (!openClose) { //this closes
-                    armFingerL.setPosition(0.3); //smaller number closes
-                    armFingerR.setPosition(0.7); //larger number closes
-                    openClose = true;
+                    autoGrab = AutoGrab.GRAB_SAMPLE;
                 }
-
                 open = false;
             }
             else if (gamepad1.right_trigger < .5 && !buttonC) {
                 buttonC = true;
             }
+
+
             //Arm
             if (gamepad1.dpad_right){//collect prep
-
-                armWrist.setPosition(.5);
-                arm.setTargetPosition(400);
-                arm.setPower(0.25);
-                arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                open = true;
-                openClose = true;
+                autoGrab = AutoGrab.ARM_MIDDLE_POS;
             }
             if (gamepad1.dpad_down){//bottom position for arm
-
-                armWrist.setPosition(.5);
-
-                open = false;
+                autoGrab = AutoGrab.ARM_BOTTOM_POS;
                 down = true;
-
-                arm.setTargetPosition(400);
-                arm.setPower(0.3);
-                arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                robot.sleep(400);
-
-                arm.setTargetPosition(530);
-                arm.setPower(0.5);
-                arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             }
             if (gamepad1.dpad_up){//back position
+                autoGrab = AutoGrab.ARM_TOP_POS;
 
-                armWrist.setPosition(.3);
-                arm.setTargetPosition(50);
-                arm.setPower(0.25);
-                arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                robot.sleep(2000);
-
-                open = true;
                 down = false;
             }
 
@@ -206,6 +194,79 @@ public class RI30Hdrive extends LinearOpMode
                 slideEncoder = 0;
 
             }
+
+
+            switch (autoGrab)
+            {
+                case GRAB_SAMPLE:
+                    armFingerL.setPosition(0.3); //smaller number closes
+                    armFingerR.setPosition(0.7); //larger number closes
+                    openClose = true;
+
+                    break;
+                case DROP_SAMPLE:
+                    armFingerL.setPosition(0.5);
+                    armFingerR.setPosition(0.5);
+                    openClose = false;
+
+                    break;
+                case TOP_SLIDE_POS:
+                    slideEncoder = 8500;
+
+                    break;
+                case MIDDLE_SLIDE_POS:
+                    slideEncoder = 4250;
+
+                    break;
+                case BOTTOM_SLIDE_POS:
+                    slideEncoder = 0;
+
+                    break;
+                case ARM_TOP_POS:
+                    down = false;
+
+                    armWrist.setPosition(.3);
+                    arm.setTargetPosition(25);
+                    arm.setPower(0.25);
+                    arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                    break;
+                case ARM_MIDDLE_POS:
+                    armWrist.setPosition(.5);
+                    arm.setTargetPosition(450);
+                    arm.setPower(0.25);
+                    arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                    if (!down){
+                        autoGrab = AutoGrab.DROP_SAMPLE;
+                    }
+
+                    break;
+                case ARM_BOTTOM_POS:
+                    down = true;
+
+                    armWrist.setPosition(.5);
+                    arm.setTargetPosition(530);
+                    arm.setPower(0.3);
+                    arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                    break;
+
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -230,11 +291,28 @@ public class RI30Hdrive extends LinearOpMode
             slides.setPower(1);
             slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+            robot.refresh(robot.odometers);
+
             telemetry.addData("slide encoder",slideEncoder);
             telemetry.addData("slide pos",slides.getCurrentPosition());
+
+            telemetry.addData("",null);
+
+            telemetry.addData("X",robot.GlobalX);
+            telemetry.addData("Y",robot.GlobalY);
+            telemetry.addData("Heading",robot.GlobalHeading);
+
+
+            telemetry.addData("",null);
+
+            telemetry.addData("currentRightPos",robot.odometers[0].getCurrentPosition());
+            telemetry.addData("currentLeftPos",robot.odometers[1].getCurrentPosition());
+            telemetry.addData("currentPerpendicularPos",robot.odometers[2].getCurrentPosition());
+
             telemetry.update();
 
 
         }
+
     }
 }
