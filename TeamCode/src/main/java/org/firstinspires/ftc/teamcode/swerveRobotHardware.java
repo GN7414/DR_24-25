@@ -276,8 +276,8 @@ public class swerveRobotHardware extends LinearOpMode
             turnPower = heading;
         }
 
-        turnPowerRight = odoPID(encoderTicksPerDegree *  finalAngle - turnEncoder, rightPodPosition);
-        turnPowerLeft = odoPID(encoderTicksPerDegree *  -finalAngle + turnEncoder, leftPodPosition);
+        turnPowerRight = odoPID(encoderTicksPerDegree *  -finalAngle - turnEncoder, rightPodPosition);
+        turnPowerLeft = odoPID(encoderTicksPerDegree *  finalAngle + turnEncoder, leftPodPosition);
     }
 
     public double distanceCalculator(double currentAngle, double newAngle){

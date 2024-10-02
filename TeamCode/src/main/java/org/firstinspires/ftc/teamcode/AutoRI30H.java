@@ -59,10 +59,25 @@ public class AutoRI30H extends LinearOpMode
         waitForStart();
 
 
+        robot.changeAccuracy(1,Math.toRadians(1));
         robot.changeSpeed(1,1);
-        robot.goToPos(16,0,0,0);
 
-        robot.goToPos(16,50,Math.toRadians(90),0);
+        double x = 0,y = 0, finalAngle = Math.toRadians(90);
+
+        while(Math.abs(x-robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
+            robot.goToPosSingle(x, y, finalAngle, 0);
+
+            telemetry.addData("X",robot.GlobalX);
+            telemetry.addData("Y",robot.GlobalY);
+            telemetry.addData("heading",robot.GlobalHeading);
+
+            telemetry.addData("X",robot.reletiveXToTarget);
+
+            telemetry.update();
+
+        }
+
+        //robot.goToPos(16,-16,0,Math.toRadians(90));
 
 
 

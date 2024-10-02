@@ -63,10 +63,10 @@ public class robotHardware extends LinearOpMode
 
     //PID Turning Variables
 
-    public static double TurnF = .15; // = 32767 / maxV      (do not edit from this number)
-    public static double TurnP = 0.6; // = 0.1 * F           (raise till real's apex touches Var apex)
-    public static double TurnI = 0.04; // = 0.1 * P           (fine ajustment of P)
-    public static double TurnD = 0.04; // = 0                     (raise to reduce ocolation)
+    public static double TurnF = .1; // = 32767 / maxV      (do not edit from this number)
+    public static double TurnP = 0.5; // = 0.1 * F           (raise till real's apex touches Var apex)
+    public static double TurnI = 0.0; // = 0.1 * P           (fine ajustment of P)
+    public static double TurnD = 0.0002; // = 0                     (raise to reduce ocolation)
 
     double TurningPIDCurrentTime = 0;
     double TurningPIDTime = 0;
@@ -312,6 +312,8 @@ public class robotHardware extends LinearOpMode
     public double GlobalY = 0;
     public double GlobalHeading = 0;
 
+    public double reletiveXToTarget;
+
     //track encoder values between loops
     private int currentRightPos = 0;
     private int currentLeftPos = 0;
@@ -356,9 +358,9 @@ public class robotHardware extends LinearOpMode
 
         //add the robots movement this loop to the global location
         double theta = (dtheta / 2.0);
-        GlobalHeading -= dtheta;//switch sign to make sure counterclockwise is + heading
-        GlobalX += dx * Math.cos(GlobalHeading) - dy * Math.sin(GlobalHeading); //switch the signs until ford is +
-        GlobalY += dx * Math.sin(GlobalHeading) + dy * Math.cos(GlobalHeading); //switch the signs until strafe left is +
+        GlobalHeading += dtheta;//switch sign to make sure counterclockwise is + heading
+        GlobalX -= dx * Math.cos(GlobalHeading) + dy * Math.sin(GlobalHeading); //switch the signs until ford is +
+        GlobalY += dx * Math.sin(GlobalHeading) - dy * Math.cos(GlobalHeading); //switch the signs until strafe left is +
 
 
         //makes heading 180 to -180
@@ -462,7 +464,7 @@ public class robotHardware extends LinearOpMode
             }
 
             //set the motors to the correct powers to move toward the target
-            mecanumDrive(-movementXpower, -movementYpower, -movementTurnPower, voltComp);
+            mecanumDrive(movementXpower, movementYpower, -movementTurnPower, voltComp);
         }
 
         //at the end of the movement stop the motors
@@ -490,7 +492,7 @@ public class robotHardware extends LinearOpMode
         double distanceToTarget = Math.hypot(x - GlobalX, y - GlobalY);
         double absoluteAngleToTarget = Math.atan2(x - GlobalX, y - GlobalY);
         double reletiveAngleToTarget = angleWrapRad(absoluteAngleToTarget - GlobalHeading - Math.toRadians(90));
-        double reletiveXToTarget = Math.cos(reletiveAngleToTarget) * distanceToTarget;
+        reletiveXToTarget = Math.cos(reletiveAngleToTarget) * distanceToTarget;
         double reletiveYToTarget = Math.sin(reletiveAngleToTarget) * distanceToTarget;
 
         //slow down ensures the robot does not over shoot the target
