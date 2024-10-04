@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -17,9 +18,9 @@ public class RI30HV2 extends LinearOpMode
     public boolean buttonA = true;
     public boolean buttonC = true;
     public boolean openClose = true;
+
     public Servo armWrist = null;
-    public Servo armFingerR = null;
-    public Servo armFingerL = null;
+    public CRServo inTake = null;
     public Servo slideFingerR = null;
     public Servo slideFingerL = null;
     public Servo dumper = null;
@@ -74,9 +75,8 @@ public class RI30HV2 extends LinearOpMode
         slides.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
-        armWrist = hardwareMap.servo.get("frontClawWrist");
-        armFingerR = hardwareMap.servo.get("frontClawRight");
-        armFingerL = hardwareMap.servo.get("frontClawLeft");
+        armWrist = hardwareMap.servo.get("intakeWrist");
+        inTake = hardwareMap.crservo.get("intake");
         //slideFingerL = hardwareMap.servo.get("");
         //slideFingerR = hardwareMap.servo.get("");
         dumper = hardwareMap.servo.get("bucket");
@@ -90,16 +90,13 @@ public class RI30HV2 extends LinearOpMode
 
             //smaller numbers go up higher
             dumper.setPosition(0.6);
-            armFingerL.setPosition(0.4);
-            armFingerR.setPosition(0.7);
-            armWrist.setPosition(1);
+            armWrist.setPosition(.5);
 
+            inTake.setPower(0);
 
             arm.setTargetPosition(0);
             arm.setPower(0.175);
             arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            //robot.wait(1000,robot.odometers);
-            //armWrist.setPosition(0);
         }
 
         arm.setTargetPosition(100);
@@ -111,7 +108,7 @@ public class RI30HV2 extends LinearOpMode
         {
 
             //robot.mecanumDrive(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, speed); //normal people
-            //robot.mecanumDrive(-gamepad1.right_stick_y, gamepad1.right_stick_x, gamepad1.left_stick_x, speed); //nolan
+            robot.mecanumDrive(-gamepad1.right_stick_y, -gamepad1.right_stick_x, -gamepad1.left_stick_x, speed); //nolan
 
             //Bucket
             if (gamepad1.a){
@@ -123,11 +120,11 @@ public class RI30HV2 extends LinearOpMode
             //Front Claw
             //if (gamepad1.x){
             //    armFingerL.setPosition(0.7);
-            //    armFingerR.setPosition(0.3);
+            //
             //}
             //if (gamepad1.y){
             //    armFingerL.setPosition(0.6);
-            //    armFingerR.setPosition(0.4); //smaller number goes inside
+            //
             //}
 
             //slide fine addjust
@@ -138,7 +135,7 @@ public class RI30HV2 extends LinearOpMode
             else if (gamepad1.y && buttonB){
 
                 buttonB = false;
-                slideEncoder += 200;
+                inTake.setPower (0);
             }
             if (!gamepad1.a && !buttonA){
                 buttonA = true;
@@ -199,15 +196,16 @@ public class RI30HV2 extends LinearOpMode
             switch (autoGrab)
             {
                 case GRAB_SAMPLE:
-                    armFingerL.setPosition(0.3); //smaller number closes
-                    armFingerR.setPosition(0.7); //larger number closes
+
+
                     openClose = true;
+                    inTake.setPower (1);
 
                     break;
                 case DROP_SAMPLE:
-                    armFingerL.setPosition(0.5);
-                    armFingerR.setPosition(0.5);
+
                     openClose = false;
+                    inTake.setPower (-1);
 
                     break;
                 case TOP_SLIDE_POS:
@@ -225,7 +223,7 @@ public class RI30HV2 extends LinearOpMode
                 case ARM_TOP_POS:
                     down = false;
 
-                    armWrist.setPosition(.3);
+                    armWrist.setPosition(.6);
                     arm.setTargetPosition(25);
                     arm.setPower(0.25);
                     arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -245,8 +243,8 @@ public class RI30HV2 extends LinearOpMode
                 case ARM_BOTTOM_POS:
                     down = true;
 
-                    armWrist.setPosition(.5);
-                    arm.setTargetPosition(530);
+                    armWrist.setPosition(.4);
+                    arm.setTargetPosition(642);
                     arm.setPower(0.3);
                     arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 

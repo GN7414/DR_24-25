@@ -116,7 +116,7 @@ public class robotHardware extends LinearOpMode
     public robotHardware(HardwareMap ahwMap)
     {
 
-        //dive motors
+        //drive motors
         motorRF = ahwMap.dcMotor.get("motorRF");
         motorLF = ahwMap.dcMotor.get("motorLF");
         motorRB = ahwMap.dcMotor.get("motorRB");
@@ -163,10 +163,10 @@ public class robotHardware extends LinearOpMode
 
     public void mecanumDrive(double forward, double strafe, double heading, double speed){
 
-        motorRF.setPower(Range.clip(((forward - strafe) * 1) - (heading * 1) * speed,-.5,.5));
-        motorRB.setPower(Range.clip((((forward + strafe) * 1) - (heading * 1)) * speed,-1,1));
-        motorLB.setPower(Range.clip((((forward - strafe) * 1) + (heading * 1)) * speed,-1,1));
-        motorLF.setPower(Range.clip(((forward + strafe) * 1) + (heading * 1) * speed,-.5,.5));
+        motorRF.setPower((((forward - strafe) * 1) - (heading * 1) * speed));
+        motorRB.setPower(((((forward + strafe) * 1) - (heading * 1)) * speed));
+        motorLB.setPower(((((forward - strafe) * 1) + (heading * 1)) * speed));
+        motorLF.setPower((((forward + strafe) * 1) + (heading * 1) * speed));
     }
 
     public void resetDriveEncoders()
