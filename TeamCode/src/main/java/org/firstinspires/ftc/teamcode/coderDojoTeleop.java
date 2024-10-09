@@ -9,10 +9,10 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-@TeleOp(name="RI30HV2")
+@TeleOp(name="coderDojoTeleop")
 //@Disabled
 
-public class RI30HV2 extends LinearOpMode
+public class coderDojoTeleop extends LinearOpMode
 {
     public boolean buttonB = true;
     public boolean buttonA = true;
@@ -20,7 +20,7 @@ public class RI30HV2 extends LinearOpMode
     public boolean openClose = true;
 
     public Servo armWrist = null;
-    public CRServo intake = null;
+    public CRServo inTake = null;
     public Servo slideFingerR = null;
     public Servo slideFingerL = null;
     public Servo dumper = null;
@@ -29,17 +29,13 @@ public class RI30HV2 extends LinearOpMode
     public DcMotor slides = null;
 
     public int slideEncoder = 0;
-    public double speed = 1;
+    public double speed = 0.3;
 
     public int maxSlides = 8500;
     public int downPos = 650;
 
     public boolean down = false;
     public boolean open = false;
-
-    public boolean x = false;
-
-    double time = 0;
 
 
     public enum AutoGrab
@@ -81,7 +77,7 @@ public class RI30HV2 extends LinearOpMode
 
 
         armWrist = hardwareMap.servo.get("intakeWrist");
-        intake = hardwareMap.crservo.get("intake");
+        inTake = hardwareMap.crservo.get("intake");
         //slideFingerL = hardwareMap.servo.get("");
         //slideFingerR = hardwareMap.servo.get("");
         dumper = hardwareMap.servo.get("bucket");
@@ -97,9 +93,9 @@ public class RI30HV2 extends LinearOpMode
             dumper.setPosition(0.6);
             armWrist.setPosition(.5);
 
-            intake.setPower(0);
+            inTake.setPower(0);
 
-            arm.setTargetPosition(0);
+            arm.setTargetPosition(100);
             arm.setPower(0.175);
             arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
@@ -112,9 +108,62 @@ public class RI30HV2 extends LinearOpMode
         while (opModeIsActive())
         {
 
+
+            if(gamepad1.b){
+
+                arm.setTargetPosition(450);
+                arm.setPower(0.4);
+                arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            }
+
+            if(gamepad1.y){
+
+                arm.setTargetPosition(100);
+                arm.setPower(0.4);
+                arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            }
+
+            if(gamepad1.dpad_up){
+                slides.setTargetPosition(5000);
+                slides.setPower(1);
+                slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            }
+            if(gamepad1.dpad_down){
+                slides.setTargetPosition(0);
+                slides.setPower(1);
+                slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             robot.mecanumDrive(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, speed); //normal people
             //robot.mecanumDrive(-gamepad1.right_stick_y, -gamepad1.right_stick_x, -gamepad1.left_stick_x, speed); //nolan
 
+            /*
             //Bucket
             if (gamepad1.a){
                 dumper.setPosition(.8);// down position
@@ -140,7 +189,7 @@ public class RI30HV2 extends LinearOpMode
             else if (gamepad1.y && buttonB){
 
                 buttonB = false;
-                intake.setPower (0);
+                inTake.setPower (0);
             }
             if (!gamepad1.a && !buttonA){
                 buttonA = true;
@@ -192,27 +241,8 @@ public class RI30HV2 extends LinearOpMode
                 autoGrab = AutoGrab.ARM_BOTTOM_POS;
                 down = true;
             }
-
-
-            if (gamepad1.dpad_up || robotHardware.timerInitted){//back position
-                if (gamepad1.dpad_up){
-                    time = robot.timerInit(700);
-                }
-
-                dumper.setPosition(.65);
-
+            if (gamepad1.dpad_up){//back position
                 autoGrab = AutoGrab.ARM_TOP_POS;
-
-                if (robot.boolTimer(time + 500)){
-                    autoGrab = AutoGrab.ARM_MIDDLE_POS;
-                    robotHardware.timerInitted = false;
-                }
-                else if (robot.boolTimer(time)){
-                    autoGrab = AutoGrab.DROP_SAMPLE;
-
-                }
-
-
 
                 down = false;
             }
@@ -241,13 +271,13 @@ public class RI30HV2 extends LinearOpMode
 
 
                     openClose = true;
-                    intake.setPower (.75);
+                    inTake.setPower (.75);
 
                     break;
                 case DROP_SAMPLE:
 
                     openClose = false;
-                    intake.setPower (-1);
+                    inTake.setPower (-1);
 
                     break;
                 case TOP_SLIDE_POS:
@@ -266,10 +296,9 @@ public class RI30HV2 extends LinearOpMode
                     down = false;
 
                     armWrist.setPosition(.6);
-                    arm.setTargetPosition(30);
-                    arm.setPower(0.4);
+                    arm.setTargetPosition(25);
+                    arm.setPower(0.25);
                     arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
 
                     break;
                 case ARM_MIDDLE_POS:
@@ -278,9 +307,13 @@ public class RI30HV2 extends LinearOpMode
                     arm.setPower(0.25);
                     arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+                    if (!down){
+                        //autoGrab = AutoGrab.DROP_SAMPLE;
+                    }
 
                     break;
                 case ARM_BOTTOM_POS:
+                    down = true;
 
                     armWrist.setPosition(.4);
                     arm.setTargetPosition(downPos);
@@ -288,6 +321,8 @@ public class RI30HV2 extends LinearOpMode
                     arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
                     break;
+
+
 
             }
 
@@ -331,6 +366,8 @@ public class RI30HV2 extends LinearOpMode
             slides.setTargetPosition(slideEncoder);
             slides.setPower(1);
             slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+             */
 
             robot.refresh(robot.odometers);
 

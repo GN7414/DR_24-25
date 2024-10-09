@@ -63,10 +63,10 @@ public class robotHardware extends LinearOpMode
 
     //PID Turning Variables
 
-    public static double TurnF = .1; // = 32767 / maxV      (do not edit from this number)
+    public static double TurnF = .15; // = 32767 / maxV      (do not edit from this number)
     public static double TurnP = 0.5; // = 0.1 * F           (raise till real's apex touches Var apex)
     public static double TurnI = 0.0; // = 0.1 * P           (fine ajustment of P)
-    public static double TurnD = 0.0002; // = 0                     (raise to reduce ocolation)
+    public static double TurnD = 0.0; // = 0                     (raise to reduce ocolation)
 
     double TurningPIDCurrentTime = 0;
     double TurningPIDTime = 0;
@@ -111,6 +111,12 @@ public class robotHardware extends LinearOpMode
     double GeneralPIDMinIntegral2 = -1.0;
     double GeneralPIDMaxIntegral2 = 1.0;
     double GeneralPIDMotorPower2 = 0;
+
+    public int downPos = 650;
+
+    public static boolean timerInitted = false;
+
+    public static ElapsedTime outputTime = new ElapsedTime();
 
 
     public robotHardware(HardwareMap ahwMap)
@@ -163,10 +169,10 @@ public class robotHardware extends LinearOpMode
 
     public void mecanumDrive(double forward, double strafe, double heading, double speed){
 
-        motorRF.setPower((((forward - strafe) * 1) - (heading * 1) * speed));
-        motorRB.setPower(((((forward + strafe) * 1) - (heading * 1)) * speed));
-        motorLB.setPower(((((forward - strafe) * 1) + (heading * 1)) * speed));
-        motorLF.setPower((((forward + strafe) * 1) + (heading * 1) * speed));
+        motorRF.setPower((((forward - strafe) * 1) - (heading * 1)) * speed);
+        motorRB.setPower((((forward + strafe) * 1) - (heading * 1)) * speed);
+        motorLB.setPower((((forward - strafe) * 1) + (heading * 1)) * speed);
+        motorLF.setPower((((forward + strafe) * 1) + (heading * 1)) * speed);
     }
 
     public void resetDriveEncoders()
@@ -464,7 +470,7 @@ public class robotHardware extends LinearOpMode
             }
 
             //set the motors to the correct powers to move toward the target
-            mecanumDrive(movementXpower, movementYpower, -movementTurnPower, voltComp);
+            mecanumDrive(movementXpower, movementYpower, movementTurnPower, voltComp);
         }
 
         //at the end of the movement stop the motors
@@ -515,7 +521,7 @@ public class robotHardware extends LinearOpMode
         }
 
         //set the motors to the correct powers to move toward the target
-        mecanumDrive(movementXpower, movementYpower, -movementTurnPower, voltComp);
+        mecanumDrive(movementXpower, movementYpower, movementTurnPower, voltComp);
 
         return movementTurnPower;
     }
@@ -728,4 +734,21 @@ public class robotHardware extends LinearOpMode
     }
 
     public void runOpMode(){}
+
+    public boolean boolTimer (double time){
+        return outputTime.milliseconds() > time;
+
+    }
+
+    public double timerInit(int t){
+
+        double ti = outputTime.milliseconds() + t;
+        timerInitted = true;
+
+        return ti;
+
+    }
+
+
+
 }
