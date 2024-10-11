@@ -116,7 +116,7 @@ public class robotHardware extends LinearOpMode
 
     public static boolean timerInitted = false;
 
-    public static ElapsedTime outputTime = new ElapsedTime();
+    public static ElapsedTime currentTime = new ElapsedTime();
 
 
     public robotHardware(HardwareMap ahwMap)
@@ -736,13 +736,13 @@ public class robotHardware extends LinearOpMode
     public void runOpMode(){}
 
     public boolean boolTimer (double time){
-        return outputTime.milliseconds() > time;
+        return currentTime.milliseconds() > time;
 
     }
 
     public double timerInit(int t){
 
-        double ti = outputTime.milliseconds() + t;
+        double ti = currentTime.milliseconds() + t;
         timerInitted = true;
 
         return ti;
