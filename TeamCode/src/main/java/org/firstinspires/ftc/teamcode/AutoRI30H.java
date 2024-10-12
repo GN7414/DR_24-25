@@ -21,7 +21,7 @@ public class AutoRI30H extends LinearOpMode
     public DcMotor arm = null;
     public DcMotor slides = null;
 
-    public int downPos = 670;
+    public int downPos = 650;
     public static double time;
 
     public static boolean timerInitted = false;
@@ -65,7 +65,7 @@ public class AutoRI30H extends LinearOpMode
 
         while(!isStarted() && !isStopRequested()){
 
-            dumper.setPosition(.6);
+            dumper.setPosition(.4);
             //armWrist.setPosition(.5);
             inTake.setPower(0);
 
@@ -79,7 +79,7 @@ public class AutoRI30H extends LinearOpMode
         }
 
 
-        armWrist.setPosition(.5);
+        armWrist.setPosition(.4);
         arm.setTargetPosition(450);
         arm.setPower(0.25);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -113,10 +113,10 @@ public class AutoRI30H extends LinearOpMode
         }
         robot.mecanumDrive(0,0,0,.6);
 
-        robot.wait(1500,robot.odometers);
+        robot.wait(1750,robot.odometers);
 
 
-        dumper.setPosition(.85);
+        dumper.setPosition(.55);
 
 
         robot.wait(750,robot.odometers);
@@ -140,10 +140,10 @@ public class AutoRI30H extends LinearOpMode
             slides.setPower(1);
             slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            dumper.setPosition(0.6);
+            dumper.setPosition(.4);
 
 
-            armWrist.setPosition(.43);
+            armWrist.setPosition(.4);
             arm.setTargetPosition(downPos);
             arm.setPower(0.5);
             arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -178,7 +178,7 @@ public class AutoRI30H extends LinearOpMode
 
         robot.wait(500,robot.odometers);
 
-        armWrist.setPosition(.6);
+        armWrist.setPosition(.4);
         arm.setTargetPosition(30);
         arm.setPower(0.4);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -189,7 +189,7 @@ public class AutoRI30H extends LinearOpMode
 
         robot.wait(400,robot.odometers);
 
-        armWrist.setPosition(.5);
+        armWrist.setPosition(.6);
         arm.setTargetPosition(450);
         arm.setPower(0.25);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -214,10 +214,10 @@ public class AutoRI30H extends LinearOpMode
         }
         robot.mecanumDrive(0,0,0,.6);
 
-        robot.wait(1500,robot.odometers);
+        robot.wait(1000,robot.odometers);
 
 
-        dumper.setPosition(.85);
+        dumper.setPosition(.55);
 
 
         robot.wait(750,robot.odometers);
@@ -244,10 +244,10 @@ public class AutoRI30H extends LinearOpMode
             slides.setPower(1);
             slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            dumper.setPosition(0.6);
+            dumper.setPosition(.4);
 
 
-            armWrist.setPosition(.43);
+            armWrist.setPosition(.4);
             arm.setTargetPosition(downPos);
             arm.setPower(0.5);
             arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -317,10 +317,10 @@ public class AutoRI30H extends LinearOpMode
         }
         robot.mecanumDrive(0,0,0,.6);
 
-        robot.wait(1500,robot.odometers);
+        robot.wait(1250,robot.odometers);
 
 
-        dumper.setPosition(.85);
+        dumper.setPosition(.55);
 
 
         robot.wait(750,robot.odometers);
@@ -352,12 +352,17 @@ public class AutoRI30H extends LinearOpMode
 
             robot.refresh(robot.odometers);
 
+            armWrist.setPosition(0);
+            arm.setTargetPosition(00);
+            arm.setPower(0.25);
+            arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
             robot.mecanumDrive(1,0,0,1);
 
         }
         robotHardware.timerInitted = false;
 
-        time = robot.timerInit(1500);
+        time = robot.timerInit(1250);
         while (!robot.boolTimer(time)){
 
             robot.refresh(robot.odometers);
@@ -367,15 +372,9 @@ public class AutoRI30H extends LinearOpMode
         }
         robotHardware.timerInitted = false;
 
-
-        armWrist.setPosition(.5);
-        arm.setTargetPosition(00);
-        arm.setPower(0.25);
-        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
         robot.mecanumDrive(0,0,0,.6);
 
-
+        robot.goToPos(0,-50,finalAngle,Math.toRadians(180));
 
     }
 

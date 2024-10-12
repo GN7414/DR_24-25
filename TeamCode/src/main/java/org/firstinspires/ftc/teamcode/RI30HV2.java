@@ -95,7 +95,7 @@ public class RI30HV2 extends LinearOpMode
 
 
             //smaller numbers go up higher
-            dumper.setPosition(0.6);
+            dumper.setPosition(0.4);
             armWrist.setPosition(.5);
 
             intake.setPower(0);
@@ -132,10 +132,10 @@ public class RI30HV2 extends LinearOpMode
                     timerInit2 = false;
                 }
                 else if (robot.boolTimer(time)){
-                    dumper.setPosition(.95);//higher number brings the dumper down
+                    dumper.setPosition(.65);//higher number brings the dumper down
                 }
                 else {
-                    dumper.setPosition(.8);
+                    dumper.setPosition(.55);
                 }
 
                 buttonA = false;
@@ -146,7 +146,7 @@ public class RI30HV2 extends LinearOpMode
 
 
             if (gamepad1.b){
-                dumper.setPosition(.65);
+                dumper.setPosition(.4);
             }
             //Front Claw
             //if (gamepad1.x){
@@ -219,7 +219,7 @@ public class RI30HV2 extends LinearOpMode
                     time = robot.timerInit(800);
                 }
 
-                dumper.setPosition(.65);
+                dumper.setPosition(.45);
 
                 autoGrab = AutoGrab.ARM_TOP_POS;
 
