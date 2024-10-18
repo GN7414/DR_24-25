@@ -4,14 +4,19 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 
  */
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.I2cDeviceSynchSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+
+
+
 
 /**
  * Created by User on 10/1/2022.
@@ -119,6 +124,13 @@ public class robotHardware extends LinearOpMode
     public static ElapsedTime currentTime = new ElapsedTime();
 
 
+
+
+    double oldTime = 0;
+    GoBildaPinpointDriver odo; // Declare OpMode member for the Odometry Computer
+
+
+
     public robotHardware(HardwareMap ahwMap)
     {
 
@@ -161,6 +173,18 @@ public class robotHardware extends LinearOpMode
         drive[1] = motorRB;
         drive[2] = motorLB;
         drive[3] = motorLF;
+
+
+
+
+
+        odo = ahwMap.get(GoBildaPinpointDriver.class,"odo");
+        odo.setOffsets(-200.0, -120.0);
+        odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
+        odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
+        odo.resetPosAndIMU();
+
+        //resetRuntime();
 
 
 
@@ -318,7 +342,6 @@ public class robotHardware extends LinearOpMode
     public double GlobalY = 0;
     public double GlobalHeading = 0;
 
-    public double reletiveXToTarget;
 
     //track encoder values between loops
     private int currentRightPos = 0;
@@ -342,6 +365,7 @@ public class robotHardware extends LinearOpMode
     public void refresh(DcMotor[] odometers)
     {
 
+        /*
         //record last loop's encoder reading
         oldRightPos = currentRightPos;
         oldLeftPos = currentLeftPos;
@@ -371,6 +395,16 @@ public class robotHardware extends LinearOpMode
 
         //makes heading 180 to -180
         //angleWrapRad(GlobalHeading);
+
+         */
+        //Converting odometry computer outputs to inches
+        odo.update();
+        GlobalHeading = odo.getHeading();
+        GlobalX = odo.getPosX() * .03937007874;
+        GlobalY = odo.getPosY() * .03937007874;
+
+
+
     }
 
     // used to mantain angle values between Pi and -Pi
@@ -430,6 +464,8 @@ public class robotHardware extends LinearOpMode
      *
      * this version will loop until the desired location is reached and then move on
      */
+
+
     public void goToPos(double x, double y, double finalAngle, double followAngle)
     {
         //bring in the encoder and motor objects
@@ -481,7 +517,7 @@ public class robotHardware extends LinearOpMode
 
     }
 
-    public double goToPosSingle(double x, double y, double finalAngle, double followAngle)
+    public double[] goToPosSingle(double x, double y, double finalAngle, double followAngle)
     {
         //bring in the encoder and motor objects
         //odometryRobotHardware robot = new odometryRobotHardware(hardwareMap);
@@ -498,7 +534,7 @@ public class robotHardware extends LinearOpMode
         double distanceToTarget = Math.hypot(x - GlobalX, y - GlobalY);
         double absoluteAngleToTarget = Math.atan2(x - GlobalX, y - GlobalY);
         double reletiveAngleToTarget = angleWrapRad(absoluteAngleToTarget - GlobalHeading - Math.toRadians(90));
-        reletiveXToTarget = Math.cos(reletiveAngleToTarget) * distanceToTarget;
+        double reletiveXToTarget = Math.cos(reletiveAngleToTarget) * distanceToTarget;
         double reletiveYToTarget = Math.sin(reletiveAngleToTarget) * distanceToTarget;
 
         //slow down ensures the robot does not over shoot the target
@@ -523,7 +559,8 @@ public class robotHardware extends LinearOpMode
         //set the motors to the correct powers to move toward the target
         mecanumDrive(movementXpower, movementYpower, movementTurnPower, voltComp);
 
-        return movementTurnPower;
+        double[] returnValue = {distanceToTarget, absoluteAngleToTarget, reletiveXToTarget, reletiveYToTarget, movementXpower, movementYpower, movementTurnPower, reletiveTurnAngle};
+        return returnValue;
     }
 
     public double driveToPos(double x, double y){

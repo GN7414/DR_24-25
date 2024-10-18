@@ -78,8 +78,16 @@ public class coderDojo extends LinearOpMode
         robot.changeAccuracy(1,Math.toRadians(1));
         robot.changeSpeed(.25,.25);
 
+        while(true){
+            double[] fake = robot.goToPosSingle(10,0,0,0);
+            telemetry.addData("reletiveXToTarget", fake[2]);
 
-        robot.goToPos(-20,0,Math.toRadians(0),Math.toRadians(0));
+
+            telemetry.update();
+
+        }
+
+        //robot.goToPos(-20,0,Math.toRadians(0),Math.toRadians(0));
 
 
 

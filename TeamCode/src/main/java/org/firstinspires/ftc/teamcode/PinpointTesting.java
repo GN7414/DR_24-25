@@ -8,13 +8,13 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 
-@TeleOp(name="RI30HV2")
+
+@TeleOp(name="PinpointTesting", group="Linear OpMode")
 //@Disabled
 
-public class RI30HV2 extends LinearOpMode
+public class PinpointTesting extends LinearOpMode
 {
     public boolean buttonB = true;
     public boolean buttonA = true;
@@ -62,15 +62,26 @@ public class RI30HV2 extends LinearOpMode
 
     ElapsedTime timer = new ElapsedTime();
 
+
+    GoBildaPinpointDriver odo; // Declare OpMode member for the Odometry Computer
+
+    double oldTime = 0;
+
     @Override
     public void runOpMode() throws InterruptedException
     {
 
+        odo = hardwareMap.get(GoBildaPinpointDriver.class,"odo");
+        odo.setOffsets(-84.0, -168.0); //these are tuned for 3110-0002-0001 Product Insight #1
+        //odo = new GoBildaPinpointDriver(,true);
+        odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
+        odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
+        odo.resetPosAndIMU();
+        resetRuntime();
+
         robotHardware robot = new robotHardware(hardwareMap);
 
         robot.resetDriveEncoders();
-
-        robot.odo.resetPosAndIMU();
 
         //dive motors
         arm = hardwareMap.dcMotor.get("frontArmMotor");
@@ -114,12 +125,11 @@ public class RI30HV2 extends LinearOpMode
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 
-
         while (opModeIsActive())
         {
 
             //robot.mecanumDrive(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, speed); //normal people
-            //robot.mecanumDrive(-gamepad1.right_stick_y, -gamepad1.right_stick_x, -gamepad1.left_stick_x, speed); //nolan
+            robot.mecanumDrive(-gamepad1.right_stick_y, -gamepad1.right_stick_x, -gamepad1.left_stick_x, speed); //nolan
 
 
 
@@ -367,30 +377,13 @@ public class RI30HV2 extends LinearOpMode
             slides.setPower(1);
             slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            //robot.odo.update();
             robot.refresh(robot.odometers);
 
-
-            telemetry.addData("slide encoder",slideEncoder);
-            telemetry.addData("slide pos",slides.getCurrentPosition());
-
-            telemetry.addData("",null);
-
-            telemetry.addData("X",robot.GlobalX);
-            telemetry.addData("Y",robot.GlobalY);
-            telemetry.addData("Heading",robot.GlobalHeading);
+            odo.update();
 
 
-            telemetry.addData("",null);
+            telemetry.addData("x",odo.getXOffset());
 
-            telemetry.addData("currentRightPos",robot.odometers[0].getCurrentPosition());
-            telemetry.addData("currentLeftPos",robot.odometers[1].getCurrentPosition());
-            telemetry.addData("currentPerpendicularPos",robot.odometers[2].getCurrentPosition());
-
-            telemetry.addData("armPos",arm.getCurrentPosition());
-
-            telemetry.addData("getPosX", robot.odo.getPosX());
-            telemetry.addData("getEncoderX", robot.odo.getEncoderX());
             telemetry.update();
 
 
