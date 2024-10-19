@@ -21,7 +21,7 @@ public class AutoRI30H extends LinearOpMode
     public DcMotor arm = null;
     public DcMotor slides = null;
 
-    public int downPos = 650;
+    public int downPos = 640;
     public static double time;
 
     public static boolean timerInitted = false;
@@ -59,7 +59,7 @@ public class AutoRI30H extends LinearOpMode
         //slideFingerR = hardwareMap.servo.get("");
         dumper = hardwareMap.servo.get("bucket");
 
-        //slides.setDirection(DcMotor.Direction.REVERSE);
+        arm.setDirection(DcMotor.Direction.REVERSE);
 
 
 
@@ -89,7 +89,7 @@ public class AutoRI30H extends LinearOpMode
         robot.changeAccuracy(1,Math.toRadians(1));
         robot.changeSpeed(.8,.8);
 
-        double x = 17,y = -4, finalAngle = Math.toRadians(-45);
+        double x = -17,y = 4, finalAngle = Math.toRadians(45);
 
         while(Math.abs(x-robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
 
@@ -127,8 +127,9 @@ public class AutoRI30H extends LinearOpMode
 
 
 
+        robot.changeSpeed(.4,.4);
 
-        x = -10;y = -27; finalAngle = Math.toRadians(205);
+        x = 10;y = 27; finalAngle = Math.toRadians(-205);
 
         while(Math.abs(x-robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
 
@@ -151,7 +152,7 @@ public class AutoRI30H extends LinearOpMode
 
         }
 
-        robot.goToPos(-10,-31,Math.toRadians(205),0);
+        robot.goToPos(10,31,Math.toRadians(-205),0);
 
         robot.mecanumDrive(0,0,0,.6);
 
@@ -198,7 +199,7 @@ public class AutoRI30H extends LinearOpMode
 
         //move to dump
 
-        x = 17;y = -4; finalAngle = Math.toRadians(-45);
+        x = -17;y = 4; finalAngle = Math.toRadians(45);
 
         while(Math.abs(x-robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
 
@@ -232,7 +233,7 @@ public class AutoRI30H extends LinearOpMode
 
 
 
-        x = 0;y = -38; finalAngle = Math.toRadians(180);
+        x = 0;y = 38; finalAngle = Math.toRadians(180);
 
         while(Math.abs(x-robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
 
@@ -301,7 +302,7 @@ public class AutoRI30H extends LinearOpMode
 
         //move to dump
 
-        x = 17;y = -4; finalAngle = Math.toRadians(-45);
+        x = -17;y = 4; finalAngle = Math.toRadians(45);
 
         while(Math.abs(x-robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
 
@@ -328,7 +329,7 @@ public class AutoRI30H extends LinearOpMode
         robot.changeSpeed(1,1);
         robot.changeAccuracy(4,Math.toRadians(10));
 
-        x = 5;y = -50; finalAngle = Math.toRadians(0);
+        x = -5;y = 50; finalAngle = Math.toRadians(0);
 
         while(Math.abs(x-robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
 
@@ -374,7 +375,7 @@ public class AutoRI30H extends LinearOpMode
 
         robot.mecanumDrive(0,0,0,.6);
 
-        robot.goToPos(0,-50,finalAngle,Math.toRadians(180));
+        robot.goToPos(0,50,finalAngle,Math.toRadians(180));
 
     }
 

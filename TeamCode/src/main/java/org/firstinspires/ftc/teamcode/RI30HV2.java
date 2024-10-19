@@ -34,7 +34,7 @@ public class RI30HV2 extends LinearOpMode
     public double speed = 1;
 
     public int maxSlides = 4500;
-    public int downPos = 650;
+    public int downPos = 640;
 
     public boolean down = false;
     public boolean open = false;
@@ -91,7 +91,7 @@ public class RI30HV2 extends LinearOpMode
         //slideFingerR = hardwareMap.servo.get("");
         dumper = hardwareMap.servo.get("bucket");
 
-        //slides.setDirection(DcMotor.Direction.REVERSE);
+        arm.setDirection(DcMotor.Direction.REVERSE);
 
 
 
@@ -118,7 +118,7 @@ public class RI30HV2 extends LinearOpMode
         while (opModeIsActive())
         {
 
-            //robot.mecanumDrive(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, speed); //normal people
+            robot.mecanumDrive(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, speed); //normal people
             //robot.mecanumDrive(-gamepad1.right_stick_y, -gamepad1.right_stick_x, -gamepad1.left_stick_x, speed); //nolan
 
 
@@ -151,7 +151,7 @@ public class RI30HV2 extends LinearOpMode
 
 
             if (gamepad1.b){
-                dumper.setPosition(.4);
+                dumper.setPosition(.35);
             }
             //Front Claw
             //if (gamepad1.x){
@@ -224,7 +224,7 @@ public class RI30HV2 extends LinearOpMode
                     time = robot.timerInit(800);
                 }
 
-                dumper.setPosition(.45);
+                dumper.setPosition(.35);
 
                 autoGrab = AutoGrab.ARM_TOP_POS;
 
@@ -298,7 +298,7 @@ public class RI30HV2 extends LinearOpMode
                 case ARM_TOP_POS:
 
                     armWrist.setPosition(.6);
-                    arm.setTargetPosition(30);
+                    arm.setTargetPosition(50);
                     arm.setPower(0.4);
                     arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 

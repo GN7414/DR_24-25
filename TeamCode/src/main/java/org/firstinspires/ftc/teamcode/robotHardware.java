@@ -482,9 +482,9 @@ public class robotHardware extends LinearOpMode
             //math to calculate distances to the target
             double distanceToTarget = Math.hypot(x - GlobalX, y - GlobalY);
             double absoluteAngleToTarget = Math.atan2(x - GlobalX, y - GlobalY);
-            double reletiveAngleToTarget = angleWrapRad(absoluteAngleToTarget - GlobalHeading-Math.toRadians(90));
-            double reletiveXToTarget = Math.cos(reletiveAngleToTarget) * distanceToTarget;
-            double reletiveYToTarget = Math.sin(reletiveAngleToTarget) * distanceToTarget;
+            double reletiveAngleToTarget = angleWrapRad(absoluteAngleToTarget + GlobalHeading - Math.toRadians(90));
+            double reletiveXToTarget = -Math.cos(reletiveAngleToTarget) * distanceToTarget;
+            double reletiveYToTarget = -Math.sin(reletiveAngleToTarget) * distanceToTarget;//use - when spinning counterclockwise is positive
 
             //slow down ensures the robot does not over shoot the target
             double slowDown = Range.clip(odoDrivePID(distanceToTarget,0), 0, moveSpeed);
@@ -497,12 +497,12 @@ public class robotHardware extends LinearOpMode
             //at the end of the movement the robot will begin moving toward the desired final angle
             double movementTurnPower;
             double reletiveTurnAngle;
-            if (distanceToTarget > 6) {
-                reletiveTurnAngle = angleWrapRad(reletiveAngleToTarget + followAngle);
-                movementTurnPower = Range.clip(odoTurnPID(0, reletiveTurnAngle), -turnSpeed, turnSpeed);
+            if (distanceToTarget > 6) {//-Range.clip(odoTurnPID(0, reletiveTurnAngle), -turnSpeed, turnSpeed) use - to switch turnpower
+                reletiveTurnAngle = angleWrapRad(reletiveAngleToTarget - followAngle);//use - when spinning counterclockwise is positive
+                movementTurnPower = -Range.clip(odoTurnPID(0, reletiveTurnAngle), -turnSpeed, turnSpeed);
             } else {
                 reletiveTurnAngle = angleWrapRad(finalAngle - GlobalHeading);
-                movementTurnPower = Range.clip(odoTurnPID(0, reletiveTurnAngle), -turnSpeed, turnSpeed);
+                movementTurnPower = -Range.clip(odoTurnPID(0, reletiveTurnAngle), -turnSpeed, turnSpeed);
             }
 
             //set the motors to the correct powers to move toward the target
@@ -533,9 +533,9 @@ public class robotHardware extends LinearOpMode
         //math to calculate distances to the target
         double distanceToTarget = Math.hypot(x - GlobalX, y - GlobalY);
         double absoluteAngleToTarget = Math.atan2(x - GlobalX, y - GlobalY);
-        double reletiveAngleToTarget = angleWrapRad(absoluteAngleToTarget - GlobalHeading - Math.toRadians(90));
-        double reletiveXToTarget = Math.cos(reletiveAngleToTarget) * distanceToTarget;
-        double reletiveYToTarget = Math.sin(reletiveAngleToTarget) * distanceToTarget;
+        double reletiveAngleToTarget = angleWrapRad(absoluteAngleToTarget + GlobalHeading - Math.toRadians(90));
+        double reletiveXToTarget = -Math.cos(reletiveAngleToTarget) * distanceToTarget;
+        double reletiveYToTarget = -Math.sin(reletiveAngleToTarget) * distanceToTarget;//use - when spinning counterclockwise is positive
 
         //slow down ensures the robot does not over shoot the target
         double slowDown = Range.clip(odoDrivePID(distanceToTarget,0), 0, moveSpeed);
@@ -548,18 +548,42 @@ public class robotHardware extends LinearOpMode
         //at the end of the movement the robot will begin moving toward the desired final angle
         double movementTurnPower;
         double reletiveTurnAngle;
-        if (distanceToTarget > 6) {
-            reletiveTurnAngle = angleWrapRad(reletiveAngleToTarget + followAngle);
-            movementTurnPower = Range.clip(odoTurnPID(0, reletiveTurnAngle), -turnSpeed, turnSpeed);
+        if (distanceToTarget > 6) {//-Range.clip(odoTurnPID(0, reletiveTurnAngle), -turnSpeed, turnSpeed) use - to switch turnpower
+            reletiveTurnAngle = angleWrapRad(reletiveAngleToTarget - followAngle);//use - when spinning counterclockwise is positive
+            movementTurnPower = -Range.clip(odoTurnPID(0, reletiveTurnAngle), -turnSpeed, turnSpeed);
         } else {
             reletiveTurnAngle = angleWrapRad(finalAngle - GlobalHeading);
-            movementTurnPower = Range.clip(odoTurnPID(0, reletiveTurnAngle), -turnSpeed, turnSpeed);
+            movementTurnPower = -Range.clip(odoTurnPID(0, reletiveTurnAngle), -turnSpeed, turnSpeed);
         }
 
         //set the motors to the correct powers to move toward the target
         mecanumDrive(movementXpower, movementYpower, movementTurnPower, voltComp);
 
-        double[] returnValue = {distanceToTarget, absoluteAngleToTarget, reletiveXToTarget, reletiveYToTarget, movementXpower, movementYpower, movementTurnPower, reletiveTurnAngle};
+        /**
+         * while(true){
+         *             double[] fake = robot.goToPosSingle(20,0,Math.toRadians(180),0);
+         *             telemetry.addData("distanceToTarget", fake[0]);
+         *             telemetry.addData("absoluteAngleToTarget", Math.toDegrees(fake[1]));
+         *             telemetry.addData("reletiveXToTarget", fake[2]);
+         *             telemetry.addData("reletiveYToTarget", fake[3]);
+         *             telemetry.addData("movementXpower", fake[4]);
+         *             telemetry.addData("movementYpower", fake[5]);
+         *             telemetry.addData("movementTurnPower", fake[6]);
+         *             telemetry.addData("reletiveTurnAngle", Math.toDegrees(fake[7]));
+         *             telemetry.addData("reletiveAngleToTarget", Math.toDegrees(fake[8]));
+         *
+         *             telemetry.addData("X",robot.GlobalX);
+         *             telemetry.addData("Y",robot.GlobalY);
+         *             telemetry.addData("Heading",Math.toDegrees(robot.GlobalHeading));
+         *
+         *             telemetry.update();
+         *
+         *
+         *         }
+         *
+         *use this to pull out all math values in order to test what the robot is actually doing
+         */
+        double[] returnValue = {distanceToTarget, absoluteAngleToTarget, reletiveXToTarget, reletiveYToTarget, movementXpower, movementYpower, movementTurnPower, reletiveTurnAngle, reletiveAngleToTarget};
         return returnValue;
     }
 
