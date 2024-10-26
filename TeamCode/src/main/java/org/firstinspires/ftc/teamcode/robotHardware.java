@@ -1,9 +1,9 @@
 package org.firstinspires.ftc.teamcode;
-/*
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 
- */
+
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -21,10 +21,10 @@ import com.qualcomm.robotcore.util.Range;
 /**
  * Created by User on 10/1/2022.
  */
-//@Config //We need this for Dashboard to change variables
+@Config //We need this for Dashboard to change variables
 public class robotHardware extends LinearOpMode
 {
-    //FtcDashboard dashboard = FtcDashboard.getInstance();
+    FtcDashboard dashboard = FtcDashboard.getInstance();
     //drive motors
     public DcMotor motorRF = null;
     public DcMotor motorLF = null;
@@ -70,8 +70,8 @@ public class robotHardware extends LinearOpMode
 
     public static double TurnF = .15; // = 32767 / maxV      (do not edit from this number)
     public static double TurnP = 0.5; // = 0.1 * F           (raise till real's apex touches Var apex)
-    public static double TurnI = 0.0; // = 0.1 * P           (fine ajustment of P)
-    public static double TurnD = 0.0; // = 0                     (raise to reduce ocolation)
+    public static double TurnI = 0.00; // = 0.1 * P           (fine adjustment of P)
+    public static double TurnD = 0.05; // = 0                     (raise to reduce ocolation)
 
     double TurningPIDCurrentTime = 0;
     double TurningPIDTime = 0;
@@ -550,7 +550,7 @@ public class robotHardware extends LinearOpMode
         double reletiveTurnAngle;
         if (distanceToTarget > 6) {//-Range.clip(odoTurnPID(0, reletiveTurnAngle), -turnSpeed, turnSpeed) use - to switch turnpower
             reletiveTurnAngle = angleWrapRad(reletiveAngleToTarget - followAngle);//use - when spinning counterclockwise is positive
-            movementTurnPower = -Range.clip(odoTurnPID(0, reletiveTurnAngle), -turnSpeed, turnSpeed);
+            movementTurnPower = Range.clip(odoTurnPID(0, reletiveTurnAngle), -turnSpeed, turnSpeed);
         } else {
             reletiveTurnAngle = angleWrapRad(finalAngle - GlobalHeading);
             movementTurnPower = -Range.clip(odoTurnPID(0, reletiveTurnAngle), -turnSpeed, turnSpeed);
@@ -804,7 +804,7 @@ public class robotHardware extends LinearOpMode
     public double timerInit(int t){
 
         double ti = currentTime.milliseconds() + t;
-        timerInitted = true;
+        //timerInitted = true;
 
         return ti;
 

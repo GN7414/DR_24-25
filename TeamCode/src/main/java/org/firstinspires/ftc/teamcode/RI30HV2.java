@@ -14,12 +14,12 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 @TeleOp(name="RI30HV2")
 //@Disabled
 
-public class RI30HV2 extends LinearOpMode
-{
+public class RI30HV2 extends LinearOpMode {
     public boolean buttonB = true;
     public boolean buttonA = true;
     public boolean buttonC = true;
     public boolean openClose = true;
+    public boolean buttonD = true;
 
     public Servo armWrist = null;
     public CRServo intake = null;
@@ -30,11 +30,15 @@ public class RI30HV2 extends LinearOpMode
     public DcMotor arm = null;
     public DcMotor slides = null;
 
+    public int slideLoops = -1;
     public int slideEncoder = 0;
+    public int offset = 0;
     public double speed = 1;
+    public double armPower = 0;
 
     public int maxSlides = 4500;
-    public int downPos = 640;
+    public int downPos = 660;
+    public int armEncoder = 0;
 
     public boolean down = false;
     public boolean open = false;
@@ -43,10 +47,10 @@ public class RI30HV2 extends LinearOpMode
 
     double time = 0;
     public boolean timerInit2 = false;
+    public boolean timerInit3 = false;
 
 
-    public enum AutoGrab
-    {
+    public enum AutoGrab {
         START,
         GRAB_SAMPLE,
         DROP_SAMPLE,
@@ -58,13 +62,13 @@ public class RI30HV2 extends LinearOpMode
         ARM_BOTTOM_POS,
         MANUAL
     }
+
     AutoGrab autoGrab = AutoGrab.START;
 
     ElapsedTime timer = new ElapsedTime();
 
     @Override
-    public void runOpMode() throws InterruptedException
-    {
+    public void runOpMode() throws InterruptedException {
 
         robotHardware robot = new robotHardware(hardwareMap);
 
@@ -72,7 +76,7 @@ public class RI30HV2 extends LinearOpMode
 
         robot.odo.resetPosAndIMU();
 
-        //dive motors
+        //drive motors
         arm = hardwareMap.dcMotor.get("frontArmMotor");
         slides = hardwareMap.dcMotor.get("slides");
 
@@ -94,8 +98,7 @@ public class RI30HV2 extends LinearOpMode
         arm.setDirection(DcMotor.Direction.REVERSE);
 
 
-
-        while(!isStarted() && !isStopRequested()){
+        while (!isStarted() && !isStopRequested()) {
 
 
             //smaller numbers go up higher
@@ -104,42 +107,38 @@ public class RI30HV2 extends LinearOpMode
 
             intake.setPower(0);
 
-            arm.setTargetPosition(0);
-            arm.setPower(0.175);
-            arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            //arm.setTargetPosition(0);
+            //arm.setPower(0.175);
+            //arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
 
-        arm.setTargetPosition(100);
+        arm.setTargetPosition(200);
         arm.setPower(0.175);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 
-
-        while (opModeIsActive())
-        {
+        while (opModeIsActive()) {
 
             robot.mecanumDrive(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, speed); //normal people
             //robot.mecanumDrive(-gamepad1.right_stick_y, -gamepad1.right_stick_x, -gamepad1.left_stick_x, speed); //nolan
 
 
-
             //Bucket
-            if ((gamepad1.a  && buttonA) || timerInit2){
+            if ((gamepad1.a && buttonA) || timerInit2) {
                 // down position
-                if(gamepad1.a) {
+                if (gamepad1.a) {
                     time = robotHardware.currentTime.milliseconds() + 250;
                     timerInit2 = true;
                 }
 
 
-                if(robot.boolTimer(time + 450)){
+                if (robot.boolTimer(time + 1000)) {
                     slideEncoder = 0;
                     timerInit2 = false;
                 }
-                else if (robot.boolTimer(time)){
+                else if (robot.boolTimer(time)) {
                     dumper.setPosition(.65);//higher number brings the dumper down
-                }
-                else {
+                } else {
                     dumper.setPosition(.55);
                 }
 
@@ -148,9 +147,7 @@ public class RI30HV2 extends LinearOpMode
             }
 
 
-
-
-            if (gamepad1.b){
+            if (gamepad1.b) {
                 dumper.setPosition(.35);
             }
             //Front Claw
@@ -163,31 +160,40 @@ public class RI30HV2 extends LinearOpMode
             //
             //}
 
-            //slide fine addjust
-            if (gamepad1.a && buttonA){
-                buttonA = false;
 
-            }
-            else if (gamepad1.y && buttonB){
 
+
+
+            //slide fine adjust
+           if (gamepad2.y && buttonA) {
                 slideEncoder += 200;
+                buttonA = false;
+                intake.setPower(0);
+            }
+           else if (gamepad2.x && buttonB) {
+
+                slideEncoder -= 200;
                 buttonB = false;
-                intake.setPower (0);
-            }
-            if (!gamepad1.a && !buttonA){
-                buttonA = true;
-            }
-            else if (!gamepad1.y && !buttonB){
-                buttonB = true;
-            }
-            if (gamepad1.left_stick_button) {
+                intake.setPower(0);
 
-                downPos = arm.getCurrentPosition() - 5;
-                arm.setTargetPosition(downPos);
-                arm.setPower(.4);
-                arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+           }
+           if (!gamepad2.a && !buttonA) {
+               buttonA = true;
+           }
+           else if (!gamepad2.y && !buttonB) {
+               buttonB = true;
+           }
 
-            }
+
+
+           if (gamepad1.left_stick_button) {
+
+               downPos = arm.getCurrentPosition() - 5;
+               arm.setTargetPosition(downPos);
+               arm.setPower(.4);
+               arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+           }
 
             if (gamepad1.right_stick_button) {
 
@@ -199,40 +205,36 @@ public class RI30HV2 extends LinearOpMode
             }
 
 
-
             //One button press
-            if (gamepad1.right_trigger > .5 && buttonC){
+            if (gamepad1.right_trigger > .5 && buttonC) {
                 buttonC = false;
                 if (openClose) {
                     autoGrab = AutoGrab.DROP_SAMPLE;
-                }
-                else if (!openClose) { //this closes
+                } else if (!openClose) { //this closes
                     autoGrab = AutoGrab.GRAB_SAMPLE;
                 }
                 open = false;
-            }
-            else if (gamepad1.right_trigger < .5 && !buttonC) {
+            } else if (gamepad1.right_trigger < .5 && !buttonC) {
                 buttonC = true;
             }
 
 
-
             //Arm
 
-            if (gamepad1.dpad_up || robotHardware.timerInitted){//back position
-                if (gamepad1.dpad_up){
-                    time = robot.timerInit(800);
+            if (gamepad1.dpad_up || robotHardware.timerInitted) {//back position
+                if (gamepad1.dpad_up) {
+                    time = robot.timerInit(900);
+                    robotHardware.timerInitted=true;
                 }
 
                 dumper.setPosition(.35);
 
                 autoGrab = AutoGrab.ARM_TOP_POS;
 
-                if (robot.boolTimer(time + 500)){
+                if (robot.boolTimer(time + 500)) {
                     autoGrab = AutoGrab.ARM_MIDDLE_POS;
                     robotHardware.timerInitted = false;
-                }
-                else if (robot.boolTimer(time)){
+                } else if (robot.boolTimer(time)) {
                     autoGrab = AutoGrab.DROP_SAMPLE;
 
                 }
@@ -240,51 +242,66 @@ public class RI30HV2 extends LinearOpMode
             }
 
 
-
-
-
-            if (gamepad1.dpad_right){//collect prep
+            if (gamepad1.dpad_right) {//collect prep
                 autoGrab = AutoGrab.ARM_MIDDLE_POS;
             }
-            if (gamepad1.dpad_down){//bottom position for arm
+            if (gamepad1.dpad_down) {//bottom position for arm
                 autoGrab = AutoGrab.ARM_BOTTOM_POS;
                 intake.setPower(.75);
             }
 
-            if (gamepad1.left_bumper ) {// 8700 is max
-
+            if (gamepad1.left_bumper && buttonD) {// 8700 is max
+                //autoGrab = AutoGrab.TOP_SLIDE_POS;
                 slideEncoder = maxSlides;
 
+                buttonD = false;
             }
-            if (gamepad1.left_trigger > .5 ) {
+            if (!gamepad1.left_bumper && !buttonD) {
+                buttonD = true;
+            }
+
+            if (gamepad1.left_trigger > .5) {
 
                 slideEncoder = 2100;
 
             }
-            if (gamepad1.right_bumper ) {
+            if (gamepad1.right_bumper || timerInit3) {
+                if (gamepad1.right_bumper) {
+                    time = robot.timerInit(2000);
+                    timerInit3 = true;
+                }
 
                 slideEncoder = 0;
-
+                if (robot.boolTimer(time)) {
+                    timerInit3 = false;
+                    offset = slides.getCurrentPosition() + 20;
+                }
             }
 
 
-            switch (autoGrab)
-            {
+            //if (gamepad1.right_bumper){
+            //    slideEncoder = 0;
+            //}
+
+
+
+            switch (autoGrab) {
                 case GRAB_SAMPLE:
 
 
                     openClose = true;
-                    intake.setPower (.75);
+                    intake.setPower(.75);
 
                     break;
                 case DROP_SAMPLE:
 
                     openClose = false;
-                    intake.setPower (-1);
+                    intake.setPower(-1);
 
                     break;
                 case TOP_SLIDE_POS:
                     slideEncoder = maxSlides;
+                    slideLoops ++;
 
                     break;
                 case MIDDLE_SLIDE_POS:
@@ -298,96 +315,98 @@ public class RI30HV2 extends LinearOpMode
                 case ARM_TOP_POS:
 
                     armWrist.setPosition(.6);
-                    arm.setTargetPosition(50);
-                    arm.setPower(0.4);
-                    arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    armEncoder = 50;
+                    armPower = .4;
 
 
                     break;
                 case ARM_MIDDLE_POS:
                     armWrist.setPosition(.5);
-                    arm.setTargetPosition(500);
-                    arm.setPower(0.25);
-                    arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    armPower = .25;
+                    armEncoder = 500;
                     intake.setPower(0);
 
 
                     break;
                 case ARM_BOTTOM_POS:
 
-                    armWrist.setPosition(.4);
-                    arm.setTargetPosition(downPos);
-                    arm.setPower(0.5);
-                    arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    armWrist.setPosition(.45);
+                    armEncoder = downPos;
+                    armPower = .4;
 
                     break;
 
             }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            if (slides.getCurrentPosition() > 6000 || arm.getCurrentPosition() > 550){
+            if (slides.getCurrentPosition() > 6000 || arm.getCurrentPosition() > 550) {
                 speed = .5;
-            }
-            else {
+            } else {
                 speed = 1;
             }
 
 
 
-
-
             //Slides stops
-            if (slideEncoder < 0){
+            if (slideEncoder < 0) {
                 slideEncoder = 0;
             }
-            if (slideEncoder > maxSlides){
-                slideEncoder = maxSlides;
+            if (slideEncoder > maxSlides) {
+                //slideEncoder = maxSlides;
             }
 
             //More slides stuff
-            //2200 is the max for the slides
-            slides.setTargetPosition(slideEncoder);
+            //4500 is the max for the slides
+            /*
+            if (slides.getCurrentPosition() < slideEncoder) {
+                slides.setTargetPosition(slideEncoder);
+                slides.setPower(1);
+                slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            }
+            else {
+                slides.setTargetPosition(slideEncoder);
+                slides.setPower(.5);
+                slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            }
+
+             */
+
+            slides.setTargetPosition(slideEncoder + offset);
             slides.setPower(1);
             slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            if(armEncoder > 600 && arm.getCurrentPosition() > 600){
+                arm.setTargetPosition(armEncoder);
+                arm.setPower(0);
+                arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            }
+            else{
+                arm.setTargetPosition(armEncoder);
+                arm.setPower(armPower);
+                arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            }
 
             //robot.odo.update();
             robot.refresh(robot.odometers);
 
 
-            telemetry.addData("slide encoder",slideEncoder);
-            telemetry.addData("slide pos",slides.getCurrentPosition());
+            telemetry.addData("slide encoder", slideEncoder + offset);
+            telemetry.addData("slide pos", slides.getCurrentPosition());
 
-            telemetry.addData("",null);
+            telemetry.addData("", null);
 
-            telemetry.addData("X",robot.GlobalX);
-            telemetry.addData("Y",robot.GlobalY);
-            telemetry.addData("Heading",robot.GlobalHeading);
+            telemetry.addData("X", robot.GlobalX);
+            telemetry.addData("Y", robot.GlobalY);
+            telemetry.addData("Heading", Math.toDegrees(robot.angleWrapRad(robot.GlobalHeading)));
 
 
-            telemetry.addData("",null);
+            telemetry.addData("", null);
 
-            telemetry.addData("currentRightPos",robot.odometers[0].getCurrentPosition());
-            telemetry.addData("currentLeftPos",robot.odometers[1].getCurrentPosition());
-            telemetry.addData("currentPerpendicularPos",robot.odometers[2].getCurrentPosition());
+            telemetry.addData("currentRightPos", robot.odometers[0].getCurrentPosition());
+            telemetry.addData("currentLeftPos", robot.odometers[1].getCurrentPosition());
+            telemetry.addData("currentPerpendicularPos", robot.odometers[2].getCurrentPosition());
 
-            telemetry.addData("armPos",arm.getCurrentPosition());
+            telemetry.addData("armPos", arm.getCurrentPosition());
 
             telemetry.addData("getPosX", robot.odo.getPosX());
             telemetry.addData("getEncoderX", robot.odo.getEncoderX());
@@ -397,4 +416,9 @@ public class RI30HV2 extends LinearOpMode
         }
 
     }
+
+
+
+
+
 }
