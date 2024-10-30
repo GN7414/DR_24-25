@@ -182,7 +182,7 @@ public class robotHardware extends LinearOpMode
         odo.setOffsets(-200.0, -120.0);
         odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
         odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
-        odo.resetPosAndIMU();
+        //odo.resetPosAndIMU();
 
         //resetRuntime();
 

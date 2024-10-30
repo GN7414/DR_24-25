@@ -37,8 +37,9 @@ public class AutoRI30H extends LinearOpMode
         robotHardware robot = new robotHardware(hardwareMap);
 
         robot.resetDriveEncoders();
+        robot.odo.resetPosAndIMU();
 
-        //dive motors
+        //drive motors
         arm = hardwareMap.dcMotor.get("frontArmMotor");
         slides = hardwareMap.dcMotor.get("slides");
 

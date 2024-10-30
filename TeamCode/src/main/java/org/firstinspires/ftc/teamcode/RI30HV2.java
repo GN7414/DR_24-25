@@ -119,8 +119,8 @@ public class RI30HV2 extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            robot.mecanumDrive(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, speed); //normal people
-            //robot.mecanumDrive(-gamepad1.right_stick_y, -gamepad1.right_stick_x, -gamepad1.left_stick_x, speed); //nolan
+            //robot.mecanumDrive(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, speed); //normal people
+            robot.mecanumDrive(gamepad1.right_stick_y, -gamepad1.right_stick_x, -gamepad1.left_stick_x, speed); //nolan
 
 
             //Bucket
@@ -133,7 +133,7 @@ public class RI30HV2 extends LinearOpMode {
 
 
                 if (robot.boolTimer(time + 1000)) {
-                    slideEncoder = 0;
+                    //slideEncoder = 0;
                     timerInit2 = false;
                 }
                 else if (robot.boolTimer(time)) {
@@ -233,6 +233,7 @@ public class RI30HV2 extends LinearOpMode {
 
                 if (robot.boolTimer(time + 500)) {
                     autoGrab = AutoGrab.ARM_MIDDLE_POS;
+                    intake.setPower(0);
                     robotHardware.timerInitted = false;
                 } else if (robot.boolTimer(time)) {
                     autoGrab = AutoGrab.DROP_SAMPLE;
@@ -274,7 +275,11 @@ public class RI30HV2 extends LinearOpMode {
                 slideEncoder = 0;
                 if (robot.boolTimer(time)) {
                     timerInit3 = false;
-                    offset = slides.getCurrentPosition() + 20;
+                    offset = slides.getCurrentPosition();
+
+                    //slides.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    //slides.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    //slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 }
             }
 
@@ -282,7 +287,6 @@ public class RI30HV2 extends LinearOpMode {
             //if (gamepad1.right_bumper){
             //    slideEncoder = 0;
             //}
-
 
 
             switch (autoGrab) {
@@ -324,7 +328,7 @@ public class RI30HV2 extends LinearOpMode {
                     armWrist.setPosition(.5);
                     armPower = .25;
                     armEncoder = 500;
-                    intake.setPower(0);
+                    //intake.setPower(0);
 
 
                     break;
@@ -371,7 +375,8 @@ public class RI30HV2 extends LinearOpMode {
 
              */
 
-            slides.setTargetPosition(slideEncoder + offset);
+
+            slides.setTargetPosition(slideEncoder + offset +20);
             slides.setPower(1);
             slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
