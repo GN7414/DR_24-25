@@ -165,7 +165,7 @@ public class AutoRI30H extends LinearOpMode
 
 
 
-            slides.setTargetPosition(200);
+            slides.setTargetPosition(0);
             slides.setPower(1);
             slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
@@ -240,7 +240,7 @@ public class AutoRI30H extends LinearOpMode
             robot.goToPosSingle(x, y, finalAngle, Math.toRadians(180));
 
 
-            slides.setTargetPosition(4500 + 200);
+            slides.setTargetPosition(4500);
             slides.setPower(1);
             slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
@@ -279,7 +279,7 @@ public class AutoRI30H extends LinearOpMode
 
 
 
-            slides.setTargetPosition(400);
+            slides.setTargetPosition(0);
             slides.setPower(1);
             slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
@@ -356,7 +356,7 @@ public class AutoRI30H extends LinearOpMode
             robot.goToPosSingle(x, y, finalAngle, Math.toRadians(180));
 
 
-            slides.setTargetPosition(4500+400);
+            slides.setTargetPosition(4500);
             slides.setPower(1);
             slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
@@ -383,7 +383,7 @@ public class AutoRI30H extends LinearOpMode
             robot.goToPosSingle(x, y, finalAngle, 0);
 
 
-            slides.setTargetPosition(600);
+            slides.setTargetPosition(0);
             slides.setPower(1);
             slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 

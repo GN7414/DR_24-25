@@ -268,14 +268,14 @@ public class RI30HV2 extends LinearOpMode {
             }
             if (gamepad1.right_bumper || timerInit3) {
                 if (gamepad1.right_bumper) {
-                    time = robot.timerInit(2000);
+                    time = robot.timerInit(2500);
                     timerInit3 = true;
                 }
 
                 slideEncoder = 0;
                 if (robot.boolTimer(time)) {
                     timerInit3 = false;
-                    offset = slides.getCurrentPosition();
+                    //offset = slides.getCurrentPosition();
 
                     //slides.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                     //slides.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -376,7 +376,7 @@ public class RI30HV2 extends LinearOpMode {
              */
 
 
-            slides.setTargetPosition(slideEncoder + offset +20);
+            slides.setTargetPosition(slideEncoder + offset);
             slides.setPower(1);
             slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
