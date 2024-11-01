@@ -36,7 +36,7 @@ public class RI30HV2 extends LinearOpMode {
     public double speed = 1;
     public double armPower = 0;
 
-    public int maxSlides = 4500;
+    public int maxSlides = 4300;
     public int downPos = 660;
     public int armEncoder = 0;
 
@@ -102,8 +102,8 @@ public class RI30HV2 extends LinearOpMode {
 
 
             //smaller numbers go up higher
-            dumper.setPosition(0.4);
-            armWrist.setPosition(.5);
+            dumper.setPosition(0);
+            armWrist.setPosition(robot.WRIST_MID);
 
             intake.setPower(0);
 
@@ -318,14 +318,14 @@ public class RI30HV2 extends LinearOpMode {
                     break;
                 case ARM_TOP_POS:
 
-                    armWrist.setPosition(.6);
+                    armWrist.setPosition(robot.WRIST_TOP);
                     armEncoder = 50;
                     armPower = .4;
 
 
                     break;
                 case ARM_MIDDLE_POS:
-                    armWrist.setPosition(.5);
+                    armWrist.setPosition(robot.WRIST_MID);
                     armPower = .25;
                     armEncoder = 500;
                     //intake.setPower(0);
@@ -334,7 +334,7 @@ public class RI30HV2 extends LinearOpMode {
                     break;
                 case ARM_BOTTOM_POS:
 
-                    armWrist.setPosition(.45);
+                    armWrist.setPosition(robot.WRIST_LOW);
                     armEncoder = downPos;
                     armPower = .4;
 
@@ -371,7 +371,7 @@ public class RI30HV2 extends LinearOpMode {
                 slides.setTargetPosition(slideEncoder);
                 slides.setPower(.5);
                 slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            }
+            }time = robotHardware.currentTime.milliseconds();
 
              */
 

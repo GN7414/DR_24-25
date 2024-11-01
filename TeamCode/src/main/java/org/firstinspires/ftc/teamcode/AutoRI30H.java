@@ -172,7 +172,7 @@ public class AutoRI30H extends LinearOpMode
             dumper.setPosition(.4);
 
 
-            armWrist.setPosition(.45);
+            armWrist.setPosition(robot.WRIST_LOW);
             arm.setTargetPosition(downPos);
             arm.setPower(0.4);
             arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -213,7 +213,7 @@ public class AutoRI30H extends LinearOpMode
 
         robot.wait(500,robot.odometers);
 
-        armWrist.setPosition(.45);
+        armWrist.setPosition(robot.WRIST_LOW);
         arm.setTargetPosition(30);
         arm.setPower(0.4);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -224,7 +224,7 @@ public class AutoRI30H extends LinearOpMode
 
         robot.wait(400,robot.odometers);
 
-        armWrist.setPosition(.6);
+        armWrist.setPosition(robot.WRIST_TOP);
         arm.setTargetPosition(450);
         arm.setPower(0.25);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -286,7 +286,7 @@ public class AutoRI30H extends LinearOpMode
             dumper.setPosition(.4);
 
 
-            armWrist.setPosition(.45);
+            armWrist.setPosition(robot.WRIST_LOW);
             arm.setTargetPosition(downPos);
             arm.setPower(0.5);
             arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -329,7 +329,7 @@ public class AutoRI30H extends LinearOpMode
         robot.goToPos(-7, 38, finalAngle, Math.toRadians(180));
 
 
-        armWrist.setPosition(.6);
+        armWrist.setPosition(robot.WRIST_TOP);
         arm.setTargetPosition(30);
         arm.setPower(0.4);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -340,7 +340,7 @@ public class AutoRI30H extends LinearOpMode
 
         robot.wait(400,robot.odometers);
 
-        armWrist.setPosition(.5);
+        armWrist.setPosition(robot.WRIST_MID);
         arm.setTargetPosition(450);
         arm.setPower(0.25);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);

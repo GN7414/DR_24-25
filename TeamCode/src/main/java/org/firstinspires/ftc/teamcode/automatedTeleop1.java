@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -8,11 +9,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-
 
 @TeleOp(name="automatedTeleop1")
-//@Disabled
+@Disabled
 
 public class automatedTeleop1 extends LinearOpMode {
     public boolean buttonB = true;
@@ -33,11 +32,14 @@ public class automatedTeleop1 extends LinearOpMode {
     public DcMotor arm = null;
     public DcMotor slides = null;
 
+    public int currentPos = 0;
     public int slideLoops = -1;
     public int slideEncoder = 0;
     public int offset = 0;
     public double speed = 1;
     public double armPower = 0;
+    double x = -17,y = 4, finalAngle = Math.toRadians(45);
+
 
     public int maxSlides = 4500;
     public int downPos = 660;
@@ -46,7 +48,7 @@ public class automatedTeleop1 extends LinearOpMode {
     public boolean down = false;
     public boolean open = false;
 
-    public boolean x = false;
+    public boolean XBoolean = false;
 
     double time = 0;
     public boolean timerInit2 = false;
@@ -107,7 +109,7 @@ public class automatedTeleop1 extends LinearOpMode {
 
             //smaller numbers go up higher
             dumper.setPosition(0.4);
-            armWrist.setPosition(.5);
+            armWrist.setPosition(robot.WRIST_MID);
 
             intake.setPower(0);
 
@@ -321,14 +323,14 @@ public class automatedTeleop1 extends LinearOpMode {
                         break;
                     case ARM_TOP_POS:
 
-                        armWrist.setPosition(.6);
+                        armWrist.setPosition(robot.WRIST_TOP);
                         armEncoder = 50;
                         armPower = .4;
 
 
                         break;
                     case ARM_MIDDLE_POS:
-                        armWrist.setPosition(.5);
+                        armWrist.setPosition(robot.WRIST_MID);
                         armPower = .25;
                         armEncoder = 500;
                         //intake.setPower(0);
@@ -337,7 +339,7 @@ public class automatedTeleop1 extends LinearOpMode {
                         break;
                     case ARM_BOTTOM_POS:
 
-                        armWrist.setPosition(.45);
+                        armWrist.setPosition(robot.WRIST_LOW);
                         armEncoder = downPos;
                         armPower = .4;
 
@@ -427,44 +429,94 @@ public class automatedTeleop1 extends LinearOpMode {
                 if (!gamepad1.guide && !buttonE){
                     buttonE = true;
                 }
-                //Mecanum Drive
-                //robot.mecanumDrive(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, speed); //normal people
-                robot.mecanumDrive(gamepad1.right_stick_y, -gamepad1.right_stick_x, -gamepad1.left_stick_x, speed); //nolan
 
-                //Middle Arm Position
-                if (gamepad1.dpad_right) {//collect prep
-                    armWrist.setPosition(.5);
-                    armPower = .25;
-                    armEncoder = 500;
-                }
-                //Down Arm Position
-                if (gamepad1.dpad_down) {//bottom position for arm
-                    armWrist.setPosition(.45);
-                    armEncoder = downPos;
-                    armPower = .4;
-                    intake.setPower(.75);
-                }
 
                 // Moving
+                //if the arm is in middle position and you pushed start or timer 4 is initiated
                 if ((armEncoder == 500 && (gamepad1.start && buttonS)) || timerInit4){
-                    //Timer
+                    //reiniting everytime you start the cycles
                     if (gamepad1.start) {
                         time = robotHardware.currentTime.milliseconds();
                         timerInit4 = true;
+                        x = 5;y = 4;finalAngle = Math.toRadians(0);
+                        currentPos = 0;
                     }
-                    if (robot.boolTimer(time + 10000)){
 
 
+
+
+
+                    if((Math.abs(x - robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) && currentPos == 0) {
+
+                        robot.goToPosSingle(x, robot.GlobalY, finalAngle, Math.toRadians(180));
+
+
+                        time = robotHardware.currentTime.milliseconds();
+                    }
+                    else if (currentPos == 0 && robot.boolTimer(time + 0)){
+                        arm.setTargetPosition(50);
+                        arm.setPower(.4);
+                        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                        armWrist.setPosition(robot.WRIST_TOP);
+                        dumper.setPosition(.4);
+
+                    }
+                    else if (currentPos == 0 && robot.boolTimer(time + 500)){
+                        intake.setPower(-.75);
+                    }
+                    else if (currentPos == 0 && robot.boolTimer(time + 750)) {
+                        arm.setTargetPosition(200);
+                        arm.setPower(.4);
+                        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    }
+                    //exiting the block of code
+                    else if (currentPos == 0 && robot.boolTimer(time + 1000)) {
+                        currentPos = 1;
+                        x = -17;y = 4;finalAngle = Math.toRadians(45);
+                    }
+
+
+
+                    if((Math.abs(x - robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) && currentPos == 1) {
+
+                        robot.goToPosSingle(x, y, finalAngle, Math.toRadians(180));
+
+                        slides.setTargetPosition(4500);
+                        slides.setPower(1);
+                        slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                        time = robotHardware.currentTime.milliseconds();
+                    }
+                    else if (currentPos == 1 && robot.boolTimer(time + 0)){
+                        dumper.setPosition(.55);
+                    }
+                    else if (currentPos == 1 && robot.boolTimer(time + 500)){
+                        dumper.setPosition(.65);
+                    }
+                    //exiting the block of code
+                    else if (currentPos == 1 && robot.boolTimer(time + 750)) {
+                        currentPos = 2;
+                        x = 10;y = 62;finalAngle = Math.toRadians(0);
+                    }
+
+
+
+
+                    if((Math.abs(x - robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) && currentPos == 2) {
+
+                        robot.goToPosSingle(x, y, finalAngle, Math.toRadians(0));
+
+                        slides.setTargetPosition(0);
+                        slides.setPower(1);
+                        slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                        time = robotHardware.currentTime.milliseconds();
+                    }
+                    else if (currentPos == 2 && robot.boolTimer(time + 0)) {
                         timerInit4 = false;
-                    }
-
-                    else if (robot.boolTimer(time + 10)){
 
                     }
-                    else {
-                        robot.goToPosSingle(0,robot.GlobalY,0,Math.toRadians(180));
 
-                    }
 
 
 
@@ -472,60 +524,46 @@ public class automatedTeleop1 extends LinearOpMode {
 
                     buttonS = false;
                 }
+                //Nolan's control while still being in auto mode of teleop
+                else {
+                    //Mecanum Drive
+                    //robot.mecanumDrive(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, speed); //normal people
+                    robot.mecanumDrive(gamepad1.right_stick_y, -gamepad1.right_stick_x, -gamepad1.left_stick_x, speed); //nolan
+
+                    //Middle Arm Position
+                    if (gamepad1.dpad_right) {//collect prep
+                        armWrist.setPosition(robot.WRIST_MID);
+                        armPower = .25;
+                        armEncoder = 500;
+                    }
+                    //Down Arm Position
+                    if (gamepad1.dpad_down) {//bottom position for arm
+                        armWrist.setPosition(robot.WRIST_LOW);
+                        armEncoder = downPos;
+                        armPower = .4;
+                        intake.setPower(.75);
+                    }
+
+
+
+                    if (armEncoder > 600 && arm.getCurrentPosition() > 600) {
+                        arm.setTargetPosition(armEncoder);
+                        arm.setPower(0);
+                        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    } else {
+                        arm.setTargetPosition(armEncoder);
+                        arm.setPower(armPower);
+                        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    }
+
+                }
                 if (!gamepad1.start && !buttonS) {
 
                     buttonS = true;
                 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                if(armEncoder > 600 && arm.getCurrentPosition() > 600){
-                    arm.setTargetPosition(armEncoder);
-                    arm.setPower(0);
-                    arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                }
-                else{
-                    arm.setTargetPosition(armEncoder);
-                    arm.setPower(armPower);
-                    arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                }
-
-
-
             }
+
         }
 
     }

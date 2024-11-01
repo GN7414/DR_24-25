@@ -15,7 +15,7 @@ import org.firstinspires.ftc.vision.opencv.PredominantColorProcessor;
 
 
 @TeleOp(name="cameraTesting")
-//@Disabled
+@Disabled
 
 public class cameraTesting extends LinearOpMode
 {

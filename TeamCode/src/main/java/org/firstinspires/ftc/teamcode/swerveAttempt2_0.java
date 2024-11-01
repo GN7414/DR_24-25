@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 
 @TeleOp(name="swerveAttempt2_0")
-// @Disabled
+@Disabled
 
 public class swerveAttempt2_0 extends LinearOpMode
 {

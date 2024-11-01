@@ -21,10 +21,10 @@ import com.qualcomm.robotcore.util.Range;
 /**
  * Created by User on 10/1/2022.
  */
-@Config //We need this for Dashboard to change variables
+//@Config //We need this for Dashboard to change variables
 public class robotHardware extends LinearOpMode
 {
-    FtcDashboard dashboard = FtcDashboard.getInstance();
+    //FtcDashboard dashboard = FtcDashboard.getInstance();
     //drive motors
     public DcMotor motorRF = null;
     public DcMotor motorLF = null;
@@ -124,7 +124,9 @@ public class robotHardware extends LinearOpMode
     public static ElapsedTime currentTime = new ElapsedTime();
 
 
-
+    public final double WRIST_LOW = .45;
+    public final double WRIST_MID = .5;
+    public final double WRIST_TOP = .6;
 
     double oldTime = 0;
     GoBildaPinpointDriver odo; // Declare OpMode member for the Odometry Computer

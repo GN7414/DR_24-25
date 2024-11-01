@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 
 @TeleOp(name="RI30Hdrive")
-//@Disabled
+@Disabled
 
 public class RI30Hdrive extends LinearOpMode
 {
