@@ -36,7 +36,7 @@ public class RI30HV2 extends LinearOpMode {
     public double speed = 1;
     public double armPower = 0;
 
-    public int maxSlides = 4300;
+    public int maxSlides = 4500;
     public int downPos = 660;
     public int armEncoder = 0;
 
@@ -102,8 +102,8 @@ public class RI30HV2 extends LinearOpMode {
 
 
             //smaller numbers go up higher
-            dumper.setPosition(0);
-            armWrist.setPosition(robot.WRIST_MID);
+            dumper.setPosition(0.35);
+            armWrist.setPosition(.3);
 
             intake.setPower(0);
 
@@ -136,7 +136,7 @@ public class RI30HV2 extends LinearOpMode {
                     //slideEncoder = 0;
                     timerInit2 = false;
                 }
-                else if (robot.boolTimer(time)) {
+                else if (robot.boolTimer(time + 500)) {
                     dumper.setPosition(.65);//higher number brings the dumper down
                 } else {
                     dumper.setPosition(.55);
@@ -223,7 +223,7 @@ public class RI30HV2 extends LinearOpMode {
 
             if (gamepad1.dpad_up || robotHardware.timerInitted) {//back position
                 if (gamepad1.dpad_up) {
-                    time = robot.timerInit(900);
+                    time = robot.timerInit(700);
                     robotHardware.timerInitted=true;
                 }
 
@@ -231,7 +231,7 @@ public class RI30HV2 extends LinearOpMode {
 
                 autoGrab = AutoGrab.ARM_TOP_POS;
 
-                if (robot.boolTimer(time + 500)) {
+                if (robot.boolTimer(time + 1000)) {
                     autoGrab = AutoGrab.ARM_MIDDLE_POS;
                     intake.setPower(0);
                     robotHardware.timerInitted = false;
@@ -319,7 +319,7 @@ public class RI30HV2 extends LinearOpMode {
                 case ARM_TOP_POS:
 
                     armWrist.setPosition(robot.WRIST_TOP);
-                    armEncoder = 50;
+                    armEncoder = 80;
                     armPower = .4;
 
 

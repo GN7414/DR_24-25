@@ -124,9 +124,9 @@ public class robotHardware extends LinearOpMode
     public static ElapsedTime currentTime = new ElapsedTime();
 
 
-    public final double WRIST_LOW = .45;
-    public final double WRIST_MID = .5;
-    public final double WRIST_TOP = .6;
+    public final double WRIST_TOP = 1;
+    public final double WRIST_MID = .7;
+    public final double WRIST_LOW = .82;
 
     double oldTime = 0;
     GoBildaPinpointDriver odo; // Declare OpMode member for the Odometry Computer
