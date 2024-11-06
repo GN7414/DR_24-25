@@ -131,7 +131,7 @@ public class AutoRI30H extends LinearOpMode
         }
         robot.mecanumDrive(0,0,0,.6);
 
-        robot.wait(1750,robot.odometers);
+        robot.wait(1100,robot.odometers);
 
 
         dumper.setPosition(.55);
@@ -139,6 +139,118 @@ public class AutoRI30H extends LinearOpMode
 
         robot.wait(750,robot.odometers);
 
+
+        /**
+         *
+         * first collection
+         *
+         *
+         *
+         *
+         *
+         *
+         */
+
+        x = 10.75;y = 24; finalAngle = Math.toRadians(145);
+
+        while(Math.abs(x-robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
+
+            robot.goToPosSingle(x, y, finalAngle, Math.toRadians(145));
+
+
+
+            slides.setTargetPosition(0);
+            slides.setPower(1);
+            slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            dumper.setPosition(.4);
+
+
+            armWrist.setPosition(robot.WRIST_TOP);
+            arm.setTargetPosition(downPos);
+            arm.setPower(0.4);
+            arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+        }
+
+        robot.changeSpeed(.4,.4);
+
+        armWrist.setPosition(robot.WRIST_LOW);
+        arm.setTargetPosition(robot.ARM_LOW);
+        arm.setPower(0);
+        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        //robot.goToPos(10,31,Math.toRadians(-205),0);
+
+        robot.mecanumDrive(0,0,0,.6);
+
+        //robot.wait(500,robot.odometers);
+
+
+        inTake.setPower (.75);
+
+        robot.changeSpeed(.3,.3);
+
+        //move to collect
+        time = robot.timerInit(500);
+        while (!robot.boolTimer(time)){
+
+            robot.refresh(robot.odometers);
+
+            robot.mecanumDrive(-.3,0,0,1);
+
+        }
+        robotHardware.timerInitted = false;
+
+        robot.mecanumDrive(0,0,0,1);
+
+
+        robot.wait(500,robot.odometers);
+
+        armWrist.setPosition(robot.WRIST_TOP);
+        arm.setTargetPosition(robot.ARM_TOP);
+        arm.setPower(0.4);
+        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        robot.wait(1000,robot.odometers);
+
+        inTake.setPower (-.75);
+
+        robot.wait(500,robot.odometers);
+
+        armWrist.setPosition(robot.WRIST_TOP);
+        arm.setTargetPosition(robot.ARM_MID);
+        arm.setPower(0.25);
+        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        robot.changeSpeed(.8,.8);
+
+        //move to dump
+
+        x = -17;y = 4; finalAngle = Math.toRadians(45);
+
+        while(Math.abs(x-robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
+
+            robot.goToPosSingle(x, y, finalAngle, Math.toRadians(180));
+
+
+            slides.setTargetPosition(4500);
+            slides.setPower(1);
+            slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+
+        }
+        robot.mecanumDrive(0,0,0,.6);
+
+        robot.wait(700,robot.odometers);
+
+
+        dumper.setPosition(.55);
+
+
+        robot.wait(750,robot.odometers);
 
 
 
@@ -152,7 +264,7 @@ public class AutoRI30H extends LinearOpMode
          *
          *
          *
-         * going to the first sample to collect
+         * going to the second sample to collect
          *
          */
 
@@ -198,12 +310,12 @@ public class AutoRI30H extends LinearOpMode
         robot.changeSpeed(.3,.3);
 
         //move to collect
-        time = robot.timerInit(1000);
+        time = robot.timerInit(500);
         while (!robot.boolTimer(time)){
 
             robot.refresh(robot.odometers);
 
-            robot.mecanumDrive(-.2,0,0,1);
+            robot.mecanumDrive(-.3,0,0,1);
 
         }
         robotHardware.timerInitted = false;
@@ -211,14 +323,14 @@ public class AutoRI30H extends LinearOpMode
         robot.mecanumDrive(0,0,0,1);
 
 
-        robot.wait(500,robot.odometers);
+        robot.wait(300,robot.odometers);
 
         armWrist.setPosition(robot.WRIST_TOP);
         arm.setTargetPosition(robot.ARM_TOP);
         arm.setPower(0.4);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        robot.wait(1500,robot.odometers);
+        robot.wait(1000,robot.odometers);
 
         inTake.setPower (-.75);
 
@@ -249,7 +361,7 @@ public class AutoRI30H extends LinearOpMode
         }
         robot.mecanumDrive(0,0,0,.6);
 
-        robot.wait(1000,robot.odometers);
+        robot.wait(800,robot.odometers);
 
 
         dumper.setPosition(.55);
@@ -267,11 +379,12 @@ public class AutoRI30H extends LinearOpMode
          *
          *
          *
-         * Second collection
+         * third collection
          *
          */
+        robot.changeAccuracy(.5,Math.toRadians(1));
 
-        x = 3;y = 38; finalAngle = Math.toRadians(180);
+        x = -6;y = 38; finalAngle = Math.toRadians(180);
 
         while(Math.abs(x-robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
 
@@ -311,12 +424,12 @@ public class AutoRI30H extends LinearOpMode
         robot.changeSpeed(.3,.3);
 
         //second move to collect
-        time = robot.timerInit(2000);
+        time = robot.timerInit(500);
         while (!robot.boolTimer(time)){
 
             robot.refresh(robot.odometers);
 
-            robot.mecanumDrive(-.2,0,0,1);
+            robot.mecanumDrive(-.3,0,0,1);
 
         }
         robotHardware.timerInitted = false;
@@ -388,7 +501,6 @@ public class AutoRI30H extends LinearOpMode
             slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 
-
         }
         robot.changeAccuracy(1,Math.toRadians(1));
 
@@ -434,18 +546,18 @@ public class AutoRI30H extends LinearOpMode
          *
          */
 
-        x = 0;y = 50; finalAngle = Math.toRadians(0);
-        while(Math.abs(x-robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
-            robot.goToPosSingle(x, y, finalAngle, Math.toRadians(180));
+        //x = 0;y = 50; finalAngle = Math.toRadians(0);
+        //while(Math.abs(x-robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
+            //robot.goToPosSingle(x, y, finalAngle, Math.toRadians(180));
             armWrist.setPosition(0.4);
             arm.setTargetPosition(0);
             arm.setPower(0.25);
             arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        }
-        robot.mecanumDrive(0,0,0,.6);
+        //}
+        //robot.mecanumDrive(0,0,0,.6);
 
-        robot.wait(2000,robot.odometers);
+        robot.wait(1000,robot.odometers);
     }
 
 
