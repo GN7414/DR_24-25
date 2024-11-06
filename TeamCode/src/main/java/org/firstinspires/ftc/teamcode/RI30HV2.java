@@ -137,7 +137,7 @@ public class RI30HV2 extends LinearOpMode {
                     timerInit2 = false;
                 }
                 else if (robot.boolTimer(time + 500)) {
-                    dumper.setPosition(.65);//higher number brings the dumper down
+                    dumper.setPosition(.70);//higher number brings the dumper down
                 } else {
                     dumper.setPosition(.55);
                 }
@@ -189,7 +189,7 @@ public class RI30HV2 extends LinearOpMode {
            if (gamepad1.left_stick_button) {
 
                downPos = arm.getCurrentPosition() - 5;
-               arm.setTargetPosition(downPos);
+               arm.setTargetPosition(robot.downPos);
                arm.setPower(.4);
                arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
@@ -319,15 +319,15 @@ public class RI30HV2 extends LinearOpMode {
                 case ARM_TOP_POS:
 
                     armWrist.setPosition(robot.WRIST_TOP);
-                    armEncoder = 80;
+                    armEncoder = robot.ARM_TOP;
                     armPower = .4;
 
 
                     break;
                 case ARM_MIDDLE_POS:
                     armWrist.setPosition(robot.WRIST_MID);
+                    armEncoder = robot.ARM_MID;
                     armPower = .25;
-                    armEncoder = 500;
                     //intake.setPower(0);
 
 
@@ -335,7 +335,7 @@ public class RI30HV2 extends LinearOpMode {
                 case ARM_BOTTOM_POS:
 
                     armWrist.setPosition(robot.WRIST_LOW);
-                    armEncoder = downPos;
+                    armEncoder = robot.ARM_LOW;
                     armPower = .4;
 
                     break;

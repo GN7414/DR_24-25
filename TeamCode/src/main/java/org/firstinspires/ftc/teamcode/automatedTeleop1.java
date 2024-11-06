@@ -324,15 +324,15 @@ public class automatedTeleop1 extends LinearOpMode {
                     case ARM_TOP_POS:
 
                         armWrist.setPosition(robot.WRIST_TOP);
-                        armEncoder = 50;
+                        armEncoder = robot.ARM_TOP;
                         armPower = .4;
 
 
                         break;
                     case ARM_MIDDLE_POS:
                         armWrist.setPosition(robot.WRIST_MID);
+                        armEncoder = robot.ARM_MID;
                         armPower = .25;
-                        armEncoder = 500;
                         //intake.setPower(0);
 
 
@@ -340,7 +340,7 @@ public class automatedTeleop1 extends LinearOpMode {
                     case ARM_BOTTOM_POS:
 
                         armWrist.setPosition(robot.WRIST_LOW);
-                        armEncoder = downPos;
+                        armEncoder = robot.ARM_LOW;
                         armPower = .4;
 
                         break;
@@ -454,7 +454,7 @@ public class automatedTeleop1 extends LinearOpMode {
                         time = robotHardware.currentTime.milliseconds();
                     }
                     else if (currentPos == 0 && robot.boolTimer(time + 0)){
-                        arm.setTargetPosition(50);
+                        arm.setTargetPosition(robot.ARM_TOP);
                         arm.setPower(.4);
                         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                         armWrist.setPosition(robot.WRIST_TOP);
@@ -534,12 +534,12 @@ public class automatedTeleop1 extends LinearOpMode {
                     if (gamepad1.dpad_right) {//collect prep
                         armWrist.setPosition(robot.WRIST_MID);
                         armPower = .25;
-                        armEncoder = 500;
+                        armEncoder = robot.ARM_MID;
                     }
                     //Down Arm Position
                     if (gamepad1.dpad_down) {//bottom position for arm
                         armWrist.setPosition(robot.WRIST_LOW);
-                        armEncoder = downPos;
+                        armEncoder = robot.ARM_LOW;
                         armPower = .4;
                         intake.setPower(.75);
                     }

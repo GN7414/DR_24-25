@@ -86,7 +86,7 @@ public class AutoRI30H extends LinearOpMode
 
 
         armWrist.setPosition(.4);
-        arm.setTargetPosition(450);
+        arm.setTargetPosition(robot.ARM_MID);
         arm.setPower(0.25);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
@@ -213,8 +213,8 @@ public class AutoRI30H extends LinearOpMode
 
         robot.wait(500,robot.odometers);
 
-        armWrist.setPosition(robot.WRIST_LOW);
-        arm.setTargetPosition(30);
+        armWrist.setPosition(robot.WRIST_TOP);
+        arm.setTargetPosition(robot.ARM_TOP);
         arm.setPower(0.4);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
@@ -222,10 +222,10 @@ public class AutoRI30H extends LinearOpMode
 
         inTake.setPower (-.75);
 
-        robot.wait(400,robot.odometers);
+        robot.wait(500,robot.odometers);
 
         armWrist.setPosition(robot.WRIST_TOP);
-        arm.setTargetPosition(450);
+        arm.setTargetPosition(robot.ARM_MID);
         arm.setPower(0.25);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
@@ -330,7 +330,7 @@ public class AutoRI30H extends LinearOpMode
 
 
         armWrist.setPosition(robot.WRIST_TOP);
-        arm.setTargetPosition(30);
+        arm.setTargetPosition(robot.ARM_TOP);
         arm.setPower(0.4);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
@@ -341,7 +341,7 @@ public class AutoRI30H extends LinearOpMode
         robot.wait(400,robot.odometers);
 
         armWrist.setPosition(robot.WRIST_MID);
-        arm.setTargetPosition(450);
+        arm.setTargetPosition(robot.ARM_MID);
         arm.setPower(0.25);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
@@ -437,7 +437,7 @@ public class AutoRI30H extends LinearOpMode
         x = 0;y = 50; finalAngle = Math.toRadians(0);
         while(Math.abs(x-robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
             robot.goToPosSingle(x, y, finalAngle, Math.toRadians(180));
-            armWrist.setPosition(0);
+            armWrist.setPosition(0.4);
             arm.setTargetPosition(0);
             arm.setPower(0.25);
             arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
