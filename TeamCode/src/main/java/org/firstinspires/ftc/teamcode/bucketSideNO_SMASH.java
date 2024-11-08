@@ -133,12 +133,15 @@ public class bucketSideNO_SMASH extends LinearOpMode
 
         robot.wait(950,robot.odometers);
 
+        armWrist.setPosition(robot.WRIST_TOP);
 
         dumper.setPosition(.6);
 
 
         robot.wait(750,robot.odometers);
         robot.changeSpeed(1,1);
+
+
 
 
         /**
@@ -152,7 +155,7 @@ public class bucketSideNO_SMASH extends LinearOpMode
          *
          */
 
-        x = 10.75;y = 24.5; finalAngle = Math.toRadians(145);
+        x = 10.75;y = 23.5; finalAngle = Math.toRadians(145);
 
         while(Math.abs(x-robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
 
@@ -167,7 +170,7 @@ public class bucketSideNO_SMASH extends LinearOpMode
             dumper.setPosition(.4);
 
 
-            armWrist.setPosition(robot.WRIST_TOP);
+
             arm.setTargetPosition(downPos);
             arm.setPower(0.4);
             arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -271,11 +274,11 @@ public class bucketSideNO_SMASH extends LinearOpMode
 
         robot.changeSpeed(1,1);
 
-        x = 3;y = 38; finalAngle = Math.toRadians(180);
+        x = 3;y = 37; finalAngle = Math.toRadians(180);
 
         while(Math.abs(x-robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
 
-            robot.goToPosSingle(x, y, finalAngle, Math.toRadians(120));
+            robot.goToPosSingle(x, y, finalAngle, Math.toRadians(180));
 
 
 
@@ -387,9 +390,9 @@ public class bucketSideNO_SMASH extends LinearOpMode
 
         robot.changeSpeed(1,1);
 
-        robot.changeAccuracy(.25,Math.toRadians(1));
+        robot.changeAccuracy(.5,Math.toRadians(1));
 
-        x = -6;y = 38; finalAngle = Math.toRadians(180);
+        x = -6;y = 37; finalAngle = Math.toRadians(180);
 
         while(Math.abs(x-robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
 
@@ -426,7 +429,7 @@ public class bucketSideNO_SMASH extends LinearOpMode
 
         inTake.setPower(.75);
 
-        robot.changeSpeed(.3,.3);
+        robot.changeSpeed(.8,.8);
 
         //second move to collect
         time = robot.timerInit(600);
@@ -443,6 +446,8 @@ public class bucketSideNO_SMASH extends LinearOpMode
 
 
         robot.wait(200,robot.odometers);
+
+        robot.changeAccuracy(1,Math.toRadians(1));
 
         robot.goToPos(-7, 38, finalAngle, Math.toRadians(180));
 
@@ -495,9 +500,9 @@ public class bucketSideNO_SMASH extends LinearOpMode
         robot.changeAccuracy(4,Math.toRadians(10));
 
        // x = 74;y = 3.75; finalAngle = Math.toRadians(0);
-//
+
        // while(Math.abs(x-robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
-//
+
        //     robot.goToPosSingle(x, y, finalAngle, 0);
 
 
