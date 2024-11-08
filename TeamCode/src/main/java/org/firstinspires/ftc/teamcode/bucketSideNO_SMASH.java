@@ -9,10 +9,10 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-@Autonomous(name="AutoRI30H")
+@Autonomous(name="bucketSideNO_SMASH")
 //@Disabled
 
-public class AutoRI30H extends LinearOpMode
+public class bucketSideNO_SMASH extends LinearOpMode
 {
     public Servo armWrist = null;
     public Servo dumper = null;
@@ -275,7 +275,7 @@ public class AutoRI30H extends LinearOpMode
 
         while(Math.abs(x-robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
 
-            robot.goToPosSingle(x, y, finalAngle, Math.toRadians(180));
+            robot.goToPosSingle(x, y, finalAngle, Math.toRadians(120));
 
 
 
@@ -393,7 +393,7 @@ public class AutoRI30H extends LinearOpMode
 
         while(Math.abs(x-robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
 
-            robot.goToPosSingle(x, y, finalAngle, Math.toRadians(180));
+            robot.goToPosSingle(x, y, finalAngle, Math.toRadians(120));
 
 
 
@@ -483,7 +483,7 @@ public class AutoRI30H extends LinearOpMode
         }
         robot.mecanumDrive(0,0,0,.6);
 
-        robot.wait(1100,robot.odometers);
+        robot.wait(1000,robot.odometers);
 
 
         dumper.setPosition(.6);
@@ -494,11 +494,11 @@ public class AutoRI30H extends LinearOpMode
         robot.changeSpeed(1,1);
         robot.changeAccuracy(4,Math.toRadians(10));
 
-        x = 74;y = 3.75; finalAngle = Math.toRadians(0);
-
-        while(Math.abs(x-robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
-
-            robot.goToPosSingle(x, y, finalAngle, 0);
+       // x = 74;y = 3.75; finalAngle = Math.toRadians(0);
+//
+       // while(Math.abs(x-robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
+//
+       //     robot.goToPosSingle(x, y, finalAngle, 0);
 
 
             slides.setTargetPosition(0);
@@ -509,7 +509,7 @@ public class AutoRI30H extends LinearOpMode
             arm.setPower(0.4);
             arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        }
+       // }
         robot.changeAccuracy(1,Math.toRadians(1));
 
 
@@ -556,11 +556,12 @@ public class AutoRI30H extends LinearOpMode
 
         //x = 0;y = 50; finalAngle = Math.toRadians(0);
         //while(Math.abs(x-robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
-            //robot.goToPosSingle(x, y, finalAngle, Math.toRadians(180));
-            armWrist.setPosition(0.4);
-            arm.setTargetPosition(0);
-            arm.setPower(0.25);
-            arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        //robot.goToPosSingle(x, y, finalAngle, Math.toRadians(180));
+        robot.wait(2000,robot.odometers);
+        armWrist.setPosition(0.4);
+        arm.setTargetPosition(0);
+        arm.setPower(0.25);
+        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         //}
         //robot.mecanumDrive(0,0,0,.6);

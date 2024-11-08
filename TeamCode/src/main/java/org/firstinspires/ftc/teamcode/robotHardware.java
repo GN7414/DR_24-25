@@ -124,7 +124,7 @@ public class robotHardware extends LinearOpMode
     public static ElapsedTime currentTime = new ElapsedTime();
 
     public final int ARM_TOP = 110;
-    public final int ARM_MID = 500;
+    public final int ARM_MID = 550;
     public final int ARM_LOW = 660;
 
     public final double WRIST_TOP = 1;
