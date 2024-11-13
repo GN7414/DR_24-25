@@ -9,10 +9,10 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-@Autonomous(name="AutoRI30H")
+@Autonomous(name="bucketSideSMASH")
 //@Disabled
 
-public class AutoRI30H extends LinearOpMode
+public class bucketSideSMASH extends LinearOpMode
 {
     public Servo armWrist = null;
     public Servo dumper = null;
@@ -154,7 +154,7 @@ public class AutoRI30H extends LinearOpMode
          *
          */
 
-        x = 10.75;y = 23.5; finalAngle = Math.toRadians(145);
+        x = 10.75;y = 24; finalAngle = Math.toRadians(145);
 
         while(Math.abs(x-robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
 
@@ -273,7 +273,7 @@ public class AutoRI30H extends LinearOpMode
 
         robot.changeSpeed(1,1);
 
-        x = 3;y = 37; finalAngle = Math.toRadians(180);
+        x = 3;y = 37.5; finalAngle = Math.toRadians(180);
 
         while(Math.abs(x-robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
 
@@ -389,13 +389,13 @@ public class AutoRI30H extends LinearOpMode
 
         robot.changeSpeed(1,1);
 
-        robot.changeAccuracy(.5,Math.toRadians(1));
+        robot.changeAccuracy(6,Math.toRadians(5));
 
-        x = -6;y = 37; finalAngle = Math.toRadians(180);
+        x = -7.4;y = 17.3; finalAngle = Math.toRadians(90);
 
         while(Math.abs(x-robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
 
-            robot.goToPosSingle(x, y, finalAngle, Math.toRadians(120));
+            robot.goToPosSingle(x, y, finalAngle, Math.toRadians(0));
 
 
 
@@ -413,6 +413,10 @@ public class AutoRI30H extends LinearOpMode
 
 
         }
+        robot.changeAccuracy(.5,Math.toRadians(1));
+
+        x = -3;y = 37.5; finalAngle = Math.toRadians(180);
+        robot.goToPos(x, y, finalAngle, Math.toRadians(0));
 
 
         robot.mecanumDrive(0,0,0,.6);

@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 @TeleOp(name="automatedTeleop1")
-@Disabled
+//@Disabled
 
 public class automatedTeleop1 extends LinearOpMode {
     public boolean buttonB = true;
@@ -126,8 +126,8 @@ public class automatedTeleop1 extends LinearOpMode {
         while (opModeIsActive()) {
             robot.refresh(robot.odometers);
             if(!autoOp) {
-                //robot.mecanumDrive(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, speed); //normal people
-                robot.mecanumDrive(gamepad1.right_stick_y, -gamepad1.right_stick_x, -gamepad1.left_stick_x, speed); //nolan
+                robot.mecanumDrive(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, speed); //normal people
+                //robot.mecanumDrive(gamepad1.right_stick_y, -gamepad1.right_stick_x, -gamepad1.left_stick_x, speed); //nolan
 
 
                 //To autoOp
@@ -527,8 +527,8 @@ public class automatedTeleop1 extends LinearOpMode {
                 //Nolan's control while still being in auto mode of teleop
                 else {
                     //Mecanum Drive
-                    //robot.mecanumDrive(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, speed); //normal people
-                    robot.mecanumDrive(gamepad1.right_stick_y, -gamepad1.right_stick_x, -gamepad1.left_stick_x, speed); //nolan
+                    robot.mecanumDrive(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, speed); //normal people
+                    //robot.mecanumDrive(gamepad1.right_stick_y, -gamepad1.right_stick_x, -gamepad1.left_stick_x, speed); //nolan
 
                     //Middle Arm Position
                     if (gamepad1.dpad_right) {//collect prep
