@@ -20,12 +20,14 @@ public class RI30HV2 extends LinearOpMode {
     public boolean buttonC = true;
     public boolean openClose = true;
     public boolean buttonD = true;
+    public boolean buttonE = true;
 
     public Servo armWrist = null;
     public CRServo intake = null;
     public Servo slideFingerR = null;
     public Servo slideFingerL = null;
     public Servo dumper = null;
+    public Servo specimenGrab = null;
 
     public DcMotor arm = null;
     public DcMotor slides = null;
@@ -42,12 +44,14 @@ public class RI30HV2 extends LinearOpMode {
 
     public boolean down = false;
     public boolean open = false;
+    public boolean outIn = false;
 
     public boolean x = false;
 
     double time = 0;
     public boolean timerInit2 = false;
     public boolean timerInit3 = false;
+    public boolean timerInit4 = false;
 
 
     public enum AutoGrab {
@@ -64,6 +68,8 @@ public class RI30HV2 extends LinearOpMode {
     }
 
     AutoGrab autoGrab = AutoGrab.START;
+
+
 
     ElapsedTime timer = new ElapsedTime();
 
@@ -94,6 +100,7 @@ public class RI30HV2 extends LinearOpMode {
         //slideFingerL = hardwareMap.servo.get("");
         //slideFingerR = hardwareMap.servo.get("");
         dumper = hardwareMap.servo.get("bucket");
+        specimenGrab = hardwareMap.servo.get("specimenGrab");
 
         arm.setDirection(DcMotor.Direction.REVERSE);
 
@@ -104,6 +111,7 @@ public class RI30HV2 extends LinearOpMode {
             //smaller numbers go up higher
             dumper.setPosition(0.35);
             armWrist.setPosition(.3);
+            specimenGrab.setPosition(0.3);//closed is 0, open is .25
 
             intake.setPower(0);
 
@@ -208,13 +216,19 @@ public class RI30HV2 extends LinearOpMode {
             //One button press
             if (gamepad1.right_trigger > .5 && buttonC) {
                 buttonC = false;
+
+
                 if (openClose) {
                     autoGrab = AutoGrab.DROP_SAMPLE;
-                } else if (!openClose) { //this closes
+
+                }
+                else if (!openClose) { //this closes
                     autoGrab = AutoGrab.GRAB_SAMPLE;
                 }
+
                 open = false;
-            } else if (gamepad1.right_trigger < .5 && !buttonC) {
+            }
+            else if (gamepad1.right_trigger < .5 && !buttonC) {
                 buttonC = true;
             }
 
@@ -282,6 +296,51 @@ public class RI30HV2 extends LinearOpMode {
                     //slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 }
             }
+
+
+            if ((gamepad1.dpad_left && buttonE) || timerInit4){
+                if (gamepad1.dpad_left) {
+                    time = robot.timerInit(250);
+                    timerInit4 = true;
+                }
+
+                armEncoder = 200;
+                armPower = .4;
+
+                if (outIn){
+                    if (slideEncoder == 2100 || slideEncoder == 1300){
+                        slideEncoder = 1300;
+
+                        if(robot.boolTimer(time + 450)){
+                            specimenGrab.setPosition(.3);//opening
+                            outIn = false;
+                            timerInit4 = false;
+                        }
+                    }
+                    else {
+                        specimenGrab.setPosition(.3);//opening
+                        outIn = false;
+                        timerInit4 = false;
+                    }
+
+                }
+
+                else if (!outIn){
+                    specimenGrab.setPosition(0);
+
+                    if(robot.boolTimer(time)) {
+                        slideEncoder = 500;
+                        outIn = true;
+                        timerInit4 = false;
+                    }
+                }
+
+                buttonE = false;
+            }
+            if(!gamepad1.dpad_left && !buttonE){
+                buttonE = true;
+            }
+
 
 
             //if (gamepad1.right_bumper){
