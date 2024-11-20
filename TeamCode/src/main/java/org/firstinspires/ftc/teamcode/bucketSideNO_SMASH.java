@@ -9,30 +9,30 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-@Autonomous(name="bucketSideNO_SMASH")
+        @Autonomous(name="bucketSideNO_SMASH")
 //@Disabled
 
-public class bucketSideNO_SMASH extends LinearOpMode
-{
-    public Servo armWrist = null;
-    public Servo dumper = null;
-    public CRServo inTake = null;
+        public class bucketSideNO_SMASH extends LinearOpMode
+        {
+            public Servo armWrist = null;
+            public Servo dumper = null;
+            public CRServo inTake = null;
 
-    public DcMotor arm = null;
-    public DcMotor slides = null;
+            public DcMotor arm = null;
+            public DcMotor slides = null;
 
-    public int downPos = 660;
-    public static double time;
+            public int downPos = 660;
+            public static double time;
 
-    public static boolean timerInitted = false;
-    public static boolean timerInitted2 = false;
-    public static boolean timerInitted3 = false;
-    public static ElapsedTime outputTime = new ElapsedTime();
+            public static boolean timerInitted = false;
+            public static boolean timerInitted2 = false;
+            public static boolean timerInitted3 = false;
+            public static ElapsedTime outputTime = new ElapsedTime();
 
 
-    @Override
-    public void runOpMode() throws InterruptedException
-    {
+            @Override
+            public void runOpMode() throws InterruptedException
+            {
 
         robotHardware robot = new robotHardware(hardwareMap);
 

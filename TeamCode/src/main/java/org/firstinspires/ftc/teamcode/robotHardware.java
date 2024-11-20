@@ -21,7 +21,7 @@ import com.qualcomm.robotcore.util.Range;
 /**
  * Created by User on 10/1/2022.
  */
-//@Config //We need this for Dashboard to change variables
+@Config //We need this for Dashboard to change variables
 public class robotHardware extends LinearOpMode
 {
     //FtcDashboard dashboard = FtcDashboard.getInstance();

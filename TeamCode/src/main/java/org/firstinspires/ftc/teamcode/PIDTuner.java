@@ -50,6 +50,7 @@ public class PIDTuner extends LinearOpMode
         robotHardware robot = new robotHardware(hardwareMap);
 
         robot.resetDriveEncoders();
+        robot.odo.resetPosAndIMU();
 
         //dive motors
         //arm = hardwareMap.dcMotor.get("frontArmMotor");
@@ -120,7 +121,7 @@ public class PIDTuner extends LinearOpMode
             while (Math.abs(x - robot.GlobalX) > robot.moveAccuracy || Math.abs(y - robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
 
 
-                double[] fake = robot.goToPosSingle(x, y, (finalAngle), 0);
+                double[] fake = robot.goToPosSingle(x, y, (finalAngle), Math.toRadians(180));
 
                 telemetry.addData("movementXpower", fake[4]);
                 telemetry.addData("movementYpower", fake[5]);
