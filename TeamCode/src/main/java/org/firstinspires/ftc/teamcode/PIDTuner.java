@@ -44,7 +44,7 @@ public class PIDTuner extends LinearOpMode
     {
 
         FtcDashboard dashboard = FtcDashboard.getInstance();//How you send telemetry to dashboard
-        telemetry = dashboard.getTelemetry();
+        //telemetry = dashboard.getTelemetry();
 
 
         robotHardware robot = new robotHardware(hardwareMap);
@@ -98,6 +98,7 @@ public class PIDTuner extends LinearOpMode
         robot.changeAccuracy(1,Math.toRadians(1));
 
 
+        /*
         double x = 25,y = 0, finalAngle = Math.toRadians(0);
 
         while (true) {
@@ -138,15 +139,17 @@ public class PIDTuner extends LinearOpMode
             //finalAngle += Math.toRadians(distance);
 
         }
+
+         */
         //robot.changeAccuracy(1,Math.toRadians(1));
         //robot.changeSpeed(.25,.25);
 
         //robot.goToPos(10,27,Math.toRadians(155),0);
         //robot.goToPos(10,31,Math.toRadians(155),0);
 
-        /*
+
         while(true){
-            double[] fake = robot.goToPosSingle(0,20,Math.toRadians(0),Math.toRadians(90));
+            double[] fake = robot.goToPosSingle(0,-20,Math.toRadians(0),Math.toRadians(-90));
             telemetry.addData("distanceToTarget", fake[0]);
             telemetry.addData("absoluteAngleToTarget", Math.toDegrees(fake[1]));
             telemetry.addData("reletiveXToTarget", fake[2]);
@@ -166,20 +169,6 @@ public class PIDTuner extends LinearOpMode
 
         }
 
-         */
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -192,10 +181,6 @@ public class PIDTuner extends LinearOpMode
 
 
     }
-
-
-
-
 
 
 

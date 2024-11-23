@@ -438,7 +438,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
         robot.changeSpeed(.8,.8);
 
-        //second move to collect
+        //third move to collect
         time = robot.timerInit(600);
         while (!robot.boolTimer(time)){
 
@@ -477,7 +477,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
         robot.changeSpeed(.8,.8);
 
-        //second move to dump
+        //third move to dump
 
         x = -17;y = 4; finalAngle = Math.toRadians(45);
 

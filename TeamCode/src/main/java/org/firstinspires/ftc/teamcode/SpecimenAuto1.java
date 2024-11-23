@@ -32,9 +32,9 @@ public class SpecimenAuto1 extends LinearOpMode {
     public static boolean timerInitted3 = false;
     public static ElapsedTime outputTime = new ElapsedTime();
 
+    private final int TEMP_DOWN = 640;
 
-
-    public static double x,y, finalAngle;
+    public static double x, y, finalAngle;
 
 
     @Override
@@ -60,10 +60,6 @@ public class SpecimenAuto1 extends LinearOpMode {
 
         armWrist = hardwareMap.servo.get("intakeWrist");
         inTake = hardwareMap.crservo.get("intake");
-        //armFingerR = hardwareMap.servo.get("frontClawRight");
-        //armFingerL = hardwareMap.servo.get("frontClawLeft");
-        //slideFingerL = hardwareMap.servo.get("");
-        //slideFingerR = hardwareMap.servo.get("");
         dumper = hardwareMap.servo.get("bucket");
         specimenGrab = hardwareMap.servo.get("specimenGrab");
 
@@ -80,42 +76,44 @@ public class SpecimenAuto1 extends LinearOpMode {
             dumper.setPosition(.4);
             //armWrist.setPosition(.5);
             inTake.setPower(0);
+            specimenGrab.setPosition(0);
 
+            //arm.setTargetPosition(50);
+            //arm.setPower(0.175);
+            //arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            arm.setTargetPosition(0);
-            arm.setPower(0.175);
-            arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            robot.changeAccuracy(1,Math.toRadians(1));
-            robot.changeSpeed(1,1);
+            robot.changeAccuracy(1, Math.toRadians(1));
+            robot.changeSpeed(1, 1);
 
         }
 
 
         firstPlace(robot);
 
-        firstGrab(robot);
+        firstCycle(robot);
 
-
-
-
+        place(robot);
 
 
     }
 
-    public void firstPlace(robotHardware robot){
+    public void firstPlace(robotHardware robot) {
 
 
-        robot.changeSpeed(.8,.8);
-        x = -6;y = 29.75; finalAngle = Math.toRadians(0);
+        robot.changeAccuracy(.5, Math.toRadians(1));
+        robot.changeSpeed(1, 1);
 
-        while(Math.abs(x-robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
+        x = -6;
+        y = 29.75;
+        finalAngle = Math.toRadians(0);
 
-            robot.goToPosSingle(x, y, finalAngle, Math.toRadians(-90));
+        while (Math.abs(x - robot.GlobalX) > robot.moveAccuracy || Math.abs(y - robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
+
+            robot.goToPosSingle(x, y, finalAngle, Math.toRadians(90));
 
 
             armWrist.setPosition(robot.WRIST_LOW);
-            arm.setTargetPosition(robot.ARM_MID);
+            arm.setTargetPosition(200);
             arm.setPower(.25);
             arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
@@ -124,39 +122,45 @@ public class SpecimenAuto1 extends LinearOpMode {
             slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         }
-        robot.wait(250,robot.odometers);
-
-
-        armWrist.setPosition(robot.WRIST_TOP);
-        armEncoder = robot.ARM_LOW;
-        armPower = .25;
-        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.wait(250, robot.odometers);
 
         slides.setTargetPosition(1300);
         slides.setPower(1);
         slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        robot.wait(650,robot.odometers);
+        robot.goToPos(-8, 29.75, Math.toRadians(0), Math.toRadians(-90));
+
+        robot.wait(500, robot.odometers);
 
         specimenGrab.setPosition(.3);//open position
 
-        robot.wait(250,robot.odometers);
+        armWrist.setPosition(robot.WRIST_LOW);
+        arm.setTargetPosition(robot.ARM_MID);
+        arm.setPower(.25);
+        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        robot.wait(250, robot.odometers);
 
     }
 
-    public void firstGrab(robotHardware robot){
+    public void firstCycle(robotHardware robot) {
 
-        robot.changeAccuracy(3,Math.toRadians(5));
-        robot.changeSpeed(.8,.8);
-        robot.goToPos(-6, 19, 0, Math.toRadians(0));
 
-        robot.wait(500,robot.odometers);
+        robot.changeAccuracy(4, Math.toRadians(7));
+        robot.changeSpeed(.8, .8);
 
-        x = 20.4;y = 23.6; finalAngle = Math.toRadians(30);
 
-        while(Math.abs(x-robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
+        robot.goToPos(-6, 20, Math.toRadians(0), Math.toRadians(-90));
 
-            robot.goToPosSingle(x, y, finalAngle, Math.toRadians(30));
+        robot.changeAccuracy(.5, Math.toRadians(1));
+
+        x = 18.4;
+        y = 23;
+        finalAngle = Math.toRadians(30);
+
+        while (Math.abs(x - robot.GlobalX) > robot.moveAccuracy || Math.abs(y - robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
+
+            robot.goToPosSingle(x, y, Math.toRadians(30), Math.toRadians(0));
 
             slides.setTargetPosition(0);
             slides.setPower(1);
@@ -170,18 +174,106 @@ public class SpecimenAuto1 extends LinearOpMode {
             inTake.setPower(.75);
 
         }
-        robot.mecanumDrive(0,0,0,.6);//breaks
-        robot.wait(1500,robot.odometers);
+        robot.mecanumDrive(0, 0, 0, .6);//brakes
 
-        armWrist.setPosition(robot.WRIST_TOP);
-        arm.setTargetPosition(robot.ARM_TOP);
-        arm.setPower(0.4);
+        arm.setPower(0);
+
+
+        //move to collect
+        time = robot.timerInit(500);
+        while (!robot.boolTimer(time)) {
+
+            robot.refresh(robot.odometers);
+
+            robot.mecanumDrive(-.3, 0, 0, 1);
+
+        }
+        robotHardware.timerInitted = false;
+        robot.mecanumDrive(0, 0, 0, .6);//brakes
+
+        robot.wait(400, robot.odometers);
+
+        robot.goToPos(36.3, 14.6, Math.toRadians(315), Math.toRadians(0));
+
+        inTake.setPower(-.75);
+
+        robot.wait(350, robot.odometers);
+
+        armWrist.setPosition(robot.WRIST_MID);
+        arm.setTargetPosition(200);
+        arm.setPower(.5);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        robot.changeAccuracy(1, Math.toRadians(10));
+
+        robot.goToPos(28.7, 14, Math.toRadians(180), Math.toRadians(0));
+
+        robot.changeAccuracy(.25, Math.toRadians(1));
+        robot.goToPos(28.7, 0.25, Math.toRadians(180), Math.toRadians(90));
+
+        specimenGrab.setPosition(0);
+
+        robot.wait(250, robot.odometers);
+
+        slides.setTargetPosition(1300);
+        slides.setPower(1);
+        slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        robot.wait(400, robot.odometers);
 
 
     }
 
+    public void secondCycle(robotHardware robot) {
 
 
+    }
 
+    public void place(robotHardware robot) {
+
+        robot.changeAccuracy(.5, Math.toRadians(3));
+
+        robot.goToPos(5,10,0,Math.toRadians(90));
+
+        robot.changeSpeed(1, 1);
+
+        x = -6;
+        y = 30;
+        finalAngle = Math.toRadians(0);
+
+        while (Math.abs(x - robot.GlobalX) > robot.moveAccuracy || Math.abs(y - robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
+
+            robot.goToPosSingle(x, y, finalAngle, Math.toRadians(90));
+
+
+            armWrist.setPosition(robot.WRIST_LOW);
+            arm.setTargetPosition(200);
+            arm.setPower(.25);
+            arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            slides.setTargetPosition(2100);
+            slides.setPower(1);
+            slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        }
+        robot.wait(250, robot.odometers);
+
+        slides.setTargetPosition(1300);
+        slides.setPower(1);
+        slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        robot.goToPos(-8, 30, Math.toRadians(0), Math.toRadians(-90));
+
+        robot.wait(500, robot.odometers);
+
+        specimenGrab.setPosition(.3);//open position
+
+        armWrist.setPosition(robot.WRIST_LOW);
+        arm.setTargetPosition(robot.ARM_MID);
+        arm.setPower(.25);
+        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        robot.wait(350, robot.odometers);
+
+    }
 }

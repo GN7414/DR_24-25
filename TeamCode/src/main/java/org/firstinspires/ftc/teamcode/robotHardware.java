@@ -125,11 +125,11 @@ public class robotHardware extends LinearOpMode
 
     public final int ARM_TOP = 110;
     public final int ARM_MID = 550;
-    public final int ARM_LOW = 660;
+    public final int ARM_LOW = 620;
 
     public final double WRIST_TOP = 1;
     public final double WRIST_MID = .7;
-    public final double WRIST_LOW = .84;
+    public final double WRIST_LOW = .85;//small number raises the wrist
 
     double oldTime = 0;
     GoBildaPinpointDriver odo; // Declare OpMode member for the Odometry Computer
@@ -486,10 +486,10 @@ public class robotHardware extends LinearOpMode
 
             //math to calculate distances to the target
             double distanceToTarget = Math.hypot(x - GlobalX, y - GlobalY);
-            double absoluteAngleToTarget = Math.atan2(x - GlobalX, y - GlobalY);
-            double reletiveAngleToTarget = angleWrapRad(absoluteAngleToTarget + GlobalHeading - Math.toRadians(90));
-            double reletiveXToTarget = -Math.cos(reletiveAngleToTarget) * distanceToTarget;
-            double reletiveYToTarget = -Math.sin(reletiveAngleToTarget) * distanceToTarget;//use - when spinning counterclockwise is positive
+            double absoluteAngleToTarget = Math.atan2(y - GlobalY, x - GlobalX);
+            double reletiveAngleToTarget = angleWrapRad(absoluteAngleToTarget - GlobalHeading /*+ Math.toRadians(90)*/);
+            double reletiveXToTarget = Math.cos(reletiveAngleToTarget) * distanceToTarget;
+            double reletiveYToTarget = Math.sin(reletiveAngleToTarget) * distanceToTarget;//use - when spinning counterclockwise is positive
 
             //slow down ensures the robot does not over shoot the target
             double slowDown = Range.clip(odoDrivePID(distanceToTarget,0), 0, moveSpeed);
@@ -504,14 +504,14 @@ public class robotHardware extends LinearOpMode
             double reletiveTurnAngle;
             if (distanceToTarget > 6) {//-Range.clip(odoTurnPID(0, reletiveTurnAngle), -turnSpeed, turnSpeed) use - to switch turnpower
                 reletiveTurnAngle = angleWrapRad(reletiveAngleToTarget - followAngle);//use - when spinning counterclockwise is positive
-                movementTurnPower = -Range.clip(odoTurnPID(0, reletiveTurnAngle), -turnSpeed, turnSpeed);
+                movementTurnPower = Range.clip(odoTurnPID(0, reletiveTurnAngle), -turnSpeed, turnSpeed);
             } else {
                 reletiveTurnAngle = angleWrapRad(finalAngle - GlobalHeading);
-                movementTurnPower = -Range.clip(odoTurnPID(0, reletiveTurnAngle), -turnSpeed, turnSpeed);
+                movementTurnPower = Range.clip(odoTurnPID(0, reletiveTurnAngle), -turnSpeed, turnSpeed);
             }
 
             //set the motors to the correct powers to move toward the target
-            mecanumDrive(movementXpower, movementYpower, movementTurnPower, voltComp);
+            mecanumDrive(-movementXpower, movementYpower, -movementTurnPower, voltComp);
         }
 
         //at the end of the movement stop the motors
@@ -537,10 +537,10 @@ public class robotHardware extends LinearOpMode
 
         //math to calculate distances to the target
         double distanceToTarget = Math.hypot(x - GlobalX, y - GlobalY);
-        double absoluteAngleToTarget = Math.atan2(x - GlobalX, y - GlobalY);
-        double reletiveAngleToTarget = angleWrapRad(absoluteAngleToTarget + GlobalHeading - Math.toRadians(90));
-        double reletiveXToTarget = -Math.cos(reletiveAngleToTarget) * distanceToTarget;
-        double reletiveYToTarget = -Math.sin(reletiveAngleToTarget) * distanceToTarget;//use - when spinning counterclockwise is positive
+        double absoluteAngleToTarget = Math.atan2(y - GlobalY, x - GlobalX);
+        double reletiveAngleToTarget = angleWrapRad(absoluteAngleToTarget - GlobalHeading /*+ Math.toRadians(90)*/);
+        double reletiveXToTarget = Math.cos(reletiveAngleToTarget) * distanceToTarget;
+        double reletiveYToTarget = Math.sin(reletiveAngleToTarget) * distanceToTarget;//use - when spinning counterclockwise is positive
 
         //slow down ensures the robot does not over shoot the target
         double slowDown = Range.clip(odoDrivePID(distanceToTarget,0), 0, moveSpeed);
@@ -558,11 +558,11 @@ public class robotHardware extends LinearOpMode
             movementTurnPower = Range.clip(odoTurnPID(0, reletiveTurnAngle), -turnSpeed, turnSpeed);
         } else {
             reletiveTurnAngle = angleWrapRad(finalAngle - GlobalHeading);
-            movementTurnPower = -Range.clip(odoTurnPID(0, reletiveTurnAngle), -turnSpeed, turnSpeed);
+            movementTurnPower = Range.clip(odoTurnPID(0, reletiveTurnAngle), -turnSpeed, turnSpeed);
         }
 
         //set the motors to the correct powers to move toward the target
-        mecanumDrive(movementXpower, movementYpower, movementTurnPower, voltComp);
+        mecanumDrive(-movementXpower, movementYpower, -movementTurnPower, voltComp);
 
         /**
          * while(true){
