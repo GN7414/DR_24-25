@@ -44,7 +44,7 @@ public class PIDTuner extends LinearOpMode
     {
 
         FtcDashboard dashboard = FtcDashboard.getInstance();//How you send telemetry to dashboard
-        //telemetry = dashboard.getTelemetry();
+        telemetry = dashboard.getTelemetry();
 
 
         robotHardware robot = new robotHardware(hardwareMap);
@@ -98,14 +98,14 @@ public class PIDTuner extends LinearOpMode
         robot.changeAccuracy(1,Math.toRadians(1));
 
 
-        /*
-        double x = 25,y = 0, finalAngle = Math.toRadians(0);
-
+        /*//straffing
+        double x = 0,y = 25, finalAngle = Math.toRadians(0);
+        bigloop:
         while (true) {
             while (Math.abs(x - robot.GlobalX) > robot.moveAccuracy || Math.abs(y - robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
 
 
-                double[] fake = robot.goToPosSingle(x, y, (finalAngle), 0);
+                double[] fake = robot.goToPosSingle(x, y, (finalAngle), Math.toRadians(90));
 
                 telemetry.addData("movementXpower", fake[4]);
                 telemetry.addData("movementYpower", fake[5]);
@@ -116,9 +116,65 @@ public class PIDTuner extends LinearOpMode
                 telemetry.addData("Heading",Math.toDegrees(robot.GlobalHeading));
 
                 telemetry.update();
+                if(isStopRequested()){
+                    break bigloop;
+                }
 
             }
             x = -x;
+            y = -y;
+            while (Math.abs(x - robot.GlobalX) > robot.moveAccuracy || Math.abs(y - robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
+
+
+                double[] fake = robot.goToPosSingle(x, y, (finalAngle), Math.toRadians(-90));
+
+                telemetry.addData("movementXpower", fake[4]);
+                telemetry.addData("movementYpower", fake[5]);
+                telemetry.addData("movementTurnPower",Math.abs(fake[6]));
+
+                telemetry.addData("X",robot.GlobalX);
+                telemetry.addData("Y",robot.GlobalY);
+                telemetry.addData("Heading",Math.toDegrees(robot.GlobalHeading));
+
+                telemetry.update();
+                if(isStopRequested()){
+                    break bigloop;
+                }
+
+            }
+            x = -x;
+            y = -y;
+            //finalAngle += Math.toRadians(distance);
+
+        }
+
+
+         */
+            //forward
+        double x = 25,y = 0, finalAngle = Math.toRadians(0);
+        bigloop:
+        while (true) {
+            while (Math.abs(x - robot.GlobalX) > robot.moveAccuracy || Math.abs(y - robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
+
+
+                double[] fake = robot.goToPosSingle(x, y, (finalAngle), Math.toRadians(0));
+
+                telemetry.addData("movementXpower", fake[4]);
+                telemetry.addData("movementYpower", fake[5]);
+                telemetry.addData("movementTurnPower",Math.abs(fake[6]));
+
+                telemetry.addData("X",robot.GlobalX);
+                telemetry.addData("Y",robot.GlobalY);
+                telemetry.addData("Heading",Math.toDegrees(robot.GlobalHeading));
+
+                telemetry.update();
+                if(isStopRequested()){
+                    break bigloop;
+                }
+
+            }
+            x = -x;
+            y = -y;
             while (Math.abs(x - robot.GlobalX) > robot.moveAccuracy || Math.abs(y - robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
 
 
@@ -133,14 +189,21 @@ public class PIDTuner extends LinearOpMode
                 telemetry.addData("Heading",Math.toDegrees(robot.GlobalHeading));
 
                 telemetry.update();
+                if(isStopRequested()){
+                    break bigloop;
+                }
 
             }
             x = -x;
+            y = -y;
             //finalAngle += Math.toRadians(distance);
 
         }
 
-         */
+
+
+
+
         //robot.changeAccuracy(1,Math.toRadians(1));
         //robot.changeSpeed(.25,.25);
 
@@ -148,6 +211,7 @@ public class PIDTuner extends LinearOpMode
         //robot.goToPos(10,31,Math.toRadians(155),0);
 
 
+        /*
         while(true){
             double[] fake = robot.goToPosSingle(0,-20,Math.toRadians(0),Math.toRadians(-90));
             telemetry.addData("distanceToTarget", fake[0]);
@@ -171,6 +235,8 @@ public class PIDTuner extends LinearOpMode
 
 
 
+
+         */
 
 
 

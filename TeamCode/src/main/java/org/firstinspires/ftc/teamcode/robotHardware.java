@@ -52,9 +52,9 @@ public class robotHardware extends LinearOpMode
     //PID Drive Variables
 
     public static double DriveF = .1; // = 32767 / maxV      (do not edit from this number)
-    public static double DriveP = 0.2; // = 0.1 * F           (raise till real's apex touches Var apex)
+    public static double DriveP = 0.3; // = 0.1 * F           (raise till real's apex touches Var apex)
     public static double DriveI = 0.025;// = 0.1 * P           (fine ajustment of P)
-    public static double DriveD = 0.06; // = 0                     (raise to reduce ocolation)
+    public static double DriveD = 0.07; // = 0                     (raise to reduce ocolation)
 
     double DrivePIDCurrentTime = 0;
     double DrivePIDTime = 0;
