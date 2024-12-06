@@ -1,5 +1,4 @@
-package org.firstinspires.ftc.teamcode;
-
+package org.firstinspires.ftc.teamcode.Gen2;
 //import com.acmerobotics.dashboard.config.Config;
 
 
@@ -15,7 +14,7 @@ import com.qualcomm.robotcore.util.Range;
  * Created by User on 10/1/2022.
  */
 //@Config //We need this for Dashboard to change variables
-public class swerveRobotHardware extends LinearOpMode
+public class robotHardwareGen2 extends LinearOpMode
 {
     //FtcDashboard dashboard = FtcDashboard.getInstance();
     //telemetry = dashboard.getTelemetry(); //This is used to read telemetry on the computer
@@ -61,7 +60,7 @@ public class swerveRobotHardware extends LinearOpMode
     double oppositeDistance = 0;
     double finalAngle = 0;
     int wheelDirection = 1;
-    double encoderTicksPerDegree = 78.38167;//6.40333;//78.38167
+    double encoderTicksPerDegree = 65.743055;//6.40333;//78.38167
     int testing = 0;
 
     //PID Drive Variables
@@ -133,7 +132,7 @@ public class swerveRobotHardware extends LinearOpMode
     double GeneralPIDMotorPower2 = 0;
 
 
-    public swerveRobotHardware(HardwareMap ahwMap)
+    public robotHardwareGen2(HardwareMap ahwMap)
     {
 
         //drive motors
@@ -163,7 +162,7 @@ public class swerveRobotHardware extends LinearOpMode
 
         //odometry init (use the motors objects that the odometers are plugged into)
         leftEncoder = LeftOutside;
-        rightEncoder = LeftInside;
+        rightEncoder = RightOutside;
         perpendicularEncoder = RightOutside;
 
 
@@ -190,12 +189,12 @@ public class swerveRobotHardware extends LinearOpMode
         LeftInside.setPower((wheelDirection * -power * speed) + turnPowerLeft - turnPower * wheelDirection);
     }
     public void swerveCalculations(double forwardDrive, double strafeDrive, double heading){
-        rightPodPosition = RightOutside.getCurrentPosition();
-        leftPodPosition  = -LeftOutside.getCurrentPosition();
+        rightPodPosition = -RightOutside.getCurrentPosition();
+        leftPodPosition  = LeftOutside.getCurrentPosition();
 
         power = Math.abs(forwardDrive) + Math.abs(strafeDrive);
 
-        aTan = Math.toDegrees(-Math.atan2(strafeDrive, -forwardDrive)) + 180;
+        aTan = Math.toDegrees(-Math.atan2(strafeDrive, - forwardDrive)) + 180;
 
         if (strafeDrive + forwardDrive == 0){
             aTan = 180;
@@ -275,8 +274,8 @@ public class swerveRobotHardware extends LinearOpMode
             turnPower = heading;
         }
 
-        turnPowerRight = odoPID(encoderTicksPerDegree *  -finalAngle - turnEncoder, rightPodPosition);
-        turnPowerLeft = odoPID(encoderTicksPerDegree *  finalAngle + turnEncoder, leftPodPosition);
+        turnPowerRight = odoPID(encoderTicksPerDegree *  finalAngle + turnEncoder, rightPodPosition);
+        turnPowerLeft = odoPID(encoderTicksPerDegree *  -finalAngle + turnEncoder, leftPodPosition);
     }
 
     public double distanceCalculator(double currentAngle, double newAngle){

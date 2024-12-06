@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Gen2;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -6,17 +6,17 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 
-@TeleOp(name="swerveAttempt2_0")
-@Disabled
+@TeleOp(name="swerveDrive1")
+//@Disabled
 
-public class swerveAttempt2_0 extends LinearOpMode
+public class swerveDrive1 extends LinearOpMode
 {
 
 
     @Override
     public void runOpMode() throws InterruptedException {
 
-        swerveRobotHardware robot = new swerveRobotHardware(hardwareMap);
+        robotHardwareGen2 robot = new robotHardwareGen2(hardwareMap);
 
         //FtcDashboard dashboard = FtcDashboard.getInstance();
         //telemetry = dashboard.getTelemetry();

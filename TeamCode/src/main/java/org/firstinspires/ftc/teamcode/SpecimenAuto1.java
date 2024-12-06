@@ -1,13 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
-
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
 
 @Autonomous(name="SpecimenAuto1")
 //@Disabled
@@ -35,7 +33,6 @@ public class SpecimenAuto1 extends LinearOpMode {
     private final int TEMP_DOWN = 640;
 
     public static double x, y, finalAngle;
-
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -184,9 +181,9 @@ public class SpecimenAuto1 extends LinearOpMode {
 
         robot.goToPos(30,51.5,0,Math.toRadians(90));
 
-        robot.goToPos(44,51,Math.toRadians(180),Math.toRadians(0));
+        robot.goToPos(44,51,Math.toRadians(90),Math.toRadians(-90));
 
-        robot.goToPos(46,10,Math.toRadians(180),Math.toRadians(90));
+        robot.goToPos(46,10,Math.toRadians(90),Math.toRadians(180));
 
     }
 
@@ -199,7 +196,7 @@ public class SpecimenAuto1 extends LinearOpMode {
 
         robot.changeAccuracy(.25, Math.toRadians(1));
 
-        robot.goToPos(28, 0.3, Math.toRadians(180), Math.toRadians(90));
+        robot.goToPos(28, 1, Math.toRadians(180), Math.toRadians(90));
 
         time = robot.timerInit(500);
         while (!robot.boolTimer(time)) {
@@ -352,7 +349,7 @@ public class SpecimenAuto1 extends LinearOpMode {
 
         robot.changeAccuracy(.25,Math.toRadians(1));
 
-        robot.goToPos(28, 0.3, Math.toRadians(180), Math.toRadians(90));
+        robot.goToPos(28, 1, Math.toRadians(180), Math.toRadians(90));
 
         time = robot.timerInit(500);
         while (!robot.boolTimer(time)) {
