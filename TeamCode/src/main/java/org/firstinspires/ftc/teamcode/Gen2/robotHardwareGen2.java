@@ -194,7 +194,7 @@ public class robotHardwareGen2 extends LinearOpMode
 
         power = Math.abs(forwardDrive) + Math.abs(strafeDrive);
 
-        aTan = Math.toDegrees(-Math.atan2(strafeDrive, - forwardDrive)) + 180;
+        aTan = Math.toDegrees(Math.atan2(strafeDrive, - forwardDrive)) + 180;
 
         if (strafeDrive + forwardDrive == 0){
             aTan = 180;
@@ -273,6 +273,12 @@ public class robotHardwareGen2 extends LinearOpMode
             turnEncoder = 0;
             turnPower = heading;
         }
+
+
+
+
+        //if pods spinning, encoder knows it's not going to the correct pos, so adds power but power makes it faster in incorrect direction according to encoder.
+        //if jittering, encoder knows currently not in correct pos, but adding power goes correct according to encoder.
 
         turnPowerRight = odoPID(encoderTicksPerDegree *  finalAngle + turnEncoder, rightPodPosition);
         turnPowerLeft = odoPID(encoderTicksPerDegree *  -finalAngle + turnEncoder, leftPodPosition);

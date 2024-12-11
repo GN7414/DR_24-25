@@ -524,11 +524,11 @@ public class automatedTeleop1 extends LinearOpMode {
 
                     buttonS = false;
                 }
-                //Nolan's control while still being in auto mode of teleop
+                //Nolan's control while still being in Auto mode of teleop
                 else {
                     //Mecanum Drive
-                    robot.mecanumDrive(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, speed); //normal people
-                    //robot.mecanumDrive(gamepad1.right_stick_y, -gamepad1.right_stick_x, -gamepad1.left_stick_x, speed); //nolan
+                    robot.mecanumDrive(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, speed); //Normal people
+                    //robot.mecanumDrive(gamepad1.right_stick_y, -gamepad1.right_stick_x, -gamepad1.left_stick_x, speed); //Nolan
 
                     //Middle Arm Position
                     if (gamepad1.dpad_right) {//collect prep

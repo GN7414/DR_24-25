@@ -60,7 +60,7 @@ public class bucketSideSMASH extends LinearOpMode
         //slideFingerR = hardwareMap.servo.get("");
         dumper = hardwareMap.servo.get("bucket");
 
-        arm.setDirection(DcMotor.Direction.REVERSE);
+        //arm.setDirection(DcMotor.Direction.REVERSE);
 
 
 

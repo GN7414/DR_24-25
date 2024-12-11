@@ -60,7 +60,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
         //slideFingerR = hardwareMap.servo.get("");
         dumper = hardwareMap.servo.get("bucket");
 
-        arm.setDirection(DcMotor.Direction.REVERSE);
+        //arm.setDirection(DcMotor.Direction.REVERSE);
 
 
 
@@ -110,7 +110,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
          *
          */
 
-        double x = -17,y = 4, finalAngle = Math.toRadians(45);
+        double x = -17,y = 3.5, finalAngle = Math.toRadians(45);
 
         while(Math.abs(x-robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
 
@@ -157,8 +157,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
          *
          *
          */
-
-        x = 10.75;y = 24; finalAngle = Math.toRadians(145);
+        robot.changeAccuracy(.5,Math.toRadians(1));
+        x = 10.75;y = 22; finalAngle = Math.toRadians(145);
 
         while(Math.abs(x-robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
 
@@ -271,13 +271,13 @@ import com.qualcomm.robotcore.util.ElapsedTime;
          *
          *
          *
-         * going to the second sample to collect
+         * second collection
          *
          */
 
         robot.changeSpeed(1,1);
 
-        x = 3;y = 37.5; finalAngle = Math.toRadians(180);
+        x = 3;y = 36.5; finalAngle = Math.toRadians(180);
 
         while(Math.abs(x-robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
 
@@ -419,7 +419,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
         }
         robot.changeAccuracy(.5,Math.toRadians(1));
 
-        x = -3;y = 37; finalAngle = Math.toRadians(180);
+        x = -3;y = 35.5; finalAngle = Math.toRadians(180);
         robot.goToPos(x, y, finalAngle, Math.toRadians(0));
 
 
@@ -498,7 +498,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
         robot.wait(1000,robot.odometers);
 
 
-        dumper.setPosition(.6);
+        dumper.setPosition(.7);
 
 
         robot.wait(750,robot.odometers);

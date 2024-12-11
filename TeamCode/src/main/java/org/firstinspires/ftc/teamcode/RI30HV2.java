@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 
-@TeleOp(name="RI30HV2")
+@TeleOp(name="Gen1Teleop")
 //@Disabled
 
 public class RI30HV2 extends LinearOpMode {
