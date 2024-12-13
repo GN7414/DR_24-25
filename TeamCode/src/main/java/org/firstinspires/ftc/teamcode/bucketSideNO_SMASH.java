@@ -157,8 +157,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
          *
          *
          */
-        robot.changeAccuracy(.5,Math.toRadians(1));
-        x = 10.75;y = 22; finalAngle = Math.toRadians(145);
+        robot.changeAccuracy(.25,Math.toRadians(1));
+        x = 10.75;y = 23; finalAngle = Math.toRadians(145);
 
         while(Math.abs(x-robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
 
@@ -497,9 +497,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
         robot.wait(1000,robot.odometers);
 
-
-        dumper.setPosition(.7);
-
+        dumper.setPosition(.6);
 
         robot.wait(750,robot.odometers);
 
@@ -512,10 +510,13 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
        //     robot.goToPosSingle(x, y, finalAngle, 0);
 
-
             slides.setTargetPosition(0);
             slides.setPower(1);
             slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            robot.wait(200,robot.odometers);
+
+            dumper.setPosition(.7);
 
             arm.setTargetPosition(120);
             arm.setPower(0.4);

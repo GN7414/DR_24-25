@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -94,6 +95,7 @@ public class RI30HV2 extends LinearOpMode {
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slides.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        slides.setDirection(DcMotorSimple.Direction.REVERSE);
 
         armWrist = hardwareMap.servo.get("intakeWrist");
         intake = hardwareMap.crservo.get("intake");
@@ -102,7 +104,7 @@ public class RI30HV2 extends LinearOpMode {
         dumper = hardwareMap.servo.get("bucket");
         specimenGrab = hardwareMap.servo.get("specimenGrab");
 
-        arm.setDirection(DcMotor.Direction.REVERSE);
+        //arm.setDirection(DcMotor.Direction.REVERSE);
 
 
         while (!isStarted() && !isStopRequested()) {
@@ -111,7 +113,7 @@ public class RI30HV2 extends LinearOpMode {
             //smaller numbers go up higher
             dumper.setPosition(0.35);
             armWrist.setPosition(.3);
-            specimenGrab.setPosition(0.3);//closed is 0, open is .25
+            specimenGrab.setPosition(0.25);//closed is 0, open is .3
 
             intake.setPower(0);
 
@@ -127,8 +129,8 @@ public class RI30HV2 extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            robot.mecanumDrive(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, speed); //normal people
-            //robot.mecanumDrive(gamepad1.right_stick_y, -gamepad1.right_stick_x, -gamepad1.left_stick_x, speed); //nolan
+            //robot.mecanumDrive(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, speed); //normal people
+            robot.mecanumDrive(gamepad1.right_stick_y, -gamepad1.right_stick_x, -gamepad1.left_stick_x, speed); //nolan
 
 
             //Bucket
@@ -308,17 +310,17 @@ public class RI30HV2 extends LinearOpMode {
                 armPower = .4;
 
                 if (outIn){
-                    if (slideEncoder == 2100 || slideEncoder == 1300){
-                        slideEncoder = 1300;
+                    if (slideEncoder == 2100 || slideEncoder == 1200){
+                        slideEncoder = 1200;
 
                         if(robot.boolTimer(time + 450)){
-                            specimenGrab.setPosition(.3);//opening
+                            specimenGrab.setPosition(.35);//opening
                             outIn = false;
                             timerInit4 = false;
                         }
                     }
                     else {
-                        specimenGrab.setPosition(.3);//opening
+                        specimenGrab.setPosition(.35);//opening
                         outIn = false;
                         timerInit4 = false;
                     }
@@ -326,7 +328,7 @@ public class RI30HV2 extends LinearOpMode {
                 }
 
                 else if (!outIn){
-                    specimenGrab.setPosition(0);
+                    specimenGrab.setPosition(0.1);
 
                     if(robot.boolTimer(time)) {
                         slideEncoder = 500;

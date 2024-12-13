@@ -123,13 +123,15 @@ public class robotHardware extends LinearOpMode
 
     public static ElapsedTime currentTime = new ElapsedTime();
 
+    //bigger number brings the arm higher
     public final int ARM_TOP = 110;
     public final int ARM_MID = 550;
     public final int ARM_LOW = 620;
 
+    //It goes clockwise when you lower the number from the not specimen side
     public final double WRIST_TOP = 1;
     public final double WRIST_MID = .7;
-    public final double WRIST_LOW = .85;//small number raises the wrist
+    public final double WRIST_LOW = .79;
 
     double oldTime = 0;
     GoBildaPinpointDriver odo; // Declare OpMode member for the Odometry Computer
