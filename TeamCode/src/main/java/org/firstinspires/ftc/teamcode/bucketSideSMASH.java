@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -10,7 +11,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 @Autonomous(name="bucketSideSMASH")
-//@Disabled
+@Disabled
 
 public class bucketSideSMASH extends LinearOpMode
 {
@@ -61,6 +62,7 @@ public class bucketSideSMASH extends LinearOpMode
         dumper = hardwareMap.servo.get("bucket");
 
         //arm.setDirection(DcMotor.Direction.REVERSE);
+        slides.setDirection(DcMotor.Direction.REVERSE);
 
 
 

@@ -61,6 +61,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
         dumper = hardwareMap.servo.get("bucket");
 
         //arm.setDirection(DcMotor.Direction.REVERSE);
+        slides.setDirection(DcMotor.Direction.REVERSE);
 
 
 
@@ -78,10 +79,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 
         }
-
-
-
-
 
 
 
@@ -134,14 +131,14 @@ import com.qualcomm.robotcore.util.ElapsedTime;
         }
         robot.mecanumDrive(0,0,0,.6);
 
-        robot.wait(950,robot.odometers);
+        robot.wait(900,robot.odometers);
 
         armWrist.setPosition(robot.WRIST_TOP);
 
         dumper.setPosition(.6);
 
 
-        robot.wait(750,robot.odometers);
+        robot.wait(700,robot.odometers);
         robot.changeSpeed(1,1);
 
 
@@ -158,7 +155,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
          *
          */
         robot.changeAccuracy(.25,Math.toRadians(1));
-        x = 10.75;y = 23; finalAngle = Math.toRadians(145);
+        x = 10.75;y = 22.5; finalAngle = Math.toRadians(145);
 
         while(Math.abs(x-robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
 
@@ -231,7 +228,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
         arm.setPower(0.25);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        robot.changeSpeed(.8,.8);
+        robot.changeSpeed(1,1);
 
         //move to dump
 
@@ -251,13 +248,13 @@ import com.qualcomm.robotcore.util.ElapsedTime;
         }
         robot.mecanumDrive(0,0,0,.6);
 
-        robot.wait(700,robot.odometers);
+        robot.wait(500,robot.odometers);
 
 
         dumper.setPosition(.6);
 
 
-        robot.wait(750,robot.odometers);
+        robot.wait(600,robot.odometers);
 
 
 
@@ -349,7 +346,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
         arm.setPower(0.25);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        robot.changeSpeed(.8,.8);
+        robot.changeSpeed(1,1);
 
         //move to dump
 
@@ -369,13 +366,13 @@ import com.qualcomm.robotcore.util.ElapsedTime;
         }
         robot.mecanumDrive(0,0,0,.6);
 
-        robot.wait(800,robot.odometers);
+        robot.wait(500,robot.odometers);
 
 
         dumper.setPosition(.6);
 
 
-        robot.wait(750,robot.odometers);
+        robot.wait(550,robot.odometers);
 
 
 
@@ -393,7 +390,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
         robot.changeSpeed(1,1);
 
-        robot.changeAccuracy(6,Math.toRadians(5));
+        robot.changeAccuracy(7,Math.toRadians(5));
 
         x = -7.4;y = 17.3; finalAngle = Math.toRadians(90);
 
@@ -417,9 +414,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 
         }
-        robot.changeAccuracy(.5,Math.toRadians(1));
+        robot.changeAccuracy(.25,Math.toRadians(1));
 
-        x = -3;y = 35.5; finalAngle = Math.toRadians(180);
+        x = -3;y = 36.25; finalAngle = Math.toRadians(180);
         robot.goToPos(x, y, finalAngle, Math.toRadians(0));
 
 
@@ -436,7 +433,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
         inTake.setPower(.75);
 
-        robot.changeSpeed(.8,.8);
+        robot.changeSpeed(1,1);
 
         //third move to collect
         time = robot.timerInit(600);
@@ -475,7 +472,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
         arm.setPower(0.25);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        robot.changeSpeed(.8,.8);
+        robot.changeSpeed(1,1);
 
         //third move to dump
 
@@ -495,11 +492,11 @@ import com.qualcomm.robotcore.util.ElapsedTime;
         }
         robot.mecanumDrive(0,0,0,.6);
 
-        robot.wait(1000,robot.odometers);
+        robot.wait(700,robot.odometers);
 
         dumper.setPosition(.6);
 
-        robot.wait(750,robot.odometers);
+        robot.wait(600,robot.odometers);
 
         robot.changeSpeed(1,1);
         robot.changeAccuracy(4,Math.toRadians(10));
@@ -518,7 +515,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
             dumper.setPosition(.7);
 
-            arm.setTargetPosition(120);
+            arm.setTargetPosition(100);
             arm.setPower(0.4);
             arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
@@ -570,7 +567,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
         //x = 0;y = 50; finalAngle = Math.toRadians(0);
         //while(Math.abs(x-robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
         //robot.goToPosSingle(x, y, finalAngle, Math.toRadians(180));
-        robot.wait(2000,robot.odometers);
+        robot.wait(1500,robot.odometers);
         armWrist.setPosition(0.4);
         arm.setTargetPosition(0);
         arm.setPower(0.25);

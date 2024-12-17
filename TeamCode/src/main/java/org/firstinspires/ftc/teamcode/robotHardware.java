@@ -130,8 +130,11 @@ public class robotHardware extends LinearOpMode
 
     //It goes clockwise when you lower the number from the not specimen side
     public final double WRIST_TOP = 1;
-    public final double WRIST_MID = .7;
+    public final double WRIST_MID = .75;
     public final double WRIST_LOW = .79;
+
+    public final double SPECIMEN_CLOSE = 0.1;
+    public final double SPECIMEN_OPEN = 0.45;
 
     double oldTime = 0;
     GoBildaPinpointDriver odo; // Declare OpMode member for the Odometry Computer

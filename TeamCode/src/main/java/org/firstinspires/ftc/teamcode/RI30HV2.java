@@ -53,6 +53,7 @@ public class RI30HV2 extends LinearOpMode {
     public boolean timerInit2 = false;
     public boolean timerInit3 = false;
     public boolean timerInit4 = false;
+    public boolean timerInit5 = false;
 
 
     public enum AutoGrab {
@@ -65,6 +66,7 @@ public class RI30HV2 extends LinearOpMode {
         ARM_TOP_POS,
         ARM_MIDDLE_POS,
         ARM_BOTTOM_POS,
+        ARM_SPECIMEN_POS,
         MANUAL
     }
 
@@ -113,7 +115,7 @@ public class RI30HV2 extends LinearOpMode {
             //smaller numbers go up higher
             dumper.setPosition(0.35);
             armWrist.setPosition(.3);
-            specimenGrab.setPosition(0.25);//closed is 0, open is .3
+            specimenGrab.setPosition(robot.SPECIMEN_OPEN);//closed is .1, open is .45
 
             intake.setPower(0);
 
@@ -277,9 +279,9 @@ public class RI30HV2 extends LinearOpMode {
                 buttonD = true;
             }
 
-            if (gamepad1.left_trigger > .5) {
+            if (gamepad1.left_trigger > .5){
 
-                slideEncoder = 2100;
+                autoGrab = AutoGrab.MIDDLE_SLIDE_POS;
 
             }
             if (gamepad1.right_bumper || timerInit3) {
@@ -304,23 +306,23 @@ public class RI30HV2 extends LinearOpMode {
                 if (gamepad1.dpad_left) {
                     time = robot.timerInit(250);
                     timerInit4 = true;
+                    intake.setPower(0);
                 }
 
-                armEncoder = 200;
-                armPower = .4;
+                autoGrab = AutoGrab.ARM_SPECIMEN_POS;
 
                 if (outIn){
-                    if (slideEncoder == 2100 || slideEncoder == 1200){
-                        slideEncoder = 1200;
+                    if (slideEncoder == 2000 || slideEncoder == 1250){
+                        slideEncoder = 1250;
 
-                        if(robot.boolTimer(time + 450)){
-                            specimenGrab.setPosition(.35);//opening
+                        if(robot.boolTimer(time + 350)){
+                            specimenGrab.setPosition(robot.SPECIMEN_OPEN);//opening
                             outIn = false;
                             timerInit4 = false;
                         }
                     }
                     else {
-                        specimenGrab.setPosition(.35);//opening
+                        specimenGrab.setPosition(robot.SPECIMEN_OPEN);//opening
                         outIn = false;
                         timerInit4 = false;
                     }
@@ -328,7 +330,7 @@ public class RI30HV2 extends LinearOpMode {
                 }
 
                 else if (!outIn){
-                    specimenGrab.setPosition(0.1);
+                    specimenGrab.setPosition(robot.SPECIMEN_CLOSE);
 
                     if(robot.boolTimer(time)) {
                         slideEncoder = 500;
@@ -370,7 +372,7 @@ public class RI30HV2 extends LinearOpMode {
 
                     break;
                 case MIDDLE_SLIDE_POS:
-                    slideEncoder = 2100;
+                    slideEncoder = 2000;
 
                     break;
                 case BOTTOM_SLIDE_POS:
@@ -397,6 +399,12 @@ public class RI30HV2 extends LinearOpMode {
 
                     armWrist.setPosition(robot.WRIST_LOW);
                     armEncoder = robot.ARM_LOW;
+                    armPower = .4;
+
+                    break;
+                case ARM_SPECIMEN_POS:
+
+                    armEncoder = 200;
                     armPower = .4;
 
                     break;
@@ -451,6 +459,30 @@ public class RI30HV2 extends LinearOpMode {
                 arm.setPower(armPower);
                 arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             }
+            // Slides and Arm Manual Reset
+            if((gamepad2.a && gamepad2.x) || timerInit5){
+                slideEncoder = -4200;
+                autoGrab = AutoGrab.ARM_SPECIMEN_POS;
+                slides.setTargetPosition(slideEncoder);
+                slides.setPower(1);
+                slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                if (gamepad2.a) {
+                    time = robotHardware.currentTime.milliseconds() + 3000;
+                    timerInit5 = true;
+                }
+                if (robot.boolTimer(time)) {
+                    //slideEncoder = 0;
+                    timerInit5 = false;
+                    slides.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    slides.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                }
+
+
+            }
+
+
+
+
 
             //robot.odo.update();
             robot.refresh(robot.odometers);
@@ -482,6 +514,7 @@ public class RI30HV2 extends LinearOpMode {
         }
 
     }
+
 
 
 
