@@ -46,6 +46,7 @@ public class RI30HV2 extends LinearOpMode {
     public boolean down = false;
     public boolean open = false;
     public boolean outIn = false;
+    public boolean manualReset = false;
 
     public boolean x = false;
 
@@ -177,11 +178,13 @@ public class RI30HV2 extends LinearOpMode {
 
 
             //slide fine adjust
-           if (gamepad2.y && buttonA) {
+           /*if (gamepad2.y && buttonA) {
                 slideEncoder += 200;
                 buttonA = false;
                 intake.setPower(0);
             }
+
+
            else if (gamepad2.x && buttonB) {
 
                 slideEncoder -= 200;
@@ -196,6 +199,7 @@ public class RI30HV2 extends LinearOpMode {
                buttonB = true;
            }
 
+            */
 
 
            if (gamepad1.left_stick_button) {
@@ -449,12 +453,28 @@ public class RI30HV2 extends LinearOpMode {
             slides.setPower(1);
             slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            if(armEncoder > 600 && arm.getCurrentPosition() > 600){
+            if(gamepad2.y){
+
+                manualReset = true;
+                arm.setPower(.4);
+                arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            }
+            if(gamepad2.b){
+                if(gamepad2.dpad_right){
+                    arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    manualReset = false;
+                }
+                arm.setPower(-.4);
+                arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+            }
+
+            if(armEncoder > 600 && arm.getCurrentPosition() > 600 && !manualReset){
                 arm.setTargetPosition(armEncoder);
                 arm.setPower(0);
                 arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             }
-            else{
+            else if(!manualReset){
                 arm.setTargetPosition(armEncoder);
                 arm.setPower(armPower);
                 arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);

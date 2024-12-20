@@ -131,7 +131,7 @@ public class robotHardware extends LinearOpMode
     //It goes clockwise when you lower the number from the not specimen side
     public final double WRIST_TOP = 1;
     public final double WRIST_MID = .75;
-    public final double WRIST_LOW = .79;
+    public final double WRIST_LOW = .84;
 
     public final double SPECIMEN_CLOSE = 0.1;
     public final double SPECIMEN_OPEN = 0.45;
@@ -192,7 +192,7 @@ public class robotHardware extends LinearOpMode
         odo.setOffsets(-200.0, -120.0);
         odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
         odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
-        //odo.resetPosAndIMU();
+//        odo.resetPosAndIMU();
 
         //resetRuntime();
 

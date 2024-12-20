@@ -106,7 +106,7 @@ public class SpecimenAuto1 extends LinearOpMode {
         finalAngle = Math.toRadians(0);
 
         armWrist.setPosition(robot.WRIST_LOW);
-        arm.setTargetPosition(200);
+        arm.setTargetPosition(160);
         arm.setPower(.25);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
@@ -153,7 +153,7 @@ public class SpecimenAuto1 extends LinearOpMode {
         slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         armWrist.setPosition(.3);
-        arm.setTargetPosition(200);
+        arm.setTargetPosition(160);
         arm.setPower(0.175);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
@@ -324,8 +324,8 @@ public class SpecimenAuto1 extends LinearOpMode {
 
         robot.changeAccuracy(.25,Math.toRadians(1));
 
-        x = -15;
-        y = 29.75;
+        x = -14;
+        y = 30.5;
         finalAngle = Math.toRadians(0);
 
         while (Math.abs(x - robot.GlobalX) > robot.moveAccuracy || Math.abs(y - robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
