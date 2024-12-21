@@ -410,8 +410,13 @@ public class robotHardware extends LinearOpMode
         //Converting odometry computer outputs to inches
         odo.update();
         GlobalHeading = odo.getHeading();
+        /*
+        These are the values from the three wheel odometry
         GlobalX = odo.getPosX() * .03937007874;
         GlobalY = odo.getPosY() * .03937007874;
+         */
+        GlobalX = odo.getPosX() / 25.4;
+        GlobalY = odo.getPosY() / 25.4;
 
 
 
@@ -595,6 +600,57 @@ public class robotHardware extends LinearOpMode
          */
         double[] returnValue = {distanceToTarget, absoluteAngleToTarget, reletiveXToTarget, reletiveYToTarget, movementXpower, movementYpower, movementTurnPower, reletiveTurnAngle, reletiveAngleToTarget};
         return returnValue;
+    }
+
+    public void goToPosPinPoint(double x, double y, double finalAngle, double followAngle)
+    {
+        //bring in the encoder and motor objects
+        //odometryRobotHardware robot = new odometryRobotHardware(hardwareMap);
+
+        //while loop makes the code keep running till the desired location is reached. (within the accuracy constraints)
+        while(Math.abs(x-GlobalX) > moveAccuracy || Math.abs(y-GlobalY) > moveAccuracy || Math.abs(angleWrapRad(finalAngle - GlobalHeading)) > angleAccuracy) {
+
+            //update odometry location
+            refresh(odometers);
+
+            double voltComp = (14.0/ControlHub_VoltageSensor.getVoltage()) * (11.0/14.0);
+
+            //math to calculate distances to the target
+            double distanceToTarget = Math.hypot(x - GlobalX, y - GlobalY);
+            double absoluteAngleToTarget = Math.atan2(y - GlobalY, x - GlobalX);
+            double reletiveAngleToTarget = angleWrapRad(absoluteAngleToTarget - GlobalHeading /*+ Math.toRadians(90)*/);
+            double reletiveXToTarget = Math.cos(reletiveAngleToTarget) * distanceToTarget;
+            double reletiveYToTarget = Math.sin(reletiveAngleToTarget) * distanceToTarget;//use - when spinning counterclockwise is positive
+
+            //slow down ensures the robot does not over shoot the target
+            double slowDown = Range.clip(odoDrivePID(distanceToTarget,0), 0, moveSpeed);
+
+            //calculate the vector powers for the mecanum math
+            double movementXpower = (reletiveXToTarget / (Math.abs(reletiveXToTarget) + Math.abs(reletiveYToTarget))) * slowDown;
+            double movementYpower = (reletiveYToTarget / (Math.abs(reletiveYToTarget) + Math.abs(reletiveXToTarget))) * slowDown;
+
+            //when far away from the target the robot will point at the target to get there faster.
+            //at the end of the movement the robot will begin moving toward the desired final angle
+            double movementTurnPower;
+            double reletiveTurnAngle;
+            if (distanceToTarget > 6) {//-Range.clip(odoTurnPID(0, reletiveTurnAngle), -turnSpeed, turnSpeed) use - to switch turnpower
+                reletiveTurnAngle = angleWrapRad(reletiveAngleToTarget - followAngle);//use - when spinning counterclockwise is positive
+                movementTurnPower = Range.clip(odoTurnPID(0, reletiveTurnAngle), -turnSpeed, turnSpeed);
+            } else {
+                reletiveTurnAngle = angleWrapRad(finalAngle - GlobalHeading);
+                movementTurnPower = Range.clip(odoTurnPID(0, reletiveTurnAngle), -turnSpeed, turnSpeed);
+            }
+
+            //set the motors to the correct powers to move toward the target
+            mecanumDrive(-movementXpower, movementYpower, -movementTurnPower, voltComp);
+        }
+
+        //at the end of the movement stop the motors
+        drive[0].setPower(0);
+        drive[1].setPower(0);
+        drive[2].setPower(0);
+        drive[3].setPower(0);
+
     }
 
     public double driveToPos(double x, double y){

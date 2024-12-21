@@ -158,6 +158,9 @@ public class RI30HV2 extends LinearOpMode {
                 buttonA = false;
 
             }
+            if (!gamepad2.a && !buttonA) {
+                buttonA = true;
+            }
 
 
             if (gamepad1.b) {
@@ -274,8 +277,9 @@ public class RI30HV2 extends LinearOpMode {
             }
 
             if (gamepad1.left_bumper && buttonD) {// 8700 is max
-                //autoGrab = AutoGrab.TOP_SLIDE_POS;
-                slideEncoder = maxSlides;
+                autoGrab = AutoGrab.TOP_SLIDE_POS;
+                //slideEncoder = maxSlides;
+
 
                 buttonD = false;
             }
@@ -288,21 +292,10 @@ public class RI30HV2 extends LinearOpMode {
                 autoGrab = AutoGrab.MIDDLE_SLIDE_POS;
 
             }
-            if (gamepad1.right_bumper || timerInit3) {
-                if (gamepad1.right_bumper) {
-                    time = robot.timerInit(2500);
-                    timerInit3 = true;
-                }
+            if (gamepad1.right_bumper) {
 
-                slideEncoder = 0;
-                if (robot.boolTimer(time)) {
-                    timerInit3 = false;
-                    //offset = slides.getCurrentPosition();
-
-                    //slides.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    //slides.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    //slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                }
+                autoGrab = AutoGrab.BOTTOM_SLIDE_POS;
+                //slideEncoder = 0;
             }
 
 
