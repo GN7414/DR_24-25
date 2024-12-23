@@ -136,10 +136,10 @@ public class robotHardwareGen2 extends LinearOpMode
     {
 
         //drive motors
-        RightOutside = ahwMap.dcMotor.get("RightOutside");//Outside is bottom gear on swerve
-        RightInside = ahwMap.dcMotor.get("RightInside");//Inside is top gear on swerve
-        LeftOutside = ahwMap.dcMotor.get("LeftOutside");//Outside is bottom gear on swerve
-        LeftInside  = ahwMap.dcMotor.get("LeftInside");//Inside is top gear on swerve
+        RightOutside = ahwMap.dcMotor.get("RO");//Outside is bottom gear on swerve
+        RightInside = ahwMap.dcMotor.get("RI");//Inside is top gear on swerve
+        LeftOutside = ahwMap.dcMotor.get("LO");//Outside is bottom gear on swerve
+        LeftInside  = ahwMap.dcMotor.get("LI");//Inside is top gear on swerve
 
         RightOutside.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RightInside.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
