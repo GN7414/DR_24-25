@@ -10,6 +10,8 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.teamcode.GoBildaPinpointDriver;
+
 /**
  * Created by User on 10/1/2022.
  */
@@ -131,6 +133,8 @@ public class robotHardwareGen2 extends LinearOpMode
     double GeneralPIDMaxIntegral2 = 1.0;
     double GeneralPIDMotorPower2 = 0;
 
+    GoBildaPinpointDriver odo;
+
 
     public robotHardwareGen2(HardwareMap ahwMap)
     {
@@ -174,6 +178,12 @@ public class robotHardwareGen2 extends LinearOpMode
         drive[1] = RightInside;
         drive[2] = LeftOutside;
         drive[3] = LeftInside;
+
+        odo = ahwMap.get(GoBildaPinpointDriver.class,"odo");
+        odo.setOffsets(-177.8, 177.8);
+        odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
+        odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
+//        odo.resetPosAndIMU();
 
 
 
