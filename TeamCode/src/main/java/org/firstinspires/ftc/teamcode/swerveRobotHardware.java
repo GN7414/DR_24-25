@@ -161,6 +161,7 @@ public class swerveRobotHardware extends LinearOpMode
         LeftInside.setPower(0);
 
 
+
         //odometry init (use the motors objects that the odometers are plugged into)
         leftEncoder = LeftOutside;
         rightEncoder = LeftInside;
@@ -190,8 +191,8 @@ public class swerveRobotHardware extends LinearOpMode
         LeftInside.setPower((wheelDirection * -power * speed) + turnPowerLeft - turnPower * wheelDirection);
     }
     public void swerveCalculations(double forwardDrive, double strafeDrive, double heading){
-        rightPodPosition = RightOutside.getCurrentPosition();
-        leftPodPosition  = -LeftOutside.getCurrentPosition();
+        rightPodPosition = -RightOutside.getCurrentPosition();
+        leftPodPosition  = LeftOutside.getCurrentPosition();
 
         power = Math.abs(forwardDrive) + Math.abs(strafeDrive);
 

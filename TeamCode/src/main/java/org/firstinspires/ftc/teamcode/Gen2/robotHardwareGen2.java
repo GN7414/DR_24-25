@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode.Gen2;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
@@ -163,6 +164,7 @@ public class robotHardwareGen2 extends LinearOpMode
         LeftOutside.setPower(0);
         LeftInside.setPower(0);
 
+        RightOutside.setDirection(DcMotorSimple.Direction.REVERSE);
 
         //odometry init (use the motors objects that the odometers are plugged into)
         leftEncoder = LeftOutside;

@@ -28,8 +28,6 @@ public class swerveDrive1 extends LinearOpMode
 
             robot.swerveDrive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, 1);
 
-
-
             telemetry.addData("turnPowerRight", robot.turnPowerRight);
             telemetry.addData("aTan degrees", robot.aTan);
             telemetry.addData("newAngle", robot.newAngle);
