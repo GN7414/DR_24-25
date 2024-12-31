@@ -26,6 +26,10 @@ public class SwerveGen2 extends LinearOpMode
     public boolean buttonB = true;
     public boolean buttonDU = true;
     public boolean buttonDD = true;
+    public boolean buttonRT = true;
+    public boolean buttonLT = true;
+
+    public boolean[] boolArray = new boolean[20];
 
 
     public Servo extensionWrist = null;
@@ -38,7 +42,7 @@ public class SwerveGen2 extends LinearOpMode
 
     public double Position =.5;
     public double HEPosition =.1;
-    public double APosition = 0;
+    public double APosition = .1;
     public double AWPosition = .35;
 
     @Override
@@ -73,6 +77,7 @@ public class SwerveGen2 extends LinearOpMode
             extensionWrist.setPosition(.5);
             intake.setPower(0);
             bucketWrist.setPosition(.35);
+            bucketArm.setPosition(.1);
         }
 
         while (opModeIsActive()) {
@@ -146,7 +151,7 @@ public class SwerveGen2 extends LinearOpMode
             if(!gamepad1.dpad_down && !buttonDD){
                 buttonDD = true;
             }
-
+            /*
             //Bucket
             //Range is .35-.85
             if(gamepad1.right_bumper && buttonRB && AWPosition < .85){
@@ -170,17 +175,84 @@ public class SwerveGen2 extends LinearOpMode
                 buttonLB = true;
             }
 
+            */
+
+            /*
+            //Arm
+            //Higher Number is Up
+            if(gamepad1.right_trigger > .5 && buttonRT && APosition < .8){
+                APosition += .05;
+                bucketArm.setPosition(APosition);
+                buttonRT = false;
+            }
+
+            if(gamepad1.left_trigger > .5 && buttonLT && APosition > .15){
+                APosition -= .05;
+                bucketArm.setPosition(APosition);
+                buttonLT = false;
+            }
+
+
+            if(gamepad1.right_trigger <.5 && !buttonRT){
+                buttonRT = true;
+            }
+
+            if(gamepad1.left_trigger <.5 && !buttonLT){
+                buttonLT = true;
+            }
+
+             */
+            if(gamepad1.right_trigger > .5 && buttonRT){ //&& APosition < .8){
+                bucketArm.setPosition(.85);
+                buttonRT = false;
+            }
+
+            if(gamepad1.left_trigger > .5 && buttonLT){ //&& APosition > .15){
+                bucketArm.setPosition(.1);
+                buttonLT = false;
+            }
+
+
+            if(gamepad1.right_trigger <.5 && !buttonRT){
+                buttonRT = true;
+            }
+
+            if(gamepad1.left_trigger <.5 && !buttonLT){
+                buttonLT = true;
+            }
+
+            if(gamepad1.right_bumper && buttonRB){ //&& AWPosition < .85){
+                bucketWrist.setPosition(.55);
+                buttonRB = false;
+            }
+
+            if(gamepad1.left_bumper && buttonLB){ //&&AWPosition > .35){
+                bucketWrist.setPosition(.5);
+                buttonLB = false;
+            }
+
+
+            if(!gamepad1.right_bumper && !buttonRB){
+                buttonRB = true;
+            }
+
+            if(!gamepad1.left_bumper && !buttonLB){
+                buttonLB = true;
+            }
 
 
 
 
-            telemetry.addData("ArmWrist", AWPosition);
+
+
+            telemetry.addData("Arm", bucketArm.getPosition());
+            telemetry.addData("ArmWrist", bucketWrist.getPosition());
             telemetry.addData("E_Wrist", Position);
             telemetry.addData("H_Extension", HEPosition);
             telemetry.addData("power", SlidesPosition);
             telemetry.update();
             if(gamepad1.a && buttonA && SlidesPosition > -3000){
-                SlidesPosition -= 100;
+                SlidesPosition += 100;
                 slidesR.setTargetPosition(SlidesPosition);
                 slidesL.setTargetPosition(SlidesPosition);
                 slidesR.setPower(.25);
@@ -191,7 +263,7 @@ public class SwerveGen2 extends LinearOpMode
             }
 
             if(gamepad1.b && buttonB && SlidesPosition < 0){
-                SlidesPosition += 100;
+                SlidesPosition -= 100;
                 slidesR.setTargetPosition(SlidesPosition);
                 slidesL.setTargetPosition(SlidesPosition);
                 slidesR.setPower(.25);
