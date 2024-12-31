@@ -137,6 +137,10 @@ public class robotHardwareGen2 extends LinearOpMode
     GoBildaPinpointDriver odo;
 
 
+
+    public static ElapsedTime currentTime = new ElapsedTime();
+
+
     public robotHardwareGen2(HardwareMap ahwMap)
     {
 
@@ -865,4 +869,8 @@ public class robotHardwareGen2 extends LinearOpMode
     }
 
     public void runOpMode(){}
+
+    public boolean boolTimer (double time){
+        return currentTime.milliseconds() > time;
+    }
 }

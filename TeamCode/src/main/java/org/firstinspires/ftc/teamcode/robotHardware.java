@@ -864,7 +864,6 @@ public class robotHardware extends LinearOpMode
 
     public boolean boolTimer (double time){
         return currentTime.milliseconds() > time;
-
     }
 
     public double timerInit(int t){
