@@ -136,7 +136,17 @@ public class robotHardwareGen2 extends LinearOpMode
 
     GoBildaPinpointDriver odo;
 
+    public final double SLIDE_TOP = 2300;
+    public final double SLIDE_MID = 1150;
 
+    public final double WRIST_TOP = .25;
+    public final double WRIST_LOW = .9;
+
+    public final double BUCKET_ARM_DROP = .85;
+    public final double BUCKET_ARM_REST = .1;
+
+    public final double BUCKET_WRIST_DROP = .2;
+    public final double BUCKET_WRIST_REST = .3;
 
     public static ElapsedTime currentTime = new ElapsedTime();
 
@@ -155,8 +165,8 @@ public class robotHardwareGen2 extends LinearOpMode
         LeftOutside.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         LeftInside.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        RightOutside.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        LeftOutside.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //RightOutside.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //LeftOutside.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         RightOutside.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         RightInside.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

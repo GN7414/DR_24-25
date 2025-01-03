@@ -51,7 +51,7 @@ public class SwerveGen2 extends LinearOpMode
     public double APosition = .1;
     public double AWPosition = .35;
 
-    double time = 0;
+    double[] timeArray = new double[20];
 
     RI30HV2.AutoGrab autoGrab = RI30HV2.AutoGrab.START;
 
@@ -104,7 +104,7 @@ public class SwerveGen2 extends LinearOpMode
 
             robot.swerveDrive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, 1);
 
-            if(gamepad1.dpad_up && buttonDU && SlidesPosition < 2300){
+            if(gamepad1.dpad_up && buttonDU && SlidesPosition < robot.SLIDE_TOP){
                 SlidesPosition = 2300;
                 slidesR.setTargetPosition(SlidesPosition);
                 slidesL.setTargetPosition(SlidesPosition);
@@ -138,12 +138,12 @@ public class SwerveGen2 extends LinearOpMode
 
             if((gamepad1.left_bumper && buttonLB) || timerArray[0] /*Add this to a if to be able to use timer "OR"*/){
                 if (gamepad1.left_bumper/*Boolean to start timer*/ && buttonLB) {
-                    time = robot.currentTime.milliseconds();//must have button press or will break
+                    timeArray[0] = robot.currentTime.milliseconds();//must have button press or will break
                     timerArray[0] = true;
                 }
 
 
-                if (robot.currentTime.milliseconds() > time + 1500) {
+                if (robot.currentTime.milliseconds() > timeArray[0] + 1750) {
 
                     timerArray[0] = false;//If must be last timer, and must reset boolean when done
 
@@ -156,20 +156,20 @@ public class SwerveGen2 extends LinearOpMode
                     slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
                 }
-                else if (robot.boolTimer(time + 500) ) {
-                    bucketArm.setPosition(.1);
-                    bucketWrist.setPosition(.3);
+                else if (robot.boolTimer(timeArray[0] + 750) ) {
+                    bucketArm.setPosition(robot.BUCKET_ARM_REST);//going to rest position/down
+                    bucketWrist.setPosition(robot.BUCKET_WRIST_REST);//rest
                 }
                 else{//first thing to happen
 
-                    bucketArm.setPosition(.85);
-                    bucketWrist.setPosition(.2);
+                    bucketArm.setPosition(robot.BUCKET_ARM_DROP);//dropping
+                    bucketWrist.setPosition(robot.BUCKET_WRIST_DROP);//drop
 
 
 
                 }
                 buttonLB = false;
-                telemetry.addData("booo5100", time);
+                telemetry.addData("booo5100", timeArray);
                 telemetry.addData("currentTime", robot.currentTime.milliseconds());
             }
 
@@ -187,48 +187,50 @@ public class SwerveGen2 extends LinearOpMode
                 buttonLT = false;
 
                 if (!upDown) {
-                    extensionWrist.setPosition(.25);//upPos
+                    extensionWrist.setPosition(robot.WRIST_TOP);//upPos
                     intake.setPower(0);
-                    upDown = false;
+                    upDown = true;
                     out = true;
 
                 }
-                else if (upDown) { //this closes
-                    extensionWrist.setPosition(.9);//downPos
+                else if (upDown) {
+                    extensionWrist.setPosition(robot.WRIST_LOW);//downPos
                     intake.setPower(-1);
-                    upDown = true;
+                    upDown = false;
+                    out = false;
                 }
             }
-
-
             else if (gamepad1.left_trigger < .5 && !buttonLT) {
                 buttonLT = true;
             }
 
-            if(extensionWrist.getPosition() == .25 && horizontalExtension.getPosition() == .1 && out){
+
+
+            if(upDown && horizontalExtension.getPosition() < .15){
+                telemetry.addData("MainThing", true);
                 if (out && in){
+                    telemetry.addData("Thing", true);
                     in = false;
-                    time = robot.currentTime.milliseconds();//must have button press or will break
+                    timeArray[1] = robot.currentTime.milliseconds();//must have button press or will break
                 }
 
-                if (robot.boolTimer(time + 1000) ) {
+                if (robot.boolTimer(timeArray[1] + 1000) ) {
                     intake.setPower(0);
                     out = false;
                     in = true;
+                    extensionWrist.setPosition(.5);
+
 
                 }
-                else if(robot.boolTimer(time + 500) ){
+                else if(robot.boolTimer(timeArray[1] + 250) ){
                     intake.setPower(1);
 
                 }
                 else{//first thing to happen
-
-
                 }
 
-
-
             }
+
 
 
 
@@ -429,6 +431,34 @@ public class SwerveGen2 extends LinearOpMode
             telemetry.addData("E_Wrist", Position);
             telemetry.addData("H_Extension", HEPosition);
             telemetry.addData("Slides", SlidesPosition);
+
+            telemetry.addData("",null);
+
+            telemetry.addData("turnPowerRight", robot.turnPowerRight);
+            telemetry.addData("aTan degrees", robot.aTan);
+            telemetry.addData("newAngle", robot.newAngle);
+            telemetry.addData("oppo angle ", robot.oppositeAngle);
+            telemetry.addData("rotations ", robot.rotations);
+            telemetry.addData("robot power", robot.power);
+            telemetry.addData("", null);
+            telemetry.addData("Powers", null);
+            telemetry.addData("right 1", robot.RightOutside.getPower());
+            telemetry.addData("right 2", robot.RightInside.getPower());
+            telemetry.addData("Location:", null);
+            telemetry.addData("left 1", robot.LeftOutside.getPower());
+            telemetry.addData("left 2", robot.LeftInside.getPower());
+
+            //one +     two -
+            telemetry.addData("right pod pos", robot.rightPodPosition);
+            telemetry.addData("left pod pos", robot.leftPodPosition);
+            telemetry.addData("current angle right",robot.currentAngle);
+            telemetry.addData("final angle",robot.finalAngle);
+            telemetry.addData("wheel Direction",robot.wheelDirection);
+            telemetry.addData("distance",robot.distance);
+            telemetry.addData("oppo-distance",robot.oppositeDistance);
+            telemetry.addData("testing",robot.testing);
+
+
             telemetry.update();
 
             /*
