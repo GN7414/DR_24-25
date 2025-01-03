@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.robotHardware;
+import org.firstinspires.ftc.teamcode.RI30HV2;
 
 
 @TeleOp(name="SwerveGen2")
@@ -31,6 +31,9 @@ public class SwerveGen2 extends LinearOpMode
     public boolean buttonDD = true;
     public boolean buttonRT = true;
     public boolean buttonLT = true;
+    public boolean upDown = true;
+    public boolean out = false;
+    public boolean in = true;
 
     public boolean[] timerArray = new boolean[20];
 
@@ -49,6 +52,8 @@ public class SwerveGen2 extends LinearOpMode
     public double AWPosition = .35;
 
     double time = 0;
+
+    RI30HV2.AutoGrab autoGrab = RI30HV2.AutoGrab.START;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -132,13 +137,14 @@ public class SwerveGen2 extends LinearOpMode
 
 
             if((gamepad1.left_bumper && buttonLB) || timerArray[0] /*Add this to a if to be able to use timer "OR"*/){
-                if (gamepad1.left_bumper/*Boolean to start timer*/) {
-                    time = robotHardware.currentTime.milliseconds();//must have button press or will break
+                if (gamepad1.left_bumper/*Boolean to start timer*/ && buttonLB) {
+                    time = robot.currentTime.milliseconds();//must have button press or will break
                     timerArray[0] = true;
                 }
 
 
-                if (robot.boolTimer(time + 4000/*value is added to original timer*/)) {
+                if (robot.currentTime.milliseconds() > time + 1500) {
+
                     timerArray[0] = false;//If must be last timer, and must reset boolean when done
 
                     SlidesPosition = 100;
@@ -150,7 +156,7 @@ public class SwerveGen2 extends LinearOpMode
                     slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
                 }
-                else if (robot.boolTimer(time + 2000)) {
+                else if (robot.boolTimer(time + 500) ) {
                     bucketArm.setPosition(.1);
                     bucketWrist.setPosition(.3);
                 }
@@ -163,13 +169,74 @@ public class SwerveGen2 extends LinearOpMode
 
                 }
                 buttonLB = false;
-                telemetry.addData("booo", timerArray[0]);
-                telemetry.update();
+                telemetry.addData("booo5100", time);
+                telemetry.addData("currentTime", robot.currentTime.milliseconds());
             }
 
             if(!gamepad1.left_bumper && !buttonLB){
                 buttonLB = true;
             }
+
+
+
+            //inc extension
+            horizontalExtension.setPosition((gamepad1.right_trigger * 0.3)+ 0.1);
+
+            //One button press
+            if (gamepad1.left_trigger > .5 && buttonLT) {
+                buttonLT = false;
+
+                if (!upDown) {
+                    extensionWrist.setPosition(.25);//upPos
+                    intake.setPower(0);
+                    upDown = false;
+                    out = true;
+
+                }
+                else if (upDown) { //this closes
+                    extensionWrist.setPosition(.9);//downPos
+                    intake.setPower(-1);
+                    upDown = true;
+                }
+            }
+
+
+            else if (gamepad1.left_trigger < .5 && !buttonLT) {
+                buttonLT = true;
+            }
+
+            if(extensionWrist.getPosition() == .25 && horizontalExtension.getPosition() == .1 && out){
+                if (out && in){
+                    in = false;
+                    time = robot.currentTime.milliseconds();//must have button press or will break
+                }
+
+                if (robot.boolTimer(time + 1000) ) {
+                    intake.setPower(0);
+                    out = false;
+                    in = true;
+
+                }
+                else if(robot.boolTimer(time + 500) ){
+                    intake.setPower(1);
+
+                }
+                else{//first thing to happen
+
+
+                }
+
+
+
+            }
+
+
+
+
+
+
+
+
 
 
 
