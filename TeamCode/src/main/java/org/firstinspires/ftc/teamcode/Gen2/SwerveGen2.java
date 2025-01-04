@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Gen2;
 
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -8,6 +9,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.GoBildaPinpointDriver;
 import org.firstinspires.ftc.teamcode.RI30HV2;
 
 
@@ -75,7 +78,7 @@ public class SwerveGen2 extends LinearOpMode
         slidesR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slidesL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        slidesR.setDirection(DcMotorSimple.Direction.REVERSE);
+        //slidesR.setDirection(DcMotorSimple.Direction.REVERSE);
         slidesL.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
@@ -103,6 +106,7 @@ public class SwerveGen2 extends LinearOpMode
         while (opModeIsActive()) {
 
             robot.swerveDrive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, 1);
+            robot.refresh(robot.odometers);
 
             if(gamepad1.dpad_up && buttonDU && SlidesPosition < robot.SLIDE_TOP){
                 SlidesPosition = 2300;
@@ -214,7 +218,7 @@ public class SwerveGen2 extends LinearOpMode
                     timeArray[1] = robot.currentTime.milliseconds();//must have button press or will break
                 }
 
-                if (robot.boolTimer(timeArray[1] + 1000) ) {
+                if (robot.boolTimer(timeArray[1] + 1500) ) {
                     intake.setPower(0);
                     out = false;
                     in = true;
@@ -230,14 +234,6 @@ public class SwerveGen2 extends LinearOpMode
                 }
 
             }
-
-
-
-
-
-
-
-
 
 
 
@@ -420,9 +416,6 @@ public class SwerveGen2 extends LinearOpMode
             }
 
              */
-
-
-
 
 
 

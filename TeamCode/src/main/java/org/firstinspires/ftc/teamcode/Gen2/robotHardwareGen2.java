@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.GoBildaPinpointDriver;
 
 /**
@@ -140,7 +141,7 @@ public class robotHardwareGen2 extends LinearOpMode
     public final double SLIDE_MID = 1150;
 
     public final double WRIST_TOP = .25;
-    public final double WRIST_LOW = .9;
+    public final double WRIST_LOW = .85;
 
     public final double BUCKET_ARM_DROP = .85;
     public final double BUCKET_ARM_REST = .1;
@@ -178,7 +179,7 @@ public class robotHardwareGen2 extends LinearOpMode
         LeftOutside.setPower(0);
         LeftInside.setPower(0);
 
-        RightOutside.setDirection(DcMotorSimple.Direction.REVERSE);
+        //RightOutside.setDirection(DcMotorSimple.Direction.REVERSE);
 
         //odometry init (use the motors objects that the odometers are plugged into)
         leftEncoder = LeftOutside;
@@ -196,7 +197,7 @@ public class robotHardwareGen2 extends LinearOpMode
         drive[3] = LeftInside;
 
         odo = ahwMap.get(GoBildaPinpointDriver.class,"odo");
-        odo.setOffsets(-177.8, 177.8);
+        odo.setOffsets(-171.45, 6.35);
         odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
         odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
 //        odo.resetPosAndIMU();
@@ -487,35 +488,16 @@ public class robotHardwareGen2 extends LinearOpMode
     public void refresh(DcMotor[] odometers)
     {
 
-        //record last loop's encoder reading
-        oldRightPos = currentRightPos;
-        oldLeftPos = currentLeftPos;
-        oldPerpendicularPos = currentPerpendicularPos;
-
-        //record a new encoder reading this loop
-        currentRightPos = odometers[0].getCurrentPosition();
-        currentLeftPos = odometers[1].getCurrentPosition();
-        currentPerpendicularPos = -odometers[2].getCurrentPosition();
-
-        //find the delta encoder values of each encoder
-        int dn1 = currentLeftPos - oldLeftPos;
-        int dn2 = currentRightPos - oldRightPos;
-        int dn3 = currentPerpendicularPos - oldPerpendicularPos;
-
-        //find the delta of x,y,heading reletive to the robot
-        double dtheta = inPerTick * (dn2 - dn1) / L;
-        double dx = inPerTick * (dn1 + dn2) / 2.0;
-        double dy = inPerTick * (dn3 - (dn2 - dn1) * B / L);
-
-        //add the robots movement this loop to the global location
-        double theta = (dtheta / 2.0);
-        GlobalHeading += dtheta;
-        GlobalX -= dx * Math.cos(GlobalHeading) + dy * Math.sin(GlobalHeading);
-        GlobalY += dx * Math.sin(GlobalHeading) - dy * Math.cos(GlobalHeading);
-
-
-        //makes heading 180 to -180
-        //angleWrapRad(GlobalHeading);
+        //Converting odometry computer outputs to inches
+        odo.update();
+        GlobalHeading = odo.getHeading();
+        /*
+        These are the values from the three wheel odometry
+        GlobalX = odo.getPosX() * .03937007874;
+        GlobalY = odo.getPosY() * .03937007874;
+         */
+        GlobalX = odo.getPosition().getX(DistanceUnit.INCH);
+        GlobalY = odo.getPosition().getY(DistanceUnit.INCH);
     }
 
     // used to mantain angle values between Pi and -Pi
