@@ -70,9 +70,9 @@ public class robotHardwareGen2 extends LinearOpMode
     //PID Drive Variables
 
     public static double DriveF = .1; // = 32767 / maxV      (do not edit from this number)
-    public static double DriveP = 0.2; // = 0.1 * F           (raise till real's apex touches Var apex)
-    public static double DriveI = 0.025;// = 0.1 * P           (fine adjustment of P)
-    public static double DriveD = 0.06; // = 0                     (raise to reduce oscillation)
+    public static double DriveP = 0; // = 0.1 * F           (raise till real's apex touches Var apex)
+    public static double DriveI = 0.0;// = 0.1 * P           (fine adjustment of P)
+    public static double DriveD = 0.0; // = 0                     (raise to reduce oscillation)
 
     double DrivePIDCurrentTime = 0;
     double DrivePIDTime = 0;
@@ -86,10 +86,10 @@ public class robotHardwareGen2 extends LinearOpMode
 
     //PID Turning Variables
 
-    public static double TurnF = .15; // = 32767 / maxV      (do not edit from this number)
-    public static double TurnP = 0.6; // = 0.1 * F           (raise till real's apex touches Var apex)
-    public static double TurnI = 0.04; // = 0.1 * P           (fine adjustment of P)
-    public static double TurnD = 0.04; // = 0                     (raise to reduce oscillation)
+    public static double TurnF = 0; // = 32767 / maxV      (do not edit from this number)
+    public static double TurnP = 0; // = 0.1 * F           (raise till real's apex touches Var apex)
+    public static double TurnI = 0; // = 0.1 * P           (fine adjustment of P)
+    public static double TurnD = 0; // = 0                     (raise to reduce oscillation)
 
     double TurningPIDCurrentTime = 0;
     double TurningPIDTime = 0;
@@ -103,8 +103,8 @@ public class robotHardwareGen2 extends LinearOpMode
 
     //PID general Variables
 
-    public static double GeneralF = 0.05; // = 32767 / maxV      (do not edit from this number)
-    public static double GeneralP = 0.000175; // = 0.1 * F           (raise till real's apex touches Var apex)
+    public static double GeneralF = 0.0001; // = 32767 / maxV      (do not edit from this number)
+    public static double GeneralP = 0.00000175; // = 0.1 * F           (raise till real's apex touches Var apex)
     public static double GeneralI = 0;// = 0.1 * P           (fine adjustment of P)
     public static double GeneralD = 0.000000; // = 0                     (raise to reduce oscillation)
 
@@ -199,7 +199,7 @@ public class robotHardwareGen2 extends LinearOpMode
         odo = ahwMap.get(GoBildaPinpointDriver.class,"odo");
         odo.setOffsets(-171.45, 6.35);
         odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
-        odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
+        odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
 //        odo.resetPosAndIMU();
 
 
@@ -597,7 +597,7 @@ public class robotHardwareGen2 extends LinearOpMode
             }
 
             //set the motors to the correct powers to move toward the target
-            //mecanumDrive(movementXpower, movementYpower, -movementTurnPower, voltComp);
+            swerveDrive(-movementXpower,movementYpower, -movementTurnPower, voltComp);
         }
 
         //at the end of the movement stop the motors
@@ -608,7 +608,7 @@ public class robotHardwareGen2 extends LinearOpMode
 
     }
 
-    public double goToPosSingle(double x, double y, double finalAngle, double followAngle)
+    public double[] goToPosSingle(double x, double y, double finalAngle, double followAngle)
     {
         //bring in the encoder and motor objects
         //odometryRobotHardware robot = new odometryRobotHardware(hardwareMap);
@@ -648,9 +648,10 @@ public class robotHardwareGen2 extends LinearOpMode
         }
 
         //set the motors to the correct powers to move toward the target
-        //mecanumDrive(movementXpower, movementYpower, -movementTurnPower, voltComp);
+        swerveDrive(-movementXpower, movementYpower, -movementTurnPower, voltComp);
 
-        return movementTurnPower;
+        double[] returnValue = {distanceToTarget, absoluteAngleToTarget, reletiveXToTarget, reletiveYToTarget, movementXpower, movementYpower, movementTurnPower, reletiveTurnAngle, reletiveAngleToTarget};
+        return returnValue;
     }
 
     public double driveToPos(double x, double y){

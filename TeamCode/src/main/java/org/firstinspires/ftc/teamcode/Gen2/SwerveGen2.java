@@ -92,7 +92,7 @@ public class SwerveGen2 extends LinearOpMode
             extensionWrist.setPosition(.5);
             intake.setPower(0);
             bucketWrist.setPosition(.3);
-            bucketArm.setPosition(.1);
+            bucketArm.setPosition(.08);
             SlidesPosition = 100;
             slidesL.setTargetPosition(SlidesPosition);
             slidesL.setPower(.2);
@@ -232,6 +232,28 @@ public class SwerveGen2 extends LinearOpMode
                 }
                 else{//first thing to happen
                 }
+
+            }
+
+            if(gamepad2.dpad_up){
+
+                slidesR.setTargetPosition(2300);
+                slidesL.setTargetPosition(2300);
+                slidesR.setPower(1);
+                slidesL.setPower(1);
+                slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            }
+
+            if(gamepad2.dpad_down){
+
+                slidesR.setTargetPosition(1800);
+                slidesL.setTargetPosition(1800);
+                slidesR.setPower(1);
+                slidesL.setPower(1);
+                slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             }
 
@@ -418,12 +440,16 @@ public class SwerveGen2 extends LinearOpMode
              */
 
 
+            robot.refresh(robot.odometers);
 
             telemetry.addData("Arm", bucketArm.getPosition());
             telemetry.addData("ArmWrist", bucketWrist.getPosition());
             telemetry.addData("E_Wrist", Position);
             telemetry.addData("H_Extension", HEPosition);
             telemetry.addData("Slides", SlidesPosition);
+
+            telemetry.addData("X",robot.odo.getPosX());
+            telemetry.addData("Y",robot.odo.getPosY());
 
             telemetry.addData("",null);
 

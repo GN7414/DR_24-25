@@ -49,9 +49,31 @@ public class BucketSideAuto extends LinearOpMode
         }
 
         robot.changeAccuracy(1,Math.toRadians(1));
-        robot.changeSpeed(.8,.8);
+        robot.changeSpeed(1,.4);
 
-        robot.goToPos(10, 0, 0, Math.toRadians(0));
+        while(true){
+            double[] fake = robot.goToPosSingle(20,0,Math.toRadians(0),Math.toRadians(0));
+            telemetry.addData("distanceToTarget", fake[0]);
+            telemetry.addData("absoluteAngleToTarget", Math.toDegrees(fake[1]));
+            telemetry.addData("reletiveXToTarget", fake[2]);
+            telemetry.addData("reletiveYToTarget", fake[3]);
+            telemetry.addData("movementXpower", fake[4]);
+            telemetry.addData("movementYpower", fake[5]);
+            telemetry.addData("movementTurnPower", fake[6]);
+            telemetry.addData("reletiveTurnAngle", Math.toDegrees(fake[7]));
+            telemetry.addData("reletiveAngleToTarget", Math.toDegrees(fake[8]));
+
+            telemetry.addData("X",robot.GlobalX);
+            telemetry.addData("Y",robot.GlobalY);
+            telemetry.addData("Heading",Math.toDegrees(robot.GlobalHeading));
+
+            telemetry.update();
+
+
+        }
+
+
+        //robot.goToPos(0, 0, Math.toRadians(90), Math.toRadians(0));
 
 
     }
