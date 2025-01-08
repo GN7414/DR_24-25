@@ -69,8 +69,8 @@ public class robotHardwareGen2 extends LinearOpMode
 
     //PID Drive Variables
 
-    public static double DriveF = .1; // = 32767 / maxV      (do not edit from this number)
-    public static double DriveP = 0; // = 0.1 * F           (raise till real's apex touches Var apex)
+    public static double DriveF = .15; // = 32767 / maxV      (do not edit from this number)
+    public static double DriveP = 0.05; // = 0.1 * F           (raise till real's apex touches Var apex)
     public static double DriveI = 0.0;// = 0.1 * P           (fine adjustment of P)
     public static double DriveD = 0.0; // = 0                     (raise to reduce oscillation)
 
@@ -86,9 +86,9 @@ public class robotHardwareGen2 extends LinearOpMode
 
     //PID Turning Variables
 
-    public static double TurnF = 0; // = 32767 / maxV      (do not edit from this number)
-    public static double TurnP = 0; // = 0.1 * F           (raise till real's apex touches Var apex)
-    public static double TurnI = 0; // = 0.1 * P           (fine adjustment of P)
+    public static double TurnF = 0.1; // = 32767 / maxV      (do not edit from this number)
+    public static double TurnP = 3; // = 0.1 * F           (raise till real's apex touches Var apex)
+    public static double TurnI = 0.0; // = 0.1 * P           (fine adjustment of P)
     public static double TurnD = 0; // = 0                     (raise to reduce oscillation)
 
     double TurningPIDCurrentTime = 0;
@@ -103,10 +103,10 @@ public class robotHardwareGen2 extends LinearOpMode
 
     //PID general Variables
 
-    public static double GeneralF = 0.0001; // = 32767 / maxV      (do not edit from this number)
-    public static double GeneralP = 0.00000175; // = 0.1 * F           (raise till real's apex touches Var apex)
-    public static double GeneralI = 0;// = 0.1 * P           (fine adjustment of P)
-    public static double GeneralD = 0.000000; // = 0                     (raise to reduce oscillation)
+    /*public static*/ double GeneralF = 0.05; // = 32767 / maxV      (do not edit from this number)
+    /*public static*/ double GeneralP = 0.000175; // = 0.1 * F           (raise till real's apex touches Var apex)
+    /*public static*/ double GeneralI = 0;// = 0.1 * P           (fine adjustment of P)
+    /*public static*/ double GeneralD = 0.000000; // = 0                     (raise to reduce oscillation)
 
     double GeneralPIDCurrentTime = 0;
     double GeneralPIDTime = 0;
@@ -143,7 +143,7 @@ public class robotHardwareGen2 extends LinearOpMode
     public final double WRIST_TOP = .25;
     public final double WRIST_LOW = .85;
 
-    public final double BUCKET_ARM_DROP = .85;
+    public final double BUCKET_ARM_DROP = .75;
     public final double BUCKET_ARM_REST = .1;
 
     public final double BUCKET_WRIST_DROP = .2;
@@ -330,10 +330,10 @@ public class robotHardwareGen2 extends LinearOpMode
         LeftOutside.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LeftInside.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        RightOutside.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        RightInside.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        LeftOutside.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        LeftInside.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        RightOutside.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        RightInside.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        LeftOutside.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        LeftInside.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     /**
@@ -572,10 +572,10 @@ public class robotHardwareGen2 extends LinearOpMode
 
             //math to calculate distances to the target
             double distanceToTarget = Math.hypot(x - GlobalX, y - GlobalY);
-            double absoluteAngleToTarget = Math.atan2(x - GlobalX, y - GlobalY);
-            double reletiveAngleToTarget = angleWrapRad(absoluteAngleToTarget - GlobalHeading-Math.toRadians(90));
+            double absoluteAngleToTarget = Math.atan2(y - GlobalY, x - GlobalX);
+            double reletiveAngleToTarget = angleWrapRad(absoluteAngleToTarget - GlobalHeading /*+ Math.toRadians(90)*/);
             double reletiveXToTarget = Math.cos(reletiveAngleToTarget) * distanceToTarget;
-            double reletiveYToTarget = Math.sin(reletiveAngleToTarget) * distanceToTarget;
+            double reletiveYToTarget = Math.sin(reletiveAngleToTarget) * distanceToTarget;//use - when spinning counterclockwise is positive
 
             //slow down ensures the robot does not over shoot the target
             double slowDown = Range.clip(odoDrivePID(distanceToTarget,0), 0, moveSpeed);
@@ -589,7 +589,7 @@ public class robotHardwareGen2 extends LinearOpMode
             double movementTurnPower;
             double reletiveTurnAngle;
             if (distanceToTarget > 6) {
-                reletiveTurnAngle = angleWrapRad(reletiveAngleToTarget + followAngle);
+                reletiveTurnAngle = angleWrapRad(reletiveAngleToTarget - followAngle);
                 movementTurnPower = Range.clip(odoTurnPID(0, reletiveTurnAngle), -turnSpeed, turnSpeed);
             } else {
                 reletiveTurnAngle = angleWrapRad(finalAngle - GlobalHeading);
@@ -597,7 +597,7 @@ public class robotHardwareGen2 extends LinearOpMode
             }
 
             //set the motors to the correct powers to move toward the target
-            swerveDrive(-movementXpower,movementYpower, -movementTurnPower, voltComp);
+            swerveDrive(-movementXpower,movementYpower, movementTurnPower, voltComp);
         }
 
         //at the end of the movement stop the motors
@@ -623,10 +623,10 @@ public class robotHardwareGen2 extends LinearOpMode
 
         //math to calculate distances to the target
         double distanceToTarget = Math.hypot(x - GlobalX, y - GlobalY);
-        double absoluteAngleToTarget = Math.atan2(x - GlobalX, y - GlobalY);
-        double reletiveAngleToTarget = angleWrapRad(absoluteAngleToTarget - GlobalHeading - Math.toRadians(90));
+        double absoluteAngleToTarget = Math.atan2(y - GlobalY, x - GlobalX);
+        double reletiveAngleToTarget = angleWrapRad(absoluteAngleToTarget - GlobalHeading /*+ Math.toRadians(90)*/);
         double reletiveXToTarget = Math.cos(reletiveAngleToTarget) * distanceToTarget;
-        double reletiveYToTarget = Math.sin(reletiveAngleToTarget) * distanceToTarget;
+        double reletiveYToTarget = Math.sin(reletiveAngleToTarget) * distanceToTarget;//use - when spinning counterclockwise is positive
 
         //slow down ensures the robot does not over shoot the target
         double slowDown = Range.clip(odoDrivePID(distanceToTarget,0), 0, moveSpeed);
@@ -640,7 +640,7 @@ public class robotHardwareGen2 extends LinearOpMode
         double movementTurnPower;
         double reletiveTurnAngle;
         if (distanceToTarget > 6) {
-            reletiveTurnAngle = angleWrapRad(reletiveAngleToTarget + followAngle);
+            reletiveTurnAngle = angleWrapRad(reletiveAngleToTarget - followAngle);
             movementTurnPower = Range.clip(odoTurnPID(0, reletiveTurnAngle), -turnSpeed, turnSpeed);
         } else {
             reletiveTurnAngle = angleWrapRad(finalAngle - GlobalHeading);
@@ -648,7 +648,8 @@ public class robotHardwareGen2 extends LinearOpMode
         }
 
         //set the motors to the correct powers to move toward the target
-        swerveDrive(-movementXpower, movementYpower, -movementTurnPower, voltComp);
+        swerveDrive(-movementXpower, movementYpower, movementTurnPower, voltComp);
+        //swerveDrive(0, 0, movementTurnPower, voltComp);
 
         double[] returnValue = {distanceToTarget, absoluteAngleToTarget, reletiveXToTarget, reletiveYToTarget, movementXpower, movementYpower, movementTurnPower, reletiveTurnAngle, reletiveAngleToTarget};
         return returnValue;
@@ -824,22 +825,22 @@ public class robotHardwareGen2 extends LinearOpMode
     }
 
     public double odoPID(double target, double current){
-        GeneralPIDPreviousError = GeneralPIDError;
-        GeneralPIDError = target - current;
-        GeneralPIDLastTime = GeneralPIDCurrentTime;
-        GeneralPIDCurrentTime = (double) System.nanoTime()/1E9;
-        time = GeneralPIDCurrentTime - GeneralPIDLastTime;
-        GeneralPIDTotalError += time * GeneralPIDError;
-        GeneralPIDTotalError = GeneralPIDTotalError < GeneralPIDMinIntegral ? GeneralPIDMinIntegral: Math.min(GeneralPIDMaxIntegral, GeneralPIDTotalError);
+        this.GeneralPIDPreviousError = this.GeneralPIDError;
+        this.GeneralPIDError = target - current;
+        this.GeneralPIDLastTime = this.GeneralPIDCurrentTime;
+        this.GeneralPIDCurrentTime = (double) System.nanoTime()/1E9;
+        this.time = this.GeneralPIDCurrentTime - this.GeneralPIDLastTime;
+        this.GeneralPIDTotalError += this.time * this.GeneralPIDError;
+        this.GeneralPIDTotalError = this.GeneralPIDTotalError < this.GeneralPIDMinIntegral ? this.GeneralPIDMinIntegral: Math.min(this.GeneralPIDMaxIntegral, this.GeneralPIDTotalError);
 
-        GeneralPIDMotorPower = (GeneralP * GeneralPIDError)
-                + (GeneralI * GeneralPIDTotalError)
-                + (GeneralD * (GeneralPIDError - GeneralPIDPreviousError) / time)
-                + (GeneralF * (GeneralPIDError/Math.abs(GeneralPIDError)));
-        if (Double.isNaN(GeneralPIDMotorPower)){
-            GeneralPIDMotorPower = 0;
+        this.GeneralPIDMotorPower = (this.GeneralP * this.GeneralPIDError)
+                + (this.GeneralI * this.GeneralPIDTotalError)
+                + (this.GeneralD * (this.GeneralPIDError - this.GeneralPIDPreviousError) / this.time)
+                + (this.GeneralF * (this.GeneralPIDError/Math.abs(this.GeneralPIDError)));
+        if (Double.isNaN(this.GeneralPIDMotorPower)){
+            this.GeneralPIDMotorPower = 0;
         }
-        return GeneralPIDMotorPower;
+        return this.GeneralPIDMotorPower;
     }
 
     public double odoPID2(double target, double current){

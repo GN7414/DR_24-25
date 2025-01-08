@@ -105,7 +105,9 @@ public class SwerveGen2 extends LinearOpMode
 
         while (opModeIsActive()) {
 
-            robot.swerveDrive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, 1);
+            //robot.swerveDrive(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, 1); //normal people
+            robot.swerveDrive(gamepad1.right_stick_y, gamepad1.right_stick_x, gamepad1.left_stick_x, 1); //nolan
+
             robot.refresh(robot.odometers);
 
             if(gamepad1.dpad_up && buttonDU && SlidesPosition < robot.SLIDE_TOP){
@@ -248,8 +250,8 @@ public class SwerveGen2 extends LinearOpMode
 
             if(gamepad2.dpad_down){
 
-                slidesR.setTargetPosition(1800);
-                slidesL.setTargetPosition(1800);
+                slidesR.setTargetPosition(1700);
+                slidesL.setTargetPosition(1700);
                 slidesR.setPower(1);
                 slidesL.setPower(1);
                 slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);

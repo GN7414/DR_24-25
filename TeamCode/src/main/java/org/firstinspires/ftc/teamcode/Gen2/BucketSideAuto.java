@@ -49,10 +49,10 @@ public class BucketSideAuto extends LinearOpMode
         }
 
         robot.changeAccuracy(1,Math.toRadians(1));
-        robot.changeSpeed(1,.4);
+        robot.changeSpeed(1,1);
 
-        while(true){
-            double[] fake = robot.goToPosSingle(20,0,Math.toRadians(0),Math.toRadians(0));
+        while(!isStopRequested()){
+            double[] fake = robot.goToPosSingle(20, 0, Math.toRadians(90), Math.toRadians(0));
             telemetry.addData("distanceToTarget", fake[0]);
             telemetry.addData("absoluteAngleToTarget", Math.toDegrees(fake[1]));
             telemetry.addData("reletiveXToTarget", fake[2]);
@@ -66,6 +66,36 @@ public class BucketSideAuto extends LinearOpMode
             telemetry.addData("X",robot.GlobalX);
             telemetry.addData("Y",robot.GlobalY);
             telemetry.addData("Heading",Math.toDegrees(robot.GlobalHeading));
+
+            telemetry.addData("",null);
+
+            telemetry.addData("turnPowerRight", robot.turnPowerRight);
+            telemetry.addData("aTan degrees", robot.aTan);
+            telemetry.addData("newAngle", robot.newAngle);
+            telemetry.addData("oppo angle ", robot.oppositeAngle);
+            telemetry.addData("rotations ", robot.rotations);
+            telemetry.addData("robot power", robot.power);
+            telemetry.addData("robot turn power", robot.turnPower);
+            telemetry.addData("", null);
+            telemetry.addData("Powers", null);
+            telemetry.addData("right 1", robot.RightOutside.getPower());
+            telemetry.addData("right 2", robot.RightInside.getPower());
+            telemetry.addData("left 1", robot.LeftOutside.getPower());
+            telemetry.addData("left 2", robot.LeftInside.getPower());
+
+            //one +     two -
+            telemetry.addData("right pod pos", robot.rightPodPosition);
+            telemetry.addData("left pod pos", robot.leftPodPosition);
+            telemetry.addData("current angle right",robot.currentAngle);
+            telemetry.addData("final angle",robot.finalAngle);
+            telemetry.addData("wheel Direction",robot.wheelDirection);
+            telemetry.addData("distance",robot.distance);
+            telemetry.addData("oppo-distance",robot.oppositeDistance);
+            telemetry.addData("testing",robot.testing);
+
+
+
+
 
             telemetry.update();
 
