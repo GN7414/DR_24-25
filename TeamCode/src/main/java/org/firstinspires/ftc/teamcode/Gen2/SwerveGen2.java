@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.Gen2;
 
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -9,8 +8,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.GoBildaPinpointDriver;
 import org.firstinspires.ftc.teamcode.RI30HV2;
 
 
@@ -61,7 +58,7 @@ public class SwerveGen2 extends LinearOpMode
     @Override
     public void runOpMode() throws InterruptedException {
 
-        robotHardwareGen2 robot = new robotHardwareGen2(hardwareMap);
+        robotHardwarePinPoint robot = new robotHardwarePinPoint(hardwareMap);
 
         intake = hardwareMap.crservo.get("intake");
         extensionWrist = hardwareMap.servo.get("extensionWrist");
@@ -79,7 +76,7 @@ public class SwerveGen2 extends LinearOpMode
         slidesL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         //slidesR.setDirection(DcMotorSimple.Direction.REVERSE);
-        slidesL.setDirection(DcMotorSimple.Direction.REVERSE);
+         slidesL.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
         //FtcDashboard dashboard = FtcDashboard.getInstance();
@@ -105,8 +102,8 @@ public class SwerveGen2 extends LinearOpMode
 
         while (opModeIsActive()) {
 
-            //robot.swerveDrive(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, 1); //normal people
-            robot.swerveDrive(gamepad1.right_stick_y, gamepad1.right_stick_x, gamepad1.left_stick_x, 1); //nolan
+            //robot.mecanumDrive(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, 1); //normal people
+            robot.mecanumDrive(gamepad1.right_stick_y, -gamepad1.right_stick_x, -gamepad1.left_stick_x, 1); //nolan
 
             robot.refresh(robot.odometers);
 
@@ -454,31 +451,6 @@ public class SwerveGen2 extends LinearOpMode
             telemetry.addData("Y",robot.odo.getPosY());
 
             telemetry.addData("",null);
-
-            telemetry.addData("turnPowerRight", robot.turnPowerRight);
-            telemetry.addData("aTan degrees", robot.aTan);
-            telemetry.addData("newAngle", robot.newAngle);
-            telemetry.addData("oppo angle ", robot.oppositeAngle);
-            telemetry.addData("rotations ", robot.rotations);
-            telemetry.addData("robot power", robot.power);
-            telemetry.addData("", null);
-            telemetry.addData("Powers", null);
-            telemetry.addData("right 1", robot.RightOutside.getPower());
-            telemetry.addData("right 2", robot.RightInside.getPower());
-            telemetry.addData("Location:", null);
-            telemetry.addData("left 1", robot.LeftOutside.getPower());
-            telemetry.addData("left 2", robot.LeftInside.getPower());
-
-            //one +     two -
-            telemetry.addData("right pod pos", robot.rightPodPosition);
-            telemetry.addData("left pod pos", robot.leftPodPosition);
-            telemetry.addData("current angle right",robot.currentAngle);
-            telemetry.addData("final angle",robot.finalAngle);
-            telemetry.addData("wheel Direction",robot.wheelDirection);
-            telemetry.addData("distance",robot.distance);
-            telemetry.addData("oppo-distance",robot.oppositeDistance);
-            telemetry.addData("testing",robot.testing);
-
 
             telemetry.update();
 
