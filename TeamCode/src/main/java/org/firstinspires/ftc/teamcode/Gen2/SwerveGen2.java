@@ -8,7 +8,12 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.RI30HV2;
+
+import java.util.Locale;
 
 
 @TeleOp(name="SwerveGen2")
@@ -50,6 +55,7 @@ public class SwerveGen2 extends LinearOpMode
     public double HEPosition =.1;
     public double APosition = .1;
     public double AWPosition = .35;
+    public double SPEED = 1;
 
     double[] timeArray = new double[20];
 
@@ -85,6 +91,7 @@ public class SwerveGen2 extends LinearOpMode
         //intake.setPower(Position);
 
         while (!isStarted() && !isStopRequested()) {
+            robot.odo.resetPosAndIMU();
             horizontalExtension.setPosition(.1);
             extensionWrist.setPosition(.5);
             intake.setPower(0);
@@ -102,8 +109,8 @@ public class SwerveGen2 extends LinearOpMode
 
         while (opModeIsActive()) {
 
-            //robot.mecanumDrive(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, 1); //normal people
-            robot.mecanumDrive(gamepad1.right_stick_y, -gamepad1.right_stick_x, -gamepad1.left_stick_x, 1); //nolan
+            robot.mecanumDrive(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, SPEED); //normal people
+            //robot.mecanumDrive(gamepad1.right_stick_y, -gamepad1.right_stick_x, -gamepad1.left_stick_x, SPEED); //nolan
 
             robot.refresh(robot.odometers);
 
@@ -194,6 +201,7 @@ public class SwerveGen2 extends LinearOpMode
                     intake.setPower(0);
                     upDown = true;
                     out = true;
+                    SPEED = 1;
 
                 }
                 else if (upDown) {
@@ -201,6 +209,7 @@ public class SwerveGen2 extends LinearOpMode
                     intake.setPower(-1);
                     upDown = false;
                     out = false;
+                    SPEED = .25;
                 }
             }
             else if (gamepad1.left_trigger < .5 && !buttonLT) {
@@ -255,18 +264,6 @@ public class SwerveGen2 extends LinearOpMode
                 slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -446,9 +443,24 @@ public class SwerveGen2 extends LinearOpMode
             telemetry.addData("E_Wrist", Position);
             telemetry.addData("H_Extension", HEPosition);
             telemetry.addData("Slides", SlidesPosition);
+            telemetry.addData("extensionWrist", extensionWrist.getPosition());
 
-            telemetry.addData("X",robot.odo.getPosX());
-            telemetry.addData("Y",robot.odo.getPosY());
+            telemetry.addData("X",robot.GlobalX);
+            telemetry.addData("Y",robot.GlobalY);
+
+            telemetry.addData("X",robot.odo.getEncoderX());
+            telemetry.addData("Y",robot.odo.getEncoderY());
+
+            telemetry.addData("slideR",slidesR.getCurrentPosition());
+            telemetry.addData("slideL",slidesL.getCurrentPosition());
+
+            /*
+            gets the current Position (x & y in mm, and heading in degrees) of the robot, and prints it.
+             */
+            Pose2D pos = robot.odo.getPosition();
+            String data = String.format(Locale.US, "{X: %.3f, Y: %.3f, H: %.3f}", pos.getX(DistanceUnit.INCH), pos.getY(DistanceUnit.INCH), pos.getHeading(AngleUnit.DEGREES));
+            telemetry.addData("Position", data);
+
 
             telemetry.addData("",null);
 

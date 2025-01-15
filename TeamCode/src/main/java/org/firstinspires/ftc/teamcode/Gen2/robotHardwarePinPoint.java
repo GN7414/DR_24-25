@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.GoBildaPinpointDriver;
 
 
@@ -130,7 +131,7 @@ public class robotHardwarePinPoint extends LinearOpMode
     public final double SLIDE_MID = 1150;
 
     public final double WRIST_TOP = .25;
-    public final double WRIST_LOW = .85;
+    public final double WRIST_LOW = .9;
 
     public final double BUCKET_ARM_DROP = .75;
     public final double BUCKET_ARM_REST = .1;
@@ -193,7 +194,7 @@ public class robotHardwarePinPoint extends LinearOpMode
         odo = ahwMap.get(GoBildaPinpointDriver.class,"odo");
         odo.setOffsets(-171.45, 6.35);
         odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
-        odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
+        odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
 //        odo.resetPosAndIMU();
 
         //resetRuntime();
@@ -411,7 +412,7 @@ public class robotHardwarePinPoint extends LinearOpMode
          */
         //Converting odometry computer outputs to inches
         odo.update();
-        GlobalHeading = odo.getHeading();
+        GlobalHeading = odo.getPosition().getHeading(AngleUnit.RADIANS);
         /*
         These are the values from the three wheel odometry
         GlobalX = odo.getPosX() * .03937007874;
