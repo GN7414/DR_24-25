@@ -127,11 +127,11 @@ public class robotHardwarePinPoint extends LinearOpMode
     public final double SPECIMEN_CLOSE = 0.1;
     public final double SPECIMEN_OPEN = 0.45;
 
-    public final double SLIDE_TOP = 2300;
+    public final double SLIDE_TOP = 2000;
     public final double SLIDE_MID = 1150;
 
     public final double WRIST_TOP = .25;
-    public final double WRIST_LOW = .9;
+    public final double WRIST_LOW = .88;
 
     public final double BUCKET_ARM_DROP = .75;
     public final double BUCKET_ARM_REST = .1;
@@ -524,7 +524,7 @@ public class robotHardwarePinPoint extends LinearOpMode
             }
 
             //set the motors to the correct powers to move toward the target
-            mecanumDrive(-movementXpower, -movementYpower, -movementTurnPower, voltComp);
+            mecanumDrive(-movementXpower, movementYpower, -movementTurnPower, voltComp);
         }
 
         //at the end of the movement stop the motors
@@ -575,7 +575,7 @@ public class robotHardwarePinPoint extends LinearOpMode
         }
 
         //set the motors to the correct powers to move toward the target
-        mecanumDrive(-movementXpower, -movementYpower, -movementTurnPower, voltComp);
+        mecanumDrive(-movementXpower, movementYpower, -movementTurnPower, voltComp);
 
         /**
          * while(true){

@@ -109,13 +109,13 @@ public class SwerveGen2 extends LinearOpMode
 
         while (opModeIsActive()) {
 
-            robot.mecanumDrive(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, SPEED); //normal people
-            //robot.mecanumDrive(gamepad1.right_stick_y, -gamepad1.right_stick_x, -gamepad1.left_stick_x, SPEED); //nolan
+            //robot.mecanumDrive(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, SPEED); //normal people
+            robot.mecanumDrive(gamepad1.right_stick_y, -gamepad1.right_stick_x, -gamepad1.left_stick_x, SPEED); //nolan
 
             robot.refresh(robot.odometers);
 
             if(gamepad1.dpad_up && buttonDU && SlidesPosition < robot.SLIDE_TOP){
-                SlidesPosition = 2300;
+                SlidesPosition = 2000;
                 slidesR.setTargetPosition(SlidesPosition);
                 slidesL.setTargetPosition(SlidesPosition);
                 slidesR.setPower(1);
@@ -123,6 +123,7 @@ public class SwerveGen2 extends LinearOpMode
                 slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 buttonDU = false;
+                SPEED = .5;
             }
 
             if(gamepad1.dpad_down && buttonDD && SlidesPosition > 100){
@@ -134,6 +135,7 @@ public class SwerveGen2 extends LinearOpMode
                 slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 buttonDD = false;
+                SPEED = 1;
             }
 
 

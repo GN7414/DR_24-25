@@ -70,9 +70,7 @@ public class BucketSideAuto extends LinearOpMode
         }
 
         robot.changeAccuracy(1,Math.toRadians(1));
-        robot.changeSpeed(.5,.5);
-
-
+        robot.changeSpeed(.75,.75);
 
 
         /**
@@ -87,8 +85,13 @@ public class BucketSideAuto extends LinearOpMode
          *
          */
 
+
+        robot.goToPos(0, 5,0,Math.toRadians(90));
+
         //double x = -15,y = 7, finalAngle = Math.toRadians(45);
-        double x = -10, y = -19, finalAngle = Math.toRadians(0);
+        double x = -19;
+        double y = 4;
+        double finalAngle = Math.toRadians(45);
 
         while(Math.abs(x-robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
 
@@ -102,32 +105,286 @@ public class BucketSideAuto extends LinearOpMode
             slidesL.setPower(1);
             slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+        }
+        robot.mecanumDrive(0,0,0,0);
 
-            //double[] fake = robot.goToPosSingle(x, y, finalAngle, Math.toRadians(-90));
-            //telemetry.addData("distanceToTarget", fake[0]);
-            //telemetry.addData("absoluteAngleToTarget", Math.toDegrees(fake[1]));
-            //telemetry.addData("reletiveXToTarget", fake[2]);
-            //telemetry.addData("reletiveYToTarget", fake[3]);
-            //telemetry.addData("movementXpower", fake[4]);
-            //telemetry.addData("movementYpower", fake[5]);
-            //telemetry.addData("movementTurnPower", fake[6]);
-            //telemetry.addData("reletiveTurnAngle", Math.toDegrees(fake[7]));
-            //telemetry.addData("reletiveAngleToTarget", Math.toDegrees(fake[8]));
-            //telemetry.addData("X",robot.GlobalX);
-            //telemetry.addData("Y",robot.GlobalY);
-            //telemetry.addData("Heading",Math.toDegrees(robot.GlobalHeading));
-            //telemetry.update();
+        bucketArm.setPosition(robot.BUCKET_ARM_DROP);//dropping
+        bucketWrist.setPosition(robot.BUCKET_WRIST_DROP);//drop
+
+        robot.wait(750, robot.odometers);
+
+        /**
+         *
+         * End of first placement
+         *
+         *
+         * Start of going to the second sample
+         *
+         */
+
+
+        bucketArm.setPosition(robot.BUCKET_ARM_REST);//going to rest position/down
+        bucketWrist.setPosition(robot.BUCKET_WRIST_REST);//rest
+
+        robot.wait(500, robot.odometers);
+
+        x = 5;
+        y = 35;
+        finalAngle = Math.toRadians(180);
+
+        while(Math.abs(x-robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
+
+            robot.goToPosSingle(x, y, finalAngle, Math.toRadians(-90));
+
+
+            slidesR.setTargetPosition(0);
+            slidesR.setPower(1);
+            slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            slidesL.setTargetPosition(0);
+            slidesL.setPower(1);
+            slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 
         }
-        //robot.goToPos(-17,0,Math.toRadians(0),Math.toRadians(180));
-        //robot.mecanumDrive(0,0,0,.6);
+        robot.mecanumDrive(0,0,0,0);
+        robot.wait(250, robot.odometers);
+
+        extensionWrist.setPosition(robot.WRIST_LOW);
+        intake.setPower(-1);
+
+        robot.wait(350, robot.odometers);
+
+        horizontalExtension.setPosition(.2);
+
+        robot.wait(750, robot.odometers);
+
+        horizontalExtension.setPosition(.1);
+
+        robot.wait(750, robot.odometers);
+
+        extensionWrist.setPosition(robot.WRIST_TOP);
+
+        robot.wait(500, robot.odometers);
+
+        intake.setPower(1);
+
+        robot.wait(1000, robot.odometers);
+
+        extensionWrist.setPosition(robot.WRIST_LOW);
+        intake.setPower(0);
+
+        robot.wait(250, robot.odometers);
+
+        x = -19;
+        y = 4;
+        finalAngle = Math.toRadians(45);
+
+        while(Math.abs(x-robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
+
+            robot.goToPosSingle(x, y, finalAngle, Math.toRadians(180));
 
 
-        robot.changeSpeed(1,1);
+            slidesR.setTargetPosition(2300);
+            slidesR.setPower(1);
+            slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            slidesL.setTargetPosition(2300);
+            slidesL.setPower(1);
+            slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        }
+        robot.mecanumDrive(0,0,0,0);
+
+        bucketArm.setPosition(robot.BUCKET_ARM_DROP);//dropping
+        bucketWrist.setPosition(robot.BUCKET_WRIST_DROP);//drop
+
+        robot.wait(750, robot.odometers);
+
+        bucketArm.setPosition(robot.BUCKET_ARM_REST);//going to rest position/down
+        bucketWrist.setPosition(robot.BUCKET_WRIST_REST);//rest
+
+        robot.wait(500, robot.odometers);
+
+        extensionWrist.setPosition(.5);
+
+        x = -4;
+        y = 35;
+        finalAngle = Math.toRadians(180);
+
+        while(Math.abs(x-robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
+
+            robot.goToPosSingle(x, y, finalAngle, Math.toRadians(-90));
 
 
+            slidesR.setTargetPosition(0);
+            slidesR.setPower(1);
+            slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            slidesL.setTargetPosition(0);
+            slidesL.setPower(1);
+            slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+        }
+        robot.mecanumDrive(0,0,0,0);
+        robot.wait(250, robot.odometers);
+
+
+        /**
+         *
+         *
+         * prep for third sample
+         *
+         *
+         */
+
+        extensionWrist.setPosition(robot.WRIST_LOW);
+        intake.setPower(-1);
+
+        robot.wait(350, robot.odometers);
+
+        horizontalExtension.setPosition(.2);
+
+        robot.wait(750, robot.odometers);
+
+        horizontalExtension.setPosition(.1);
+
+        robot.wait(750, robot.odometers);
+
+        extensionWrist.setPosition(robot.WRIST_TOP);
+
+        robot.wait(500, robot.odometers);
+
+        intake.setPower(1);
+
+        robot.wait(1000, robot.odometers);
+
+        extensionWrist.setPosition(robot.WRIST_LOW);
+        intake.setPower(0);
+
+        robot.wait(250, robot.odometers);
+
+        x = -19;
+        y = 4;
+        finalAngle = Math.toRadians(45);
+
+        while(Math.abs(x-robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
+
+            robot.goToPosSingle(x, y, finalAngle, Math.toRadians(180));
+
+
+            slidesR.setTargetPosition(2300);
+            slidesR.setPower(1);
+            slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            slidesL.setTargetPosition(2300);
+            slidesL.setPower(1);
+            slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        }
+        robot.mecanumDrive(0,0,0,0);
+
+        bucketArm.setPosition(robot.BUCKET_ARM_DROP);//dropping
+        bucketWrist.setPosition(robot.BUCKET_WRIST_DROP);//drop
+
+        robot.wait(750, robot.odometers);
+
+        bucketArm.setPosition(robot.BUCKET_ARM_REST);//going to rest position/down
+        bucketWrist.setPosition(robot.BUCKET_WRIST_REST);//rest
+
+        robot.wait(500, robot.odometers);
+
+
+        /**
+         *
+         *
+         * prep for fourth sample
+         *
+         *
+         */
+
+        extensionWrist.setPosition(.5);
+
+        x = -13;
+        y = 35;
+        finalAngle = Math.toRadians(180);
+
+        while(Math.abs(x-robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
+
+            robot.goToPosSingle(x, y, finalAngle, Math.toRadians(-90));
+
+
+            slidesR.setTargetPosition(0);
+            slidesR.setPower(1);
+            slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            slidesL.setTargetPosition(0);
+            slidesL.setPower(1);
+            slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+        }
+        robot.mecanumDrive(0,0,0,0);
+        robot.wait(250, robot.odometers);
+
+        extensionWrist.setPosition(robot.WRIST_LOW);
+        intake.setPower(-1);
+
+        robot.wait(350, robot.odometers);
+
+        horizontalExtension.setPosition(.2);
+
+        robot.wait(750, robot.odometers);
+
+        horizontalExtension.setPosition(.1);
+
+        robot.wait(750, robot.odometers);
+
+        extensionWrist.setPosition(robot.WRIST_TOP);
+
+        robot.wait(500, robot.odometers);
+
+        intake.setPower(1);
+
+        robot.wait(1000, robot.odometers);
+
+        extensionWrist.setPosition(robot.WRIST_LOW);
+        intake.setPower(0);
+
+        robot.wait(250, robot.odometers);
+
+        x = -19;
+        y = 4;
+        finalAngle = Math.toRadians(45);
+
+        while(Math.abs(x-robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
+
+            robot.goToPosSingle(x, y, finalAngle, Math.toRadians(180));
+
+
+            slidesR.setTargetPosition(2300);
+            slidesR.setPower(1);
+            slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            slidesL.setTargetPosition(2300);
+            slidesL.setPower(1);
+            slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        }
+        robot.mecanumDrive(0,0,0,0);
+
+        bucketArm.setPosition(robot.BUCKET_ARM_DROP);//dropping
+        bucketWrist.setPosition(robot.BUCKET_WRIST_DROP);//drop
+
+        robot.wait(750, robot.odometers);
+
+        bucketArm.setPosition(robot.BUCKET_ARM_REST);//going to rest position/down
+        bucketWrist.setPosition(robot.BUCKET_WRIST_REST);//rest
+
+        robot.wait(500, robot.odometers);
+
+        slidesR.setTargetPosition(0);
+        slidesR.setPower(1);
+        slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slidesL.setTargetPosition(0);
+        slidesL.setPower(1);
+        slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        robot.wait(750, robot.odometers);
 
 
 
