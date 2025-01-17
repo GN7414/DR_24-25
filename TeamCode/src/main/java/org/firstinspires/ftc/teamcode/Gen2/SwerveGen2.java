@@ -96,7 +96,7 @@ public class SwerveGen2 extends LinearOpMode
             extensionWrist.setPosition(.5);
             intake.setPower(0);
             bucketWrist.setPosition(.3);
-            bucketArm.setPosition(.08);
+            bucketArm.setPosition(.125);
             SlidesPosition = 100;
             slidesL.setTargetPosition(SlidesPosition);
             slidesL.setPower(.2);
@@ -115,7 +115,7 @@ public class SwerveGen2 extends LinearOpMode
             robot.refresh(robot.odometers);
 
             if(gamepad1.dpad_up && buttonDU && SlidesPosition < robot.SLIDE_TOP){
-                SlidesPosition = 2000;
+                SlidesPosition = 2050;
                 slidesR.setTargetPosition(SlidesPosition);
                 slidesL.setTargetPosition(SlidesPosition);
                 slidesR.setPower(1);
@@ -123,6 +123,18 @@ public class SwerveGen2 extends LinearOpMode
                 slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 buttonDU = false;
+                SPEED = .5;
+            }
+
+            if(gamepad1.dpad_left && buttonDL && SlidesPosition < robot.SLIDE_MID){
+                SlidesPosition = 500;
+                slidesR.setTargetPosition(SlidesPosition);
+                slidesL.setTargetPosition(SlidesPosition);
+                slidesR.setPower(1);
+                slidesL.setPower(1);
+                slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                buttonDL = false;
                 SPEED = .5;
             }
 
@@ -141,6 +153,10 @@ public class SwerveGen2 extends LinearOpMode
 
             if(!gamepad1.dpad_up && !buttonDU){
                 buttonDU = true;
+            }
+
+            if(!gamepad1.dpad_left && !buttonDL){
+                buttonDL = true;
             }
 
             if(!gamepad1.dpad_down && !buttonDD){
@@ -266,6 +282,34 @@ public class SwerveGen2 extends LinearOpMode
                 slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             }
+
+            if((gamepad1.right_bumper && buttonRB) || timerArray[1] /*Add this to a if to be able to use timer "OR"*/){
+                if (gamepad1.right_bumper/*Boolean to start timer*/ && buttonRB) {
+                    timeArray[1] = robot.currentTime.milliseconds();//must have button press or will break
+                    timerArray[1] = true;
+                }
+
+
+                if (robot.currentTime.milliseconds() > timeArray[1] + 1000) {
+
+                    timerArray[1] = false;//If must be last timer, and must reset boolean when done
+                    intake.setPower(-1);
+
+                }
+                else{//first thing to happen
+
+                    intake.setPower(1);
+
+                }
+                buttonRB = false;
+
+            }
+
+            if(!gamepad1.right_bumper && !buttonRB){
+                buttonRB = true;
+            }
+
+
 
 
 

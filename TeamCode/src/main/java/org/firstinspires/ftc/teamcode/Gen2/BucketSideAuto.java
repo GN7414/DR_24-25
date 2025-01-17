@@ -98,10 +98,10 @@ public class BucketSideAuto extends LinearOpMode
             robot.goToPosSingle(x, y, finalAngle, Math.toRadians(180));
 
 
-            slidesR.setTargetPosition(2300);
+            slidesR.setTargetPosition(2050);
             slidesR.setPower(1);
             slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            slidesL.setTargetPosition(2300);
+            slidesL.setTargetPosition(2050);
             slidesL.setPower(1);
             slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
@@ -184,10 +184,10 @@ public class BucketSideAuto extends LinearOpMode
             robot.goToPosSingle(x, y, finalAngle, Math.toRadians(180));
 
 
-            slidesR.setTargetPosition(2300);
+            slidesR.setTargetPosition(2050);
             slidesR.setPower(1);
             slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            slidesL.setTargetPosition(2300);
+            slidesL.setTargetPosition(2050);
             slidesL.setPower(1);
             slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
@@ -270,10 +270,10 @@ public class BucketSideAuto extends LinearOpMode
             robot.goToPosSingle(x, y, finalAngle, Math.toRadians(180));
 
 
-            slidesR.setTargetPosition(2300);
+            slidesR.setTargetPosition(2050);
             slidesR.setPower(1);
             slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            slidesL.setTargetPosition(2300);
+            slidesL.setTargetPosition(2050);
             slidesL.setPower(1);
             slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
@@ -357,10 +357,10 @@ public class BucketSideAuto extends LinearOpMode
             robot.goToPosSingle(x, y, finalAngle, Math.toRadians(180));
 
 
-            slidesR.setTargetPosition(2300);
+            slidesR.setTargetPosition(2050);
             slidesR.setPower(1);
             slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            slidesL.setTargetPosition(2300);
+            slidesL.setTargetPosition(2050);
             slidesL.setPower(1);
             slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
