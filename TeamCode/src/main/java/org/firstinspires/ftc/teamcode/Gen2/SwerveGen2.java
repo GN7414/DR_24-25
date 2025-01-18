@@ -97,7 +97,7 @@ public class SwerveGen2 extends LinearOpMode
             intake.setPower(0);
             bucketWrist.setPosition(.3);
             bucketArm.setPosition(.125);
-            SlidesPosition = 100;
+            SlidesPosition = 50;
             slidesL.setTargetPosition(SlidesPosition);
             slidesL.setPower(.2);
             slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -208,7 +208,7 @@ public class SwerveGen2 extends LinearOpMode
 
 
             //inc extension
-            horizontalExtension.setPosition((gamepad1.right_trigger * 0.3)+ 0.1);
+            horizontalExtension.setPosition((gamepad1.right_trigger * 0.3)+ 0.115);
 
             //One button press
             if (gamepad1.left_trigger > .5 && buttonLT) {
@@ -308,9 +308,6 @@ public class SwerveGen2 extends LinearOpMode
             if(!gamepad1.right_bumper && !buttonRB){
                 buttonRB = true;
             }
-
-
-
 
 
             /*

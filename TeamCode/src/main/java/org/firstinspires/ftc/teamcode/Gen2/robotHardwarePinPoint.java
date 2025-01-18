@@ -134,7 +134,7 @@ public class robotHardwarePinPoint extends LinearOpMode
     public final double WRIST_LOW = .88;
 
     public final double BUCKET_ARM_DROP = .75;
-    public final double BUCKET_ARM_REST = .125;
+    public final double BUCKET_ARM_REST = .115;
 
     public final double BUCKET_WRIST_DROP = .2;
     public final double BUCKET_WRIST_REST = .3;
