@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 
 @TeleOp(name="swerveDrive1")
-//@Disabled
+@Disabled
 
 public class swerveDrive1 extends LinearOpMode
 {

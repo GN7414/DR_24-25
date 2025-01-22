@@ -11,7 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 
 
 @Autonomous(name="autoTesting")
-//@Disabled
+@Disabled
 
 public class autoTesting extends LinearOpMode
 {

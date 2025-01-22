@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Gen2;
 
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -36,6 +37,9 @@ public class SwerveGen2 extends LinearOpMode
     public boolean buttonDD = true;
     public boolean buttonRT = true;
     public boolean buttonLT = true;
+    public boolean button2A = true;
+    public boolean button2B = true;
+    public boolean button2X = true;
     public boolean upDown = true;
     public boolean out = false;
     public boolean in = true;
@@ -55,7 +59,7 @@ public class SwerveGen2 extends LinearOpMode
     public double HEPosition =.1;
     public double APosition = .1;
     public double AWPosition = .35;
-    public double SPEED = 1;
+    public double SPEED = .5;
 
     double[] timeArray = new double[20];
 
@@ -93,7 +97,7 @@ public class SwerveGen2 extends LinearOpMode
         while (!isStarted() && !isStopRequested()) {
             robot.odo.resetPosAndIMU();
             horizontalExtension.setPosition(.1);
-            extensionWrist.setPosition(.5);
+            extensionWrist.setPosition(.35);
             intake.setPower(0);
             bucketWrist.setPosition(.3);
             bucketArm.setPosition(.125);
@@ -115,7 +119,7 @@ public class SwerveGen2 extends LinearOpMode
             robot.refresh(robot.odometers);
 
             if(gamepad1.dpad_up && buttonDU && SlidesPosition < robot.SLIDE_TOP){
-                SlidesPosition = 2050;
+                SlidesPosition = 2200;
                 slidesR.setTargetPosition(SlidesPosition);
                 slidesL.setTargetPosition(SlidesPosition);
                 slidesR.setPower(1);
@@ -236,7 +240,7 @@ public class SwerveGen2 extends LinearOpMode
 
 
 
-            if(upDown && horizontalExtension.getPosition() < .15){
+            if(upDown && horizontalExtension.getPosition() < .13){
                 telemetry.addData("MainThing", true);
                 if (out && in){
                     telemetry.addData("Thing", true);
@@ -252,7 +256,7 @@ public class SwerveGen2 extends LinearOpMode
 
 
                 }
-                else if(robot.boolTimer(timeArray[1] + 250) ){
+                else if(robot.boolTimer(timeArray[1] + 400) ){
                     intake.setPower(1);
 
                 }
@@ -274,8 +278,8 @@ public class SwerveGen2 extends LinearOpMode
 
             if(gamepad2.dpad_down){
 
-                slidesR.setTargetPosition(1700);
-                slidesL.setTargetPosition(1700);
+                slidesR.setTargetPosition(1600);
+                slidesL.setTargetPosition(1600);
                 slidesR.setPower(1);
                 slidesL.setPower(1);
                 slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -283,24 +287,80 @@ public class SwerveGen2 extends LinearOpMode
 
             }
 
-            if((gamepad1.right_bumper && buttonRB) || timerArray[1] /*Add this to a if to be able to use timer "OR"*/){
-                if (gamepad1.right_bumper/*Boolean to start timer*/ && buttonRB) {
-                    timeArray[1] = robot.currentTime.milliseconds();//must have button press or will break
-                    timerArray[1] = true;
-                }
+            if(gamepad2.a && button2A){//slides fine adjust
+
+                SlidesPosition += 100;
+                slidesR.setTargetPosition(SlidesPosition);
+                slidesL.setTargetPosition(SlidesPosition);
+                slidesR.setPower(1);
+                slidesL.setPower(1);
+                slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                button2A = false;
+
+            }
+
+            if(!gamepad2.a && !button2A){
+
+                button2A = true;
+            }
+
+            if(gamepad2.b && button2B){
+
+                SlidesPosition -= 100;
+                slidesR.setTargetPosition(SlidesPosition);
+                slidesL.setTargetPosition(SlidesPosition);
+                slidesR.setPower(1);
+                slidesL.setPower(1);
+                slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                button2B = false;
 
 
-                if (robot.currentTime.milliseconds() > timeArray[1] + 1000) {
 
-                    timerArray[1] = false;//If must be last timer, and must reset boolean when done
-                    intake.setPower(-1);
 
-                }
-                else{//first thing to happen
+            }
 
-                    intake.setPower(1);
+            if(!gamepad2.b && !button2B){
 
-                }
+                button2B = true;
+            }
+
+            if(gamepad2.x && button2X){//resetting slide's encoder
+
+                slidesR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                slidesL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+                button2X = false;
+
+            }
+
+            if(!gamepad2.x && !button2X){
+
+                button2B = true;
+            }
+
+            if((gamepad1.right_bumper && buttonRB)/** || timerArray[1]**/ /*Add this to a if to be able to use timer "OR"*/){
+                intake.setPower(-intake.getPower());
+//                if (gamepad1.right_bumper/*Boolean to start timer*/ && buttonRB) {
+//                    timeArray[1] = robot.currentTime.milliseconds();//must have button press or will break
+//                    timerArray[1] = true;
+//                }
+//
+//
+//                if (robot.currentTime.milliseconds() > timeArray[1] + 1000) {
+//
+//                    timerArray[1] = false;//If must be last timer, and must reset boolean when done
+//                    intake.setPower(-1);
+//
+//                }
+//                else{//first thing to happen
+//
+//                    intake.setPower(1);
+//
+//                }
                 buttonRB = false;
 
             }
@@ -308,6 +368,8 @@ public class SwerveGen2 extends LinearOpMode
             if(!gamepad1.right_bumper && !buttonRB){
                 buttonRB = true;
             }
+
+
 
 
             /*

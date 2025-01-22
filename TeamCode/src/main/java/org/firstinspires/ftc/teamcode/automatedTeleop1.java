@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 @TeleOp(name="automatedTeleop1")
-//@Disabled
+@Disabled
 
 public class automatedTeleop1 extends LinearOpMode {
     public boolean buttonB = true;
