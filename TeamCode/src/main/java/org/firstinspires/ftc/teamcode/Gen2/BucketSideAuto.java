@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.Gen2;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -151,7 +150,7 @@ public class BucketSideAuto extends LinearOpMode
 
         robot.goToPos(5,35,Math.toRadians(180),Math.toRadians(-90));
 
-        extensionWrist.setPosition(robot.WRIST_LOW);
+        extensionWrist.setPosition(robot.WRIST_PICKUP_MIDDLE);
 
         robot.mecanumDrive(0,0,0,0);
         robot.wait(250, robot.odometers);
@@ -168,7 +167,7 @@ public class BucketSideAuto extends LinearOpMode
 
         robot.wait(500, robot.odometers);
 
-        extensionWrist.setPosition(robot.WRIST_TOP);
+        extensionWrist.setPosition(robot.WRIST_DROP);
 
         robot.wait(525, robot.odometers);
 
@@ -176,7 +175,7 @@ public class BucketSideAuto extends LinearOpMode
 
         robot.wait(750, robot.odometers);
 
-        extensionWrist.setPosition(robot.WRIST_LOW);
+        extensionWrist.setPosition(robot.WRIST_PICKUP_MIDDLE);
         intake.setPower(0);
 
         robot.wait(250, robot.odometers);
@@ -238,7 +237,7 @@ public class BucketSideAuto extends LinearOpMode
         robot.mecanumDrive(0,0,0,0);
         robot.wait(250, robot.odometers);
 
-        extensionWrist.setPosition(robot.WRIST_LOW);
+        extensionWrist.setPosition(robot.WRIST_PICKUP_MIDDLE);
         intake.setPower(-1);
 
         robot.wait(350, robot.odometers);
@@ -251,7 +250,7 @@ public class BucketSideAuto extends LinearOpMode
 
         robot.wait(500, robot.odometers);
 
-        extensionWrist.setPosition(robot.WRIST_TOP);
+        extensionWrist.setPosition(robot.WRIST_DROP);
 
         robot.wait(525, robot.odometers);
 
@@ -259,7 +258,7 @@ public class BucketSideAuto extends LinearOpMode
 
         robot.wait(750, robot.odometers);
 
-        extensionWrist.setPosition(robot.WRIST_LOW);
+        extensionWrist.setPosition(robot.WRIST_PICKUP_MIDDLE);
         intake.setPower(0);
 
         robot.wait(250, robot.odometers);
@@ -326,7 +325,7 @@ public class BucketSideAuto extends LinearOpMode
         robot.mecanumDrive(0,0,0,0);
         robot.wait(250, robot.odometers);
 
-        extensionWrist.setPosition(robot.WRIST_LOW);
+        extensionWrist.setPosition(robot.WRIST_PICKUP_MIDDLE);
         intake.setPower(-1);
 
         robot.wait(350, robot.odometers);
@@ -339,7 +338,7 @@ public class BucketSideAuto extends LinearOpMode
 
         robot.wait(500, robot.odometers);
 
-        extensionWrist.setPosition(robot.WRIST_TOP);
+        extensionWrist.setPosition(robot.WRIST_DROP);
 
         robot.wait(525, robot.odometers);
 
@@ -347,7 +346,7 @@ public class BucketSideAuto extends LinearOpMode
 
         robot.wait(750, robot.odometers);
 
-        extensionWrist.setPosition(robot.WRIST_LOW);
+        extensionWrist.setPosition(robot.WRIST_PICKUP_MIDDLE);
         intake.setPower(0);
 
         robot.wait(250, robot.odometers);

@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.Gen2;
 
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -52,7 +51,9 @@ public class SwerveGen2 extends LinearOpMode
     public Servo horizontalExtension = null;
     public Servo bucketArm = null;
     public Servo bucketWrist = null;
+    public Servo turret = null;
 
+    public double WristPosition = 0;
     public int SlidesPosition = 0;
 
     public double Position =.5;
@@ -75,6 +76,7 @@ public class SwerveGen2 extends LinearOpMode
         horizontalExtension = hardwareMap.servo.get("horizontalExtension");
         bucketWrist = hardwareMap.servo.get("bucketWrist");
         bucketArm = hardwareMap.servo.get("bucketArm");
+        turret = hardwareMap.servo.get("turret");
 
         slidesR = hardwareMap.dcMotor.get("slidesR");
         slidesL = hardwareMap.dcMotor.get("slidesL");
@@ -97,11 +99,12 @@ public class SwerveGen2 extends LinearOpMode
         while (!isStarted() && !isStopRequested()) {
             robot.odo.resetPosAndIMU();
             horizontalExtension.setPosition(.1);
-            extensionWrist.setPosition(.35);
+            extensionWrist.setPosition(.72);
+            turret.setPosition(.5);
             intake.setPower(0);
-            bucketWrist.setPosition(.3);
+            bucketWrist.setPosition(.35);
             bucketArm.setPosition(.125);
-            SlidesPosition = 50;
+            SlidesPosition = 100;
             slidesL.setTargetPosition(SlidesPosition);
             slidesL.setPower(.2);
             slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -109,14 +112,16 @@ public class SwerveGen2 extends LinearOpMode
             slidesR.setPower(.2);
             slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+
         }
 
         while (opModeIsActive()) {
 
-            //robot.mecanumDrive(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, SPEED); //normal people
-            robot.mecanumDrive(gamepad1.right_stick_y, -gamepad1.right_stick_x, -gamepad1.left_stick_x, SPEED); //nolan
+            robot.mecanumDrive(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, SPEED); //normal people
+            //robot.mecanumDrive(gamepad1.right_stick_y, -gamepad1.right_stick_x, -gamepad1.left_stick_x, SPEED); //nolan
 
             robot.refresh(robot.odometers);
+
 
             if(gamepad1.dpad_up && buttonDU && SlidesPosition < robot.SLIDE_TOP){
                 SlidesPosition = 2200;
@@ -219,7 +224,7 @@ public class SwerveGen2 extends LinearOpMode
                 buttonLT = false;
 
                 if (!upDown) {
-                    extensionWrist.setPosition(robot.WRIST_TOP);//upPos
+                    extensionWrist.setPosition(robot.WRIST_DROP);//upPos
                     intake.setPower(0);
                     upDown = true;
                     out = true;
@@ -227,7 +232,7 @@ public class SwerveGen2 extends LinearOpMode
 
                 }
                 else if (upDown) {
-                    extensionWrist.setPosition(robot.WRIST_LOW);//downPos
+                    extensionWrist.setPosition(robot.WRIST_PICKUP_MIDDLE);//downPos
                     intake.setPower(-1);
                     upDown = false;
                     out = false;
@@ -318,9 +323,6 @@ public class SwerveGen2 extends LinearOpMode
 
                 button2B = false;
 
-
-
-
             }
 
             if(!gamepad2.b && !button2B){
@@ -339,7 +341,7 @@ public class SwerveGen2 extends LinearOpMode
 
             if(!gamepad2.x && !button2X){
 
-                button2B = true;
+                button2X = true;
             }
 
             if((gamepad1.right_bumper && buttonRB)/** || timerArray[1]**/ /*Add this to a if to be able to use timer "OR"*/){
@@ -543,6 +545,7 @@ public class SwerveGen2 extends LinearOpMode
 
             robot.refresh(robot.odometers);
 
+            telemetry.addData("turret", turret.getPosition());
             telemetry.addData("Arm", bucketArm.getPosition());
             telemetry.addData("ArmWrist", bucketWrist.getPosition());
             telemetry.addData("E_Wrist", Position);
