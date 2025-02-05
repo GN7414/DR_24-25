@@ -150,7 +150,7 @@ public class BucketSideAuto extends LinearOpMode
 
         robot.goToPos(5,35,Math.toRadians(180),Math.toRadians(-90));
 
-        extensionWrist.setPosition(robot.WRIST_PICKUP_MIDDLE);
+        extensionWrist.setPosition(robot.WRIST_PICKUP);
 
         robot.mecanumDrive(0,0,0,0);
         robot.wait(250, robot.odometers);
@@ -175,7 +175,7 @@ public class BucketSideAuto extends LinearOpMode
 
         robot.wait(750, robot.odometers);
 
-        extensionWrist.setPosition(robot.WRIST_PICKUP_MIDDLE);
+        extensionWrist.setPosition(robot.WRIST_PICKUP);
         intake.setPower(0);
 
         robot.wait(250, robot.odometers);
@@ -237,7 +237,7 @@ public class BucketSideAuto extends LinearOpMode
         robot.mecanumDrive(0,0,0,0);
         robot.wait(250, robot.odometers);
 
-        extensionWrist.setPosition(robot.WRIST_PICKUP_MIDDLE);
+        extensionWrist.setPosition(robot.WRIST_PICKUP);
         intake.setPower(-1);
 
         robot.wait(350, robot.odometers);
@@ -258,7 +258,7 @@ public class BucketSideAuto extends LinearOpMode
 
         robot.wait(750, robot.odometers);
 
-        extensionWrist.setPosition(robot.WRIST_PICKUP_MIDDLE);
+        extensionWrist.setPosition(robot.WRIST_PICKUP);
         intake.setPower(0);
 
         robot.wait(250, robot.odometers);
@@ -325,7 +325,7 @@ public class BucketSideAuto extends LinearOpMode
         robot.mecanumDrive(0,0,0,0);
         robot.wait(250, robot.odometers);
 
-        extensionWrist.setPosition(robot.WRIST_PICKUP_MIDDLE);
+        extensionWrist.setPosition(robot.WRIST_PICKUP);
         intake.setPower(-1);
 
         robot.wait(350, robot.odometers);
@@ -346,7 +346,7 @@ public class BucketSideAuto extends LinearOpMode
 
         robot.wait(750, robot.odometers);
 
-        extensionWrist.setPosition(robot.WRIST_PICKUP_MIDDLE);
+        extensionWrist.setPosition(robot.WRIST_PICKUP);
         intake.setPower(0);
 
         robot.wait(250, robot.odometers);

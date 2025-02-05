@@ -39,7 +39,7 @@ public class SwerveGen2 extends LinearOpMode
     public boolean button2A = true;
     public boolean button2B = true;
     public boolean button2X = true;
-    public boolean upDown = true;
+    public boolean upDown = false;
     public boolean out = false;
     public boolean in = true;
 
@@ -90,7 +90,6 @@ public class SwerveGen2 extends LinearOpMode
         //slidesR.setDirection(DcMotorSimple.Direction.REVERSE);
          slidesL.setDirection(DcMotorSimple.Direction.REVERSE);
 
-
         //FtcDashboard dashboard = FtcDashboard.getInstance();
         //telemetry = dashboard.getTelemetry();
 
@@ -99,10 +98,10 @@ public class SwerveGen2 extends LinearOpMode
         while (!isStarted() && !isStopRequested()) {
             robot.odo.resetPosAndIMU();
             horizontalExtension.setPosition(.1);
-            extensionWrist.setPosition(.72);
+            extensionWrist.setPosition(.0);
             turret.setPosition(.5);
             intake.setPower(0);
-            bucketWrist.setPosition(.35);
+            bucketWrist.setPosition(.9);
             bucketArm.setPosition(.125);
             SlidesPosition = 100;
             slidesL.setTargetPosition(SlidesPosition);
@@ -117,14 +116,56 @@ public class SwerveGen2 extends LinearOpMode
 
         while (opModeIsActive()) {
 
-            robot.mecanumDrive(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, SPEED); //normal people
-            //robot.mecanumDrive(gamepad1.right_stick_y, -gamepad1.right_stick_x, -gamepad1.left_stick_x, SPEED); //nolan
+            //robot.mecanumDrive(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, SPEED); //normal people
+            robot.mecanumDrive(gamepad1.right_stick_y, -gamepad1.right_stick_x, -gamepad1.left_stick_x, SPEED); //nolan
 
             robot.refresh(robot.odometers);
 
 
+
+
+            if(gamepad1.b && buttonB){
+                turret.setPosition(robot.TURRET_RIGHT);
+                extensionWrist.setPosition(robot.WRIST_PICKUP);
+                intake.setPower(-1);
+                buttonB = false;
+
+            }
+
+            if(!gamepad1.b && !buttonB){
+                buttonB = true;
+
+            }
+
+
+            if(gamepad1.x && buttonX){
+                turret.setPosition(robot.TURRET_LEFT);
+                extensionWrist.setPosition(robot.WRIST_PICKUP);
+                intake.setPower(-1);
+                buttonX = false;
+
+            }
+
+            if(!gamepad1.x && !buttonX){
+                buttonX = true;
+
+            }
+
+            if(gamepad1.y && buttonY){
+                turret.setPosition(robot.TURRET_MIDDLE);
+                extensionWrist.setPosition(robot.WRIST_PICKUP);
+                intake.setPower(-1);
+                buttonY = false;
+
+            }
+
+            if(!gamepad1.y && !buttonY){
+                buttonY = true;
+
+            }
+
             if(gamepad1.dpad_up && buttonDU && SlidesPosition < robot.SLIDE_TOP){
-                SlidesPosition = 2200;
+                SlidesPosition = 2350;
                 slidesR.setTargetPosition(SlidesPosition);
                 slidesL.setTargetPosition(SlidesPosition);
                 slidesR.setPower(1);
@@ -136,7 +177,7 @@ public class SwerveGen2 extends LinearOpMode
             }
 
             if(gamepad1.dpad_left && buttonDL && SlidesPosition < robot.SLIDE_MID){
-                SlidesPosition = 500;
+                SlidesPosition = 700;
                 slidesR.setTargetPosition(SlidesPosition);
                 slidesL.setTargetPosition(SlidesPosition);
                 slidesR.setPower(1);
@@ -148,7 +189,7 @@ public class SwerveGen2 extends LinearOpMode
             }
 
             if(gamepad1.dpad_down && buttonDD && SlidesPosition > 100){
-                SlidesPosition = 100;
+                SlidesPosition = 10000;
                 slidesR.setTargetPosition(SlidesPosition);
                 slidesL.setTargetPosition(SlidesPosition);
                 slidesR.setPower(1);
@@ -180,7 +221,7 @@ public class SwerveGen2 extends LinearOpMode
                 }
 
 
-                if (robot.currentTime.milliseconds() > timeArray[0] + 1750) {
+                if (robot.currentTime.milliseconds() > timeArray[0] + 2500) {
 
                     timerArray[0] = false;//If must be last timer, and must reset boolean when done
 
@@ -193,7 +234,7 @@ public class SwerveGen2 extends LinearOpMode
                     slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
                 }
-                else if (robot.boolTimer(timeArray[0] + 750) ) {
+                else if (robot.boolTimer(timeArray[0] + 2000) ) {
                     bucketArm.setPosition(robot.BUCKET_ARM_REST);//going to rest position/down
                     bucketWrist.setPosition(robot.BUCKET_WRIST_REST);//rest
                 }
@@ -232,7 +273,7 @@ public class SwerveGen2 extends LinearOpMode
 
                 }
                 else if (upDown) {
-                    extensionWrist.setPosition(robot.WRIST_PICKUP_MIDDLE);//downPos
+                    extensionWrist.setPosition(robot.WRIST_PICKUP);//downPos
                     intake.setPower(-1);
                     upDown = false;
                     out = false;
