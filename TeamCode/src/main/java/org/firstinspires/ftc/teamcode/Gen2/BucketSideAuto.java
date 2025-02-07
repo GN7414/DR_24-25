@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Gen2;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -11,7 +12,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 @Autonomous(name="BucketSideAuto")
-//@Disabled
+@Disabled
 
 public class BucketSideAuto extends LinearOpMode
 {

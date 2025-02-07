@@ -266,6 +266,7 @@ public class SwerveGen2 extends LinearOpMode
 
                 if (!upDown) {
                     extensionWrist.setPosition(robot.WRIST_DROP);//upPos
+                    turret.setPosition(robot.TURRET_MIDDLE);
                     intake.setPower(0);
                     upDown = true;
                     out = true;
@@ -592,7 +593,8 @@ public class SwerveGen2 extends LinearOpMode
             telemetry.addData("E_Wrist", Position);
             telemetry.addData("H_Extension", HEPosition);
             telemetry.addData("Slides", SlidesPosition);
-            telemetry.addData("extensionWrist", extensionWrist.getPosition());
+            telemetry.addData("extension Wrist", extensionWrist.getPosition());
+            telemetry.addData("Horizontal extension", horizontalExtension.getPosition());
 
             telemetry.addData("X",robot.GlobalX);
             telemetry.addData("Y",robot.GlobalY);
@@ -609,9 +611,6 @@ public class SwerveGen2 extends LinearOpMode
             Pose2D pos = robot.odo.getPosition();
             String data = String.format(Locale.US, "{X: %.3f, Y: %.3f, H: %.3f}", pos.getX(DistanceUnit.INCH), pos.getY(DistanceUnit.INCH), pos.getHeading(AngleUnit.DEGREES));
             telemetry.addData("Position", data);
-
-
-            telemetry.addData("",null);
 
             telemetry.update();
 

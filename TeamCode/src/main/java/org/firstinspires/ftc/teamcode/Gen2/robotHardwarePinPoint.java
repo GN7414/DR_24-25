@@ -144,7 +144,7 @@ public class robotHardwarePinPoint extends LinearOpMode
     public final double BUCKET_WRIST_REST = .9;
 
     double oldTime = 0;
-    GoBildaPinpointDriver odo; // Declare OpMode member for the Odometry Computer
+    public GoBildaPinpointDriver odo; // Declare OpMode member for the Odometry Computer
 
 
 
