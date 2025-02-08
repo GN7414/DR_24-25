@@ -42,6 +42,9 @@ public class SwerveGen2 extends LinearOpMode
     public boolean upDown = false;
     public boolean out = false;
     public boolean in = true;
+    public boolean B = false;
+    public boolean Y = false;
+    public boolean X = false;
 
     public boolean[] timerArray = new boolean[20];
 
@@ -116,20 +119,15 @@ public class SwerveGen2 extends LinearOpMode
 
         while (opModeIsActive()) {
 
-            //robot.mecanumDrive(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, SPEED); //normal people
-            robot.mecanumDrive(gamepad1.right_stick_y, -gamepad1.right_stick_x, -gamepad1.left_stick_x, SPEED); //nolan
+            robot.mecanumDrive(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, SPEED); //normal people
+            //robot.mecanumDrive(gamepad1.right_stick_y, -gamepad1.right_stick_x, -gamepad1.left_stick_x, SPEED); //nolan
 
             robot.refresh(robot.odometers);
 
 
-
-
             if(gamepad1.b && buttonB){
                 turret.setPosition(robot.TURRET_RIGHT);
-                extensionWrist.setPosition(robot.WRIST_PICKUP);
-                intake.setPower(-1);
                 buttonB = false;
-
             }
 
             if(!gamepad1.b && !buttonB){
@@ -140,8 +138,6 @@ public class SwerveGen2 extends LinearOpMode
 
             if(gamepad1.x && buttonX){
                 turret.setPosition(robot.TURRET_LEFT);
-                extensionWrist.setPosition(robot.WRIST_PICKUP);
-                intake.setPower(-1);
                 buttonX = false;
 
             }
@@ -151,10 +147,9 @@ public class SwerveGen2 extends LinearOpMode
 
             }
 
-            if(gamepad1.y && buttonY){
+
+            if((gamepad1.y && buttonY)){
                 turret.setPosition(robot.TURRET_MIDDLE);
-                extensionWrist.setPosition(robot.WRIST_PICKUP);
-                intake.setPower(-1);
                 buttonY = false;
 
             }
@@ -163,6 +158,7 @@ public class SwerveGen2 extends LinearOpMode
                 buttonY = true;
 
             }
+
 
             if(gamepad1.dpad_up && buttonDU && SlidesPosition < robot.SLIDE_TOP){
                 SlidesPosition = 2350;
@@ -234,7 +230,7 @@ public class SwerveGen2 extends LinearOpMode
                     slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
                 }
-                else if (robot.boolTimer(timeArray[0] + 2000) ) {
+                else if (robot.boolTimer(timeArray[0] + 2000)) {
                     bucketArm.setPosition(robot.BUCKET_ARM_REST);//going to rest position/down
                     bucketWrist.setPosition(robot.BUCKET_WRIST_REST);//rest
                 }
@@ -242,8 +238,6 @@ public class SwerveGen2 extends LinearOpMode
 
                     bucketArm.setPosition(robot.BUCKET_ARM_DROP);//dropping
                     bucketWrist.setPosition(robot.BUCKET_WRIST_DROP);//drop
-
-
 
                 }
                 buttonLB = false;
@@ -266,7 +260,6 @@ public class SwerveGen2 extends LinearOpMode
 
                 if (!upDown) {
                     extensionWrist.setPosition(robot.WRIST_DROP);//upPos
-                    turret.setPosition(robot.TURRET_MIDDLE);
                     intake.setPower(0);
                     upDown = true;
                     out = true;
@@ -388,23 +381,6 @@ public class SwerveGen2 extends LinearOpMode
 
             if((gamepad1.right_bumper && buttonRB)/** || timerArray[1]**/ /*Add this to a if to be able to use timer "OR"*/){
                 intake.setPower(-intake.getPower());
-//                if (gamepad1.right_bumper/*Boolean to start timer*/ && buttonRB) {
-//                    timeArray[1] = robot.currentTime.milliseconds();//must have button press or will break
-//                    timerArray[1] = true;
-//                }
-//
-//
-//                if (robot.currentTime.milliseconds() > timeArray[1] + 1000) {
-//
-//                    timerArray[1] = false;//If must be last timer, and must reset boolean when done
-//                    intake.setPower(-1);
-//
-//                }
-//                else{//first thing to happen
-//
-//                    intake.setPower(1);
-//
-//                }
                 buttonRB = false;
 
             }
@@ -412,178 +388,6 @@ public class SwerveGen2 extends LinearOpMode
             if(!gamepad1.right_bumper && !buttonRB){
                 buttonRB = true;
             }
-
-
-
-
-            /*
-            //INTAKE
-            if(gamepad1.dpad_right && buttonDR){
-                //Position += .1;
-                intake.setPower(.5);
-                buttonDR = false;
-            }
-
-            if(gamepad1.dpad_left && buttonDL){
-                //Position -= .1;
-                intake.setPower(-.5);
-                buttonDL = false;
-            }
-
-
-            if(!gamepad1.dpad_right && !buttonDR){
-                buttonDR = true;
-            }
-
-            if(!gamepad1.dpad_left && !buttonDL){
-                buttonDL = true;
-            }
-
-            //EXTENSION WRIST
-            if(gamepad1.y && buttonY){
-                Position = .25;
-                extensionWrist.setPosition(Position);
-                horizontalExtension.setPosition(.1);
-                buttonY = false;
-            }
-
-            if(gamepad1.x && buttonX){
-                Position = .9;
-                extensionWrist.setPosition(Position);
-                buttonX = false;
-            }
-
-
-            if(!gamepad1.y && !buttonY){
-                buttonY = true;
-            }
-
-            if(!gamepad1.x && !buttonX){
-                buttonX = true;
-            }
-
-            //HORIZONTAL EXTENSION
-            if(gamepad1.dpad_up && buttonDU && HEPosition <.4){
-                HEPosition += .01;
-                horizontalExtension.setPosition(HEPosition);
-                buttonDU = false;
-            }
-
-            if(gamepad1.dpad_down && buttonDD && HEPosition >.1){
-                HEPosition -= .01;
-                horizontalExtension.setPosition(HEPosition);
-                buttonDD = false;
-                intake.setPower(0);
-            }
-
-
-            if(!gamepad1.dpad_up && !buttonDU){
-                buttonDU = true;
-            }
-
-            if(!gamepad1.dpad_down && !buttonDD){
-                buttonDD = true;
-            }
-
-
-
-            //Bucket
-            //Range is
-            if(gamepad1.right_bumper && buttonRB && AWPosition < .85){
-                AWPosition += .05;
-                bucketWrist.setPosition(AWPosition);
-                buttonRB = false;
-            }
-
-            if(gamepad1.left_bumper && buttonLB &&AWPosition > .35){
-                AWPosition -= .05;
-                bucketWrist.setPosition(AWPosition);
-                buttonLB = false;
-            }
-
-
-            if(!gamepad1.right_bumper && !buttonRB){
-                buttonRB = true;
-            }
-
-            if(!gamepad1.left_bumper && !buttonLB){
-                buttonLB = true;
-            }
-
-            */
-
-            /*
-            //Arm
-            //Higher Number is Up
-            if(gamepad1.right_trigger > .5 && buttonRT && APosition < .8){
-                APosition += .05;
-                bucketArm.setPosition(APosition);
-                buttonRT = false;
-            }
-
-            if(gamepad1.left_trigger > .5 && buttonLT && APosition > .15){
-                APosition -= .05;
-                bucketArm.setPosition(APosition);
-                buttonLT = false;
-            }
-
-
-            if(gamepad1.right_trigger <.5 && !buttonRT){
-                buttonRT = true;
-            }
-
-            if(gamepad1.left_trigger <.5 && !buttonLT){
-                buttonLT = true;
-            }
-
-
-
-            //placing
-            //Wrist + is up
-            if(gamepad1.right_trigger > .5 && buttonRT){ //&& APosition < .8){
-                bucketArm.setPosition(.85);
-                bucketWrist.setPosition(.2);
-                buttonRT = false;
-            }
-
-            if(gamepad1.left_trigger > .5 && buttonLT){ //&& APosition > .15){
-                bucketArm.setPosition(.1);
-                bucketWrist.setPosition(.3);
-                buttonLT = false;
-            }
-
-
-            if(gamepad1.right_trigger <.5 && !buttonRT){
-                buttonRT = true;
-            }
-
-            if(gamepad1.left_trigger <.5 && !buttonLT){
-                buttonLT = true;
-            }
-
-
-            /*
-            if(gamepad1.right_bumper && buttonRB){ //&& AWPosition < .85){
-                bucketWrist.setPosition(.55);
-                buttonRB = false;
-            }
-
-            if(gamepad1.left_bumper && buttonLB){ //&&AWPosition > .35){
-                bucketWrist.setPosition(.5);
-                buttonLB = false;
-            }
-
-
-            if(!gamepad1.right_bumper && !buttonRB){
-                buttonRB = true;
-            }
-
-            if(!gamepad1.left_bumper && !buttonLB){
-                buttonLB = true;
-            }
-
-             */
-
 
             robot.refresh(robot.odometers);
 
@@ -614,62 +418,6 @@ public class SwerveGen2 extends LinearOpMode
 
             telemetry.update();
 
-            /*
-            if(gamepad1.a && buttonA && SlidesPosition < 3000){
-                SlidesPosition += 100;
-                slidesR.setTargetPosition(SlidesPosition);
-                slidesL.setTargetPosition(SlidesPosition);
-                slidesR.setPower(.25);
-                slidesL.setPower(.25);
-                slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                buttonA = false;
-            }
-
-            if(gamepad1.b && buttonB && SlidesPosition > 0){
-                SlidesPosition -= 100;
-                slidesR.setTargetPosition(SlidesPosition);
-                slidesL.setTargetPosition(SlidesPosition);
-                slidesR.setPower(.25);
-                slidesL.setPower(.25);
-                slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                buttonB = false;
-            }
-
-
-            if(!gamepad1.a && !buttonA){
-                buttonA = true;
-            }
-
-            if(!gamepad1.b && !buttonB){
-                buttonB = true;
-            }
-
-
-            if(gamepad1.a && Position < 3000){
-                Position += 50;
-                slidesR.setTargetPosition(Position);
-                slidesL.setTargetPosition(Position);
-                slidesR.setPower(.25);
-                slidesL.setPower(.25);
-                slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            }
-
-            if(gamepad1.b && Position > 50){
-                Position -= 50;
-                slidesR.setTargetPosition(Position);
-                slidesL.setTargetPosition(Position);
-                slidesR.setPower(.25);
-                slidesL.setPower(.25);
-                slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            }
-
-             */
 
 
 
