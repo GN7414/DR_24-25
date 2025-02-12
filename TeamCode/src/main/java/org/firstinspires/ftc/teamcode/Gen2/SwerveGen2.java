@@ -260,6 +260,7 @@ public class SwerveGen2 extends LinearOpMode
 
                 if (!upDown) {
                     extensionWrist.setPosition(robot.WRIST_DROP);//upPos
+                    turret.setPosition(robot.TURRET_MIDDLE);
                     intake.setPower(0);
                     upDown = true;
                     out = true;
@@ -292,7 +293,7 @@ public class SwerveGen2 extends LinearOpMode
                     intake.setPower(0);
                     out = false;
                     in = true;
-                    extensionWrist.setPosition(.5);
+                    extensionWrist.setPosition(.2);
 
 
                 }
