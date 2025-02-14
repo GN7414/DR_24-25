@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.Gen2.StateAuto;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
-
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -11,7 +9,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Gen2.robotHardwarePinPoint;
-import org.firstinspires.ftc.teamcode.robotHardware;
 
 @Autonomous(name="BucketSideAuto")
 public class BucketsideAuto extends LinearOpMode {
@@ -65,12 +62,17 @@ public class BucketsideAuto extends LinearOpMode {
         }
 
 
+        preloadedSamplePlace(robot);
+
+        firstSamplePickup(robot);
+
+        firstSamplePlace(robot);
 
 
     }
-    public void firstPlace(robotHardwarePinPoint robot){
+    public void preloadedSamplePlace(robotHardwarePinPoint robot){
 
-        robot.changeAccuracy(0,0);
+        robot.changeAccuracy(2,4);
         robot.changeSpeed(0.75,0.75);
 
         double x = 0;
@@ -103,26 +105,80 @@ public class BucketsideAuto extends LinearOpMode {
         robot.changeAccuracy(0,0);
         robot.changeSpeed(0.75,0.75);
 
+        bucketArm.setPosition(robot.BUCKET_ARM_REST);
+        bucketWrist.setPosition(robot.BUCKET_WRIST_REST);
+
+        slidesR.setTargetPosition(100);
+        slidesR.setPower(1);
+        slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slidesL.setTargetPosition(100);
+        slidesL.setPower(1);
+        slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        robot.wait(500, robot.odometers);
+
+        horizontalExtension.setPosition(0);
+        extensionWrist.setPosition(robot.WRIST_PICKUP);
+        turret.setPosition(robot.TURRET_LEFT);
+        intake.setPower(-1);
+
+        robot.wait(750,robot.odometers);
+
+        turret.setPosition(robot.TURRET_MIDDLE);
+
+        robot.wait(150,robot.odometers);
+
+        horizontalExtension.setPosition(0);
+
+        robot.wait(200,robot.odometers);
+
+        extensionWrist.setPosition(robot.WRIST_DROP);
+
+        robot.wait(300,robot.odometers);
+
+        intake.setPower(-1);
+
+        robot.wait(500,robot.odometers);
+    }
+    public void firstSamplePlace(robotHardwarePinPoint robot){
+
+        robot.changeAccuracy(2,4);
+        robot.changeSpeed(0.75,0.75);
+
         double x = 0;
         double y = 0;
         double finalAngle = Math.toRadians(0);
+
         while(Math.abs(x-robot.GlobalX) > robot.moveAccuracy || Math.abs(y-robot.GlobalY) > robot.moveAccuracy || Math.abs(robot.angleWrapRad(finalAngle - robot.GlobalHeading)) > robot.angleAccuracy) {
 
             robot.goToPosSingle(x, y, finalAngle, Math.toRadians(0));
 
 
-            slidesR.setTargetPosition(100);
+            slidesR.setTargetPosition(2200);
             slidesR.setPower(1);
             slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            slidesL.setTargetPosition(100);
+            slidesL.setTargetPosition(2200);
             slidesL.setPower(1);
             slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         }
-        robot.wait(500, robot.odometers);
+        robot.mecanumDrive(0,0,0,0);
 
-        bucketArm.setPosition(robot.BUCKET_ARM_REST);
-        bucketWrist.setPosition(robot.BUCKET_WRIST_REST);
+        bucketArm.setPosition(robot.BUCKET_ARM_DROP);//dropping
+        bucketWrist.setPosition(robot.BUCKET_WRIST_DROP);//drop
+
+        robot.wait(850, robot.odometers);
+
     }
+    public void secondSamplePickup(robotHardwarePinPoint robot){
+
+
+
+
+
+
+
+    }
+
 
 }

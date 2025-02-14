@@ -96,15 +96,15 @@ public class SwerveGen2 extends LinearOpMode
         //FtcDashboard dashboard = FtcDashboard.getInstance();
         //telemetry = dashboard.getTelemetry();
 
-        //intake.setPower(Position);
+        //intake.setPower(Position);...........
 
         while (!isStarted() && !isStopRequested()) {
             robot.odo.resetPosAndIMU();
             horizontalExtension.setPosition(.1);
             extensionWrist.setPosition(.0);
-            turret.setPosition(.5);
+            turret.setPosition(robot.TURRET_LEFT);
             intake.setPower(0);
-            bucketWrist.setPosition(.9);
+            bucketWrist.setPosition(1);
             bucketArm.setPosition(.125);
             SlidesPosition = 100;
             slidesL.setTargetPosition(SlidesPosition);
@@ -252,7 +252,7 @@ public class SwerveGen2 extends LinearOpMode
 
 
             //inc extension
-            horizontalExtension.setPosition((gamepad1.right_trigger * 0.3)+ 0.115);
+            horizontalExtension.setPosition((gamepad1.right_trigger * 0.3)+ 0.125);
 
             //One button press
             if (gamepad1.left_trigger > .5 && buttonLT) {
@@ -279,9 +279,12 @@ public class SwerveGen2 extends LinearOpMode
                 buttonLT = true;
             }
 
+            if(extensionWrist.getPosition() == 0){
 
+                turret.setPosition(robot.TURRET_MIDDLE);
+            }
 
-            if(upDown && horizontalExtension.getPosition() < .13){
+            if(upDown && horizontalExtension.getPosition() < .13 && bucketArm.getPosition() == .115 && bucketWrist.getPosition() == .9){
                 telemetry.addData("MainThing", true);
                 if (out && in){
                     telemetry.addData("Thing", true);
