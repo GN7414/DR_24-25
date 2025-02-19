@@ -55,6 +55,10 @@ public class SwerveGen2 extends LinearOpMode
     public Servo bucketArm = null;
     public Servo bucketWrist = null;
     public Servo turret = null;
+    public Servo MTConverter = null;
+    public Servo specimenArm = null;
+    public Servo specimenWrist = null;
+    public Servo specimenClaw = null;
 
     public double WristPosition = 0;
     public int SlidesPosition = 0;
@@ -80,6 +84,10 @@ public class SwerveGen2 extends LinearOpMode
         bucketWrist = hardwareMap.servo.get("bucketWrist");
         bucketArm = hardwareMap.servo.get("bucketArm");
         turret = hardwareMap.servo.get("turret");
+        MTConverter = hardwareMap.servo.get("MTConverter");
+        specimenArm = hardwareMap.servo.get("specimenArm");
+        specimenClaw = hardwareMap.servo.get("specimenClaw");
+        specimenWrist = hardwareMap.servo.get("specimenWrist");
 
         slidesR = hardwareMap.dcMotor.get("slidesR");
         slidesL = hardwareMap.dcMotor.get("slidesL");
@@ -100,19 +108,23 @@ public class SwerveGen2 extends LinearOpMode
 
         while (!isStarted() && !isStopRequested()) {
             robot.odo.resetPosAndIMU();
-            horizontalExtension.setPosition(.1);
-            extensionWrist.setPosition(.0);
-            turret.setPosition(robot.TURRET_LEFT);
-            intake.setPower(0);
-            bucketWrist.setPosition(1);
-            bucketArm.setPosition(.125);
-            SlidesPosition = 100;
-            slidesL.setTargetPosition(SlidesPosition);
-            slidesL.setPower(.2);
-            slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            slidesR.setTargetPosition(SlidesPosition);
-            slidesR.setPower(.2);
-            slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            //horizontalExtension.setPosition(1);  //Tuned  -Smaller # is Out
+            //extensionWrist.setPosition(.0);
+            //turret.setPosition(robot.TURRET_LEFT);
+            //intake.setPower(0);  //Tuned
+            //bucketWrist.setPosition(1);  //Tuned
+            //bucketArm.setPosition(.99);  //Tuned
+            //MTConverter.setPosition(1);  //Tuned
+            specimenArm.setPosition(1);
+            //specimenClaw.setPosition(1);
+            //specimenWrist.setPosition(1);
+            //SlidesPosition = 100;
+            //slidesL.setTargetPosition(SlidesPosition);
+            //slidesL.setPower(.2);
+            //slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            //slidesR.setTargetPosition(SlidesPosition);
+            //slidesR.setPower(.2);
+            //slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 
         }
