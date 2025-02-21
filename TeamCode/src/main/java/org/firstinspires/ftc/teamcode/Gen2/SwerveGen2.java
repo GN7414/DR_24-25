@@ -108,23 +108,23 @@ public class SwerveGen2 extends LinearOpMode
 
         while (!isStarted() && !isStopRequested()) {
             robot.odo.resetPosAndIMU();
-            //horizontalExtension.setPosition(1);  //Tuned  -Smaller # is Out
-            //extensionWrist.setPosition(.0);
-            //turret.setPosition(robot.TURRET_LEFT);
+            //horizontalExtension.setPosition(1);  //Tuned   Smaller # is Out
+            extensionWrist.setPosition(0);  //Tuned
+            //turret.setPosition(robot.TURRET_LEFT); //Tuned
             //intake.setPower(0);  //Tuned
-            //bucketWrist.setPosition(1);  //Tuned
-            //bucketArm.setPosition(.99);  //Tuned
+            bucketWrist.setPosition(1);  //Tuned
+            bucketArm.setPosition(.99);  //Tuned
             //MTConverter.setPosition(1);  //Tuned
-            specimenArm.setPosition(1);
-            //specimenClaw.setPosition(1);
-            //specimenWrist.setPosition(1);
-            //SlidesPosition = 100;
-            //slidesL.setTargetPosition(SlidesPosition);
-            //slidesL.setPower(.2);
-            //slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            //slidesR.setTargetPosition(SlidesPosition);
-            //slidesR.setPower(.2);
-            //slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            specimenArm.setPosition(.1);
+            specimenClaw.setPosition(1);
+            specimenWrist.setPosition(.1);
+            SlidesPosition = 100;
+            slidesL.setTargetPosition(SlidesPosition);
+            slidesL.setPower(.2);
+            slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            slidesR.setTargetPosition(SlidesPosition);
+            slidesR.setPower(.2);
+            slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 
         }
@@ -137,273 +137,17 @@ public class SwerveGen2 extends LinearOpMode
             robot.refresh(robot.odometers);
 
 
-            if(gamepad1.b && buttonB){
-                turret.setPosition(robot.TURRET_RIGHT);
-                buttonB = false;
-            }
+            intake(robot);
 
-            if(!gamepad1.b && !buttonB){
-                buttonB = true;
+            turret(robot);
 
-            }
+            bucket(robot);
 
+            controller2(robot);
 
-            if(gamepad1.x && buttonX){
-                turret.setPosition(robot.TURRET_LEFT);
-                buttonX = false;
+            slides(robot);
 
-            }
-
-            if(!gamepad1.x && !buttonX){
-                buttonX = true;
-
-            }
-
-
-            if((gamepad1.y && buttonY)){
-                turret.setPosition(robot.TURRET_MIDDLE);
-                buttonY = false;
-
-            }
-
-            if(!gamepad1.y && !buttonY){
-                buttonY = true;
-
-            }
-
-
-            if(gamepad1.dpad_up && buttonDU && SlidesPosition < robot.SLIDE_TOP){
-                SlidesPosition = 2350;
-                slidesR.setTargetPosition(SlidesPosition);
-                slidesL.setTargetPosition(SlidesPosition);
-                slidesR.setPower(1);
-                slidesL.setPower(1);
-                slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                buttonDU = false;
-                SPEED = .5;
-            }
-
-            if(gamepad1.dpad_left && buttonDL && SlidesPosition < robot.SLIDE_MID){
-                SlidesPosition = 700;
-                slidesR.setTargetPosition(SlidesPosition);
-                slidesL.setTargetPosition(SlidesPosition);
-                slidesR.setPower(1);
-                slidesL.setPower(1);
-                slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                buttonDL = false;
-                SPEED = .5;
-            }
-
-            if(gamepad1.dpad_down && buttonDD && SlidesPosition > 100){
-                SlidesPosition = 10000;
-                slidesR.setTargetPosition(SlidesPosition);
-                slidesL.setTargetPosition(SlidesPosition);
-                slidesR.setPower(1);
-                slidesL.setPower(1);
-                slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                buttonDD = false;
-                SPEED = 1;
-            }
-
-
-            if(!gamepad1.dpad_up && !buttonDU){
-                buttonDU = true;
-            }
-
-            if(!gamepad1.dpad_left && !buttonDL){
-                buttonDL = true;
-            }
-
-            if(!gamepad1.dpad_down && !buttonDD){
-                buttonDD = true;
-            }
-
-
-            if((gamepad1.left_bumper && buttonLB) || timerArray[0] /*Add this to a if to be able to use timer "OR"*/){
-                if (gamepad1.left_bumper/*Boolean to start timer*/ && buttonLB) {
-                    timeArray[0] = robot.currentTime.milliseconds();//must have button press or will break
-                    timerArray[0] = true;
-                }
-
-
-                if (robot.currentTime.milliseconds() > timeArray[0] + 2500) {
-
-                    timerArray[0] = false;//If must be last timer, and must reset boolean when done
-
-                    SlidesPosition = 100;
-                    slidesR.setTargetPosition(SlidesPosition);
-                    slidesL.setTargetPosition(SlidesPosition);
-                    slidesR.setPower(1);
-                    slidesL.setPower(1);
-                    slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                }
-                else if (robot.boolTimer(timeArray[0] + 2000)) {
-                    bucketArm.setPosition(robot.BUCKET_ARM_REST);//going to rest position/down
-                    bucketWrist.setPosition(robot.BUCKET_WRIST_REST);//rest
-                }
-                else{//first thing to happen
-
-                    bucketArm.setPosition(robot.BUCKET_ARM_DROP);//dropping
-                    bucketWrist.setPosition(robot.BUCKET_WRIST_DROP);//drop
-
-                }
-                buttonLB = false;
-                telemetry.addData("booo5100", timeArray);
-                telemetry.addData("currentTime", robot.currentTime.milliseconds());
-            }
-
-            if(!gamepad1.left_bumper && !buttonLB){
-                buttonLB = true;
-            }
-
-
-
-            //inc extension
-            horizontalExtension.setPosition((gamepad1.right_trigger * 0.3)+ 0.125);
-
-            //One button press
-            if (gamepad1.left_trigger > .5 && buttonLT) {
-                buttonLT = false;
-
-                if (!upDown) {
-                    extensionWrist.setPosition(robot.WRIST_DROP);//upPos
-                    turret.setPosition(robot.TURRET_MIDDLE);
-                    intake.setPower(0);
-                    upDown = true;
-                    out = true;
-                    SPEED = 1;
-
-                }
-                else if (upDown) {
-                    extensionWrist.setPosition(robot.WRIST_PICKUP);//downPos
-                    intake.setPower(-1);
-                    upDown = false;
-                    out = false;
-                    SPEED = .25;
-                }
-            }
-            else if (gamepad1.left_trigger < .5 && !buttonLT) {
-                buttonLT = true;
-            }
-
-            if(extensionWrist.getPosition() == 0){
-
-                turret.setPosition(robot.TURRET_MIDDLE);
-            }
-
-            if(upDown && horizontalExtension.getPosition() < .13 && bucketArm.getPosition() == .115 && bucketWrist.getPosition() == .9){
-                telemetry.addData("MainThing", true);
-                if (out && in){
-                    telemetry.addData("Thing", true);
-                    in = false;
-                    timeArray[1] = robot.currentTime.milliseconds();//must have button press or will break
-                }
-
-                if (robot.boolTimer(timeArray[1] + 1500) ) {
-                    intake.setPower(0);
-                    out = false;
-                    in = true;
-                    extensionWrist.setPosition(.2);
-
-
-                }
-                else if(robot.boolTimer(timeArray[1] + 400) ){
-                    intake.setPower(1);
-
-                }
-                else{//first thing to happen
-                }
-
-            }
-
-            if(gamepad2.dpad_up){
-
-                slidesR.setTargetPosition(2300);
-                slidesL.setTargetPosition(2300);
-                slidesR.setPower(1);
-                slidesL.setPower(1);
-                slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            }
-
-            if(gamepad2.dpad_down){
-
-                slidesR.setTargetPosition(1600);
-                slidesL.setTargetPosition(1600);
-                slidesR.setPower(1);
-                slidesL.setPower(1);
-                slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            }
-
-            if(gamepad2.a && button2A){//slides fine adjust
-
-                SlidesPosition += 100;
-                slidesR.setTargetPosition(SlidesPosition);
-                slidesL.setTargetPosition(SlidesPosition);
-                slidesR.setPower(1);
-                slidesL.setPower(1);
-                slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                button2A = false;
-
-            }
-
-            if(!gamepad2.a && !button2A){
-
-                button2A = true;
-            }
-
-            if(gamepad2.b && button2B){
-
-                SlidesPosition -= 100;
-                slidesR.setTargetPosition(SlidesPosition);
-                slidesL.setTargetPosition(SlidesPosition);
-                slidesR.setPower(1);
-                slidesL.setPower(1);
-                slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                button2B = false;
-
-            }
-
-            if(!gamepad2.b && !button2B){
-
-                button2B = true;
-            }
-
-            if(gamepad2.x && button2X){//resetting slide's encoder
-
-                slidesR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                slidesL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-                button2X = false;
-
-            }
-
-            if(!gamepad2.x && !button2X){
-
-                button2X = true;
-            }
-
-            if((gamepad1.right_bumper && buttonRB)/** || timerArray[1]**/ /*Add this to a if to be able to use timer "OR"*/){
-                intake.setPower(-intake.getPower());
-                buttonRB = false;
-
-            }
-
-            if(!gamepad1.right_bumper && !buttonRB){
-                buttonRB = true;
-            }
+            specimen(robot);
 
             robot.refresh(robot.odometers);
 
@@ -434,9 +178,324 @@ public class SwerveGen2 extends LinearOpMode
 
             telemetry.update();
 
+        }
+    }
 
+    public void intake(robotHardwarePinPoint robot){
 
+        //intake
+
+        if((gamepad1.right_bumper && buttonRB)/** || timerArray[1]**/ /*Add this to a if to be able to use timer "OR"*/){
+            intake.setPower(-intake.getPower());
+            buttonRB = false;
 
         }
+
+        if(!gamepad1.right_bumper && !buttonRB){
+            buttonRB = true;
+        }
+
+        if((gamepad1.right_bumper && buttonRB)/** || timerArray[1]**/ /*Add this to a if to be able to use timer "OR"*/){
+            intake.setPower(-intake.getPower());
+            buttonRB = false;
+
+        }
+
+        if(!gamepad1.right_bumper && !buttonRB){
+            buttonRB = true;
+        }
+
+        if(upDown && horizontalExtension.getPosition() < .13 && bucketArm.getPosition() == .115 && bucketWrist.getPosition() == .9){
+            telemetry.addData("MainThing", true);
+            if (out && in){
+                telemetry.addData("Thing", true);
+                in = false;
+                timeArray[1] = robot.currentTime.milliseconds();//must have button press or will break
+            }
+
+            if (robot.boolTimer(timeArray[1] + 1500) ) {
+                intake.setPower(0);
+                out = false;
+                in = true;
+                extensionWrist.setPosition(.2);
+
+
+            }
+            else if(robot.boolTimer(timeArray[1] + 400) ){
+                intake.setPower(1);
+
+            }
+            else{//first thing to happen
+            }
+        }
+
+        //inc extension
+        horizontalExtension.setPosition((gamepad1.right_trigger * 0.3)+ 0.125);
+
+        //intake up and down
+        if (gamepad1.left_trigger > .5 && buttonLT) {
+            buttonLT = false;
+
+            if (!upDown) {
+                extensionWrist.setPosition(robot.WRIST_DROP);//upPos
+                turret.setPosition(robot.TURRET_MIDDLE);
+                intake.setPower(0);
+                upDown = true;
+                out = true;
+                SPEED = 1;
+
+            }
+            else if (upDown) {
+                extensionWrist.setPosition(robot.WRIST_PICKUP);//downPos
+                intake.setPower(-1);
+                upDown = false;
+                out = false;
+                SPEED = .25;
+            }
+        }
+        else if (gamepad1.left_trigger < .5 && !buttonLT) {
+            buttonLT = true;
+        }
+
+        if(extensionWrist.getPosition() == 0){
+
+            turret.setPosition(robot.TURRET_MIDDLE);
+        }
+
+    }
+    public void turret(robotHardwarePinPoint robot){
+
+
+        if(extensionWrist.getPosition() == 0){
+
+            turret.setPosition(robot.TURRET_MIDDLE);
+        }
+
+        if(gamepad1.b && buttonB){
+            turret.setPosition(robot.TURRET_RIGHT);
+            buttonB = false;
+        }
+
+        if(!gamepad1.b && !buttonB){
+            buttonB = true;
+
+        }
+
+        if(gamepad1.x && buttonX){
+            turret.setPosition(robot.TURRET_LEFT);
+            buttonX = false;
+
+        }
+
+        if(!gamepad1.x && !buttonX){
+            buttonX = true;
+
+        }
+
+
+        if((gamepad1.y && buttonY)){
+            turret.setPosition(robot.TURRET_MIDDLE);
+            buttonY = false;
+
+        }
+
+        if(!gamepad1.y && !buttonY){
+            buttonY = true;
+
+        }
+
+    }
+
+    public void bucket(robotHardwarePinPoint robot){
+
+        if((gamepad1.left_bumper && buttonLB) || timerArray[0] /*Add this to a if to be able to use timer "OR"*/){
+            if (gamepad1.left_bumper/*Boolean to start timer*/ && buttonLB) {
+                timeArray[0] = robot.currentTime.milliseconds();//must have button press or will break
+                timerArray[0] = true;
+            }
+
+
+            if (robot.currentTime.milliseconds() > timeArray[0] + 2500) {
+
+                timerArray[0] = false;//If must be last timer, and must reset boolean when done
+
+                SlidesPosition = 100;
+                slidesR.setTargetPosition(SlidesPosition);
+                slidesL.setTargetPosition(SlidesPosition);
+                slidesR.setPower(1);
+                slidesL.setPower(1);
+                slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            }
+            else if (robot.boolTimer(timeArray[0] + 2000)) {
+                bucketArm.setPosition(robot.BUCKET_ARM_REST);//going to rest position/down
+                bucketWrist.setPosition(robot.BUCKET_WRIST_REST);//rest
+            }
+            else{//first thing to happen
+
+                bucketArm.setPosition(robot.BUCKET_ARM_DROP);//dropping
+                bucketWrist.setPosition(robot.BUCKET_WRIST_DROP);//drop
+
+            }
+            buttonLB = false;
+            telemetry.addData("booo5100", timeArray);
+            telemetry.addData("currentTime", robot.currentTime.milliseconds());
+        }
+
+        if(!gamepad1.left_bumper && !buttonLB){
+            buttonLB = true;
+        }
+
+    }
+    public void controller2(robotHardwarePinPoint robot){
+
+        if(gamepad2.dpad_up){
+
+            slidesR.setTargetPosition(2300);
+            slidesL.setTargetPosition(2300);
+            slidesR.setPower(1);
+            slidesL.setPower(1);
+            slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        }
+
+        if(gamepad2.dpad_down){
+
+            slidesR.setTargetPosition(1600);
+            slidesL.setTargetPosition(1600);
+            slidesR.setPower(1);
+            slidesL.setPower(1);
+            slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        }
+
+        if(gamepad2.a && button2A){//slides fine adjust
+
+            SlidesPosition += 100;
+            slidesR.setTargetPosition(SlidesPosition);
+            slidesL.setTargetPosition(SlidesPosition);
+            slidesR.setPower(1);
+            slidesL.setPower(1);
+            slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            button2A = false;
+
+        }
+
+        if(!gamepad2.a && !button2A){
+
+            button2A = true;
+        }
+
+        if(gamepad2.b && button2B){
+
+            SlidesPosition -= 100;
+            slidesR.setTargetPosition(SlidesPosition);
+            slidesL.setTargetPosition(SlidesPosition);
+            slidesR.setPower(1);
+            slidesL.setPower(1);
+            slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            button2B = false;
+
+        }
+
+        if(!gamepad2.b && !button2B){
+
+            button2B = true;
+        }
+
+        if(gamepad2.x && button2X){//resetting slide's encoder
+
+            slidesR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            slidesL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+            button2X = false;
+
+        }
+
+        if(!gamepad2.x && !button2X){
+
+            button2X = true;
+        }
+
+
+    }
+
+    public void slides(robotHardwarePinPoint robot){
+
+        if(gamepad1.dpad_up && buttonDU && SlidesPosition < robot.SLIDE_TOP){
+            SlidesPosition = 2350;
+            slidesR.setTargetPosition(SlidesPosition);
+            slidesL.setTargetPosition(SlidesPosition);
+            slidesR.setPower(1);
+            slidesL.setPower(1);
+            slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            buttonDU = false;
+            SPEED = .5;
+        }
+
+        if(gamepad1.dpad_left && buttonDL && SlidesPosition < robot.SLIDE_MID){
+            SlidesPosition = 700;
+            slidesR.setTargetPosition(SlidesPosition);
+            slidesL.setTargetPosition(SlidesPosition);
+            slidesR.setPower(1);
+            slidesL.setPower(1);
+            slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            buttonDL = false;
+            SPEED = .5;
+        }
+
+        if(gamepad1.dpad_down && buttonDD && SlidesPosition > 100){
+            SlidesPosition = 10000;
+            slidesR.setTargetPosition(SlidesPosition);
+            slidesL.setTargetPosition(SlidesPosition);
+            slidesR.setPower(1);
+            slidesL.setPower(1);
+            slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            buttonDD = false;
+            SPEED = 1;
+        }
+
+
+        if(!gamepad1.dpad_up && !buttonDU){
+            buttonDU = true;
+        }
+
+        if(!gamepad1.dpad_left && !buttonDL){
+            buttonDL = true;
+        }
+
+        if(!gamepad1.dpad_down && !buttonDD){
+            buttonDD = true;
+        }
+
+    }
+    public void specimen(robotHardwarePinPoint robot){
+
+        //Hanging the specimen
+        if(gamepad1.a && buttonA){
+
+            specimenArm.setPosition(robot.SPECIMEN_ARM_PLACE);
+            specimenWrist.setPosition(robot.SPECIMEN_WRIST_PLACE);
+
+            buttonA = false;
+
+        }
+
+        if(!gamepad1.a && !buttonA){
+            buttonA = true;
+
+        }
+
+
     }
 }
