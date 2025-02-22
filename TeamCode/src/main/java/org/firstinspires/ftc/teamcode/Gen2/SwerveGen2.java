@@ -39,6 +39,10 @@ public class SwerveGen2 extends LinearOpMode
     public boolean button2A = true;
     public boolean button2B = true;
     public boolean button2X = true;
+    public boolean button2RT = true;
+    public boolean button2LT = true;
+
+
     public boolean upDown = false;
     public boolean out = false;
     public boolean in = true;
@@ -110,7 +114,7 @@ public class SwerveGen2 extends LinearOpMode
             robot.odo.resetPosAndIMU();
             //horizontalExtension.setPosition(1);  //Tuned   Smaller # is Out
             extensionWrist.setPosition(0);  //Tuned
-            //turret.setPosition(robot.TURRET_LEFT); //Tuned
+            turret.setPosition(robot.TURRET_LEFT); //Tuned
             //intake.setPower(0);  //Tuned
             bucketWrist.setPosition(1);  //Tuned
             bucketArm.setPosition(.99);  //Tuned
@@ -118,7 +122,7 @@ public class SwerveGen2 extends LinearOpMode
             specimenArm.setPosition(.1);
             specimenClaw.setPosition(1);
             specimenWrist.setPosition(.1);
-            SlidesPosition = 100;
+            SlidesPosition = (int) robot.SLIDE_INIT;
             slidesL.setTargetPosition(SlidesPosition);
             slidesL.setPower(.2);
             slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -147,7 +151,7 @@ public class SwerveGen2 extends LinearOpMode
 
             slides(robot);
 
-            specimen(robot);
+            //specimen(robot);
 
             robot.refresh(robot.odometers);
 
@@ -195,15 +199,6 @@ public class SwerveGen2 extends LinearOpMode
             buttonRB = true;
         }
 
-        if((gamepad1.right_bumper && buttonRB)/** || timerArray[1]**/ /*Add this to a if to be able to use timer "OR"*/){
-            intake.setPower(-intake.getPower());
-            buttonRB = false;
-
-        }
-
-        if(!gamepad1.right_bumper && !buttonRB){
-            buttonRB = true;
-        }
 
         if(upDown && horizontalExtension.getPosition() < .13 && bucketArm.getPosition() == .115 && bucketWrist.getPosition() == .9){
             telemetry.addData("MainThing", true);
@@ -257,19 +252,14 @@ public class SwerveGen2 extends LinearOpMode
             buttonLT = true;
         }
 
-        if(extensionWrist.getPosition() == 0){
-
-            turret.setPosition(robot.TURRET_MIDDLE);
-        }
-
     }
     public void turret(robotHardwarePinPoint robot){
 
 
-        if(extensionWrist.getPosition() == 0){
+       //if(extensionWrist.getPosition() == 0){
 
-            turret.setPosition(robot.TURRET_MIDDLE);
-        }
+       //    turret.setPosition(robot.TURRET_MIDDLE);
+       //}
 
         if(gamepad1.b && buttonB){
             turret.setPosition(robot.TURRET_RIGHT);
@@ -423,6 +413,64 @@ public class SwerveGen2 extends LinearOpMode
 
             button2X = true;
         }
+        // Pick up and place specimen
+        if((gamepad2.right_trigger >.5 && button2RT) || timerArray[12] /*Add this to a if to be able to use timer "OR"*/){
+            if (gamepad2.right_trigger >.5/*Boolean to start timer*/ && button2RT) {
+                timeArray[12] = robot.currentTime.milliseconds();//must have button press or will break
+                timerArray[12] = true;
+            }
+
+
+            if (robot.currentTime.milliseconds() > timeArray[12] + 2500) {
+
+                timerArray[12] = false;//If must be last timer, and must reset boolean when done
+
+                specimenArm.setPosition(robot.SPECIMEN_ARM_PLACE);
+                specimenWrist.setPosition(robot.SPECIMEN_WRIST_PLACE);
+
+
+            }
+            else if (robot.boolTimer(timeArray[12] + 2000)) {
+                SlidesPosition = 1500; //Position Not Correct
+                slidesR.setTargetPosition(SlidesPosition);
+                slidesL.setTargetPosition(SlidesPosition);
+                slidesR.setPower(1);
+                slidesL.setPower(1);
+                slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            }
+            else{//first thing to happen
+                specimenClaw.setPosition(1);
+            }
+
+            button2RT = false;
+
+        }
+
+        if(gamepad2.right_trigger <.5 && !button2RT){
+            button2RT = true;
+        }
+        //Reset Specimen
+        if(gamepad2.left_trigger > .5 && button2LT){
+
+            specimenArm.setPosition(.1);
+            specimenClaw.setPosition(.5);
+            specimenWrist.setPosition(.1);
+
+            SlidesPosition = (int)robot.SLIDE_INIT;
+            slidesR.setTargetPosition(SlidesPosition);
+            slidesL.setTargetPosition(SlidesPosition);
+            slidesR.setPower(1);
+            slidesL.setPower(1);
+            slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            button2LT = false;
+        }
+
+        if(gamepad2.left_trigger <.5 && !button2LT){
+            button2LT = true;
+        }
 
 
     }
@@ -430,7 +478,7 @@ public class SwerveGen2 extends LinearOpMode
     public void slides(robotHardwarePinPoint robot){
 
         if(gamepad1.dpad_up && buttonDU && SlidesPosition < robot.SLIDE_TOP){
-            SlidesPosition = 2350;
+            SlidesPosition = (int) robot.SLIDE_TOP;
             slidesR.setTargetPosition(SlidesPosition);
             slidesL.setTargetPosition(SlidesPosition);
             slidesR.setPower(1);
@@ -442,7 +490,7 @@ public class SwerveGen2 extends LinearOpMode
         }
 
         if(gamepad1.dpad_left && buttonDL && SlidesPosition < robot.SLIDE_MID){
-            SlidesPosition = 700;
+            SlidesPosition = (int) robot.SLIDE_MID;
             slidesR.setTargetPosition(SlidesPosition);
             slidesL.setTargetPosition(SlidesPosition);
             slidesR.setPower(1);
@@ -454,7 +502,7 @@ public class SwerveGen2 extends LinearOpMode
         }
 
         if(gamepad1.dpad_down && buttonDD && SlidesPosition > 100){
-            SlidesPosition = 10000;
+            SlidesPosition = (int) robot.SLIDE_INIT;
             slidesR.setTargetPosition(SlidesPosition);
             slidesL.setTargetPosition(SlidesPosition);
             slidesR.setPower(1);

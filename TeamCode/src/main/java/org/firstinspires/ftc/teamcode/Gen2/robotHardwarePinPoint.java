@@ -124,15 +124,16 @@ public class robotHardwarePinPoint extends LinearOpMode
     public final int ARM_MID = 550;
     public final int ARM_LOW = 620;
 
-    public final double SLIDE_TOP = 2250;
-    public final double SLIDE_MID = 500;
+    public final double SLIDE_TOP = 2350;
+    public final double SLIDE_MID = 700;
+    public final double SLIDE_INIT = 100;
 
     public final double WRIST_DROP = 0;
     public final double WRIST_PICKUP = 0.65;
 
-    public final double TURRET_RIGHT = 0.3;
+    public final double TURRET_RIGHT = 0.25;
     public final double TURRET_MIDDLE = 0.5;
-    public final double TURRET_LEFT = 0.7;
+    public final double TURRET_LEFT = 0.8;
 
     public final double BUCKET_ARM_DROP = .2;
     public final double BUCKET_ARM_REST = .99;
