@@ -24,6 +24,7 @@ import com.qualcomm.robotcore.util.Range;
 @Config //We need this for Dashboard to change variables
 public class robotHardware extends LinearOpMode
 {
+
     //FtcDashboard dashboard = FtcDashboard.getInstance();
     //drive motors
     public DcMotor motorRF = null;

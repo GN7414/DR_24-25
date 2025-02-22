@@ -23,6 +23,8 @@ public class SwerveGen2 extends LinearOpMode
 {
     public DcMotor slidesR = null;
     public DcMotor slidesL = null;
+    public DcMotor horizontalExtension = null;
+    public DcMotor motorMTConverter = null;
 
     public boolean buttonY = true;
     public boolean buttonX = true;
@@ -46,16 +48,18 @@ public class SwerveGen2 extends LinearOpMode
     public boolean upDown = false;
     public boolean out = false;
     public boolean in = true;
+    public boolean converter = false;
     public boolean B = false;
     public boolean Y = false;
     public boolean X = false;
+
+    public int MTCoffset = 0;
 
     public boolean[] timerArray = new boolean[20];
 
 
     public Servo extensionWrist = null;
     public CRServo intake = null;
-    public Servo horizontalExtension = null;
     public Servo bucketArm = null;
     public Servo bucketWrist = null;
     public Servo turret = null;
@@ -84,7 +88,7 @@ public class SwerveGen2 extends LinearOpMode
 
         intake = hardwareMap.crservo.get("intake");
         extensionWrist = hardwareMap.servo.get("extensionWrist");
-        horizontalExtension = hardwareMap.servo.get("horizontalExtension");
+
         bucketWrist = hardwareMap.servo.get("bucketWrist");
         bucketArm = hardwareMap.servo.get("bucketArm");
         turret = hardwareMap.servo.get("turret");
@@ -95,15 +99,23 @@ public class SwerveGen2 extends LinearOpMode
 
         slidesR = hardwareMap.dcMotor.get("slidesR");
         slidesL = hardwareMap.dcMotor.get("slidesL");
+        motorMTConverter = hardwareMap.dcMotor.get("motorMTConverter");
+        horizontalExtension = hardwareMap.dcMotor.get("horizontalExtension");
 
+        horizontalExtension.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorMTConverter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         slidesR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         slidesL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        horizontalExtension.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorMTConverter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slidesR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slidesL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         //slidesR.setDirection(DcMotorSimple.Direction.REVERSE);
-         slidesL.setDirection(DcMotorSimple.Direction.REVERSE);
+        slidesL.setDirection(DcMotorSimple.Direction.REVERSE);
+        horizontalExtension.setDirection(DcMotorSimple.Direction.REVERSE);
+        motorMTConverter.setDirection(DcMotorSimple.Direction.REVERSE);
 
         //FtcDashboard dashboard = FtcDashboard.getInstance();
         //telemetry = dashboard.getTelemetry();
@@ -112,16 +124,16 @@ public class SwerveGen2 extends LinearOpMode
 
         while (!isStarted() && !isStopRequested()) {
             robot.odo.resetPosAndIMU();
-            //horizontalExtension.setPosition(1);  //Tuned   Smaller # is Out
             extensionWrist.setPosition(0);  //Tuned
             turret.setPosition(robot.TURRET_LEFT); //Tuned
-            //intake.setPower(0);  //Tuned
+            //intake.setPower(0);          //Tuned
             bucketWrist.setPosition(1);  //Tuned
             bucketArm.setPosition(.99);  //Tuned
-            //MTConverter.setPosition(1);  //Tuned
+            MTConverter.setPosition(1);  //Tuned
             specimenArm.setPosition(.1);
             specimenClaw.setPosition(1);
-            specimenWrist.setPosition(.1);
+            specimenWrist.setPosition(.65);
+
             SlidesPosition = (int) robot.SLIDE_INIT;
             slidesL.setTargetPosition(SlidesPosition);
             slidesL.setPower(.2);
@@ -130,8 +142,22 @@ public class SwerveGen2 extends LinearOpMode
             slidesR.setPower(.2);
             slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+            horizontalExtension.setTargetPosition(0);
+            horizontalExtension.setPower(.5);
+            horizontalExtension.setMode(DcMotor.RunMode.RUN_TO_POSITION);  //Tuned   Smaller # is Out
+
+            //motorMTConverter.setTargetPosition(0);
+            //motorMTConverter.setPower(.2);
+            //motorMTConverter.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
 
         }
+
+
+
+        bucketWrist.setPosition(robot.BUCKET_WRIST_REST);
+        bucketArm.setPosition(robot.BUCKET_ARM_REST);
+
 
         while (opModeIsActive()) {
 
@@ -162,13 +188,13 @@ public class SwerveGen2 extends LinearOpMode
             telemetry.addData("H_Extension", HEPosition);
             telemetry.addData("Slides", SlidesPosition);
             telemetry.addData("extension Wrist", extensionWrist.getPosition());
-            telemetry.addData("Horizontal extension", horizontalExtension.getPosition());
+            telemetry.addData("Horizontal extension", horizontalExtension.getCurrentPosition());
 
             telemetry.addData("X",robot.GlobalX);
             telemetry.addData("Y",robot.GlobalY);
 
-            telemetry.addData("X",robot.odo.getEncoderX());
-            telemetry.addData("Y",robot.odo.getEncoderY());
+            //telemetry.addData("X",robot.odo.getEncoderX());
+            //telemetry.addData("Y",robot.odo.getEncoderY());
 
             telemetry.addData("slideR",slidesR.getCurrentPosition());
             telemetry.addData("slideL",slidesL.getCurrentPosition());
@@ -200,7 +226,7 @@ public class SwerveGen2 extends LinearOpMode
         }
 
 
-        if(upDown && horizontalExtension.getPosition() < .13 && bucketArm.getPosition() == .115 && bucketWrist.getPosition() == .9){
+        if(upDown && horizontalExtension.getCurrentPosition() < .13 && bucketArm.getPosition() == .115 && bucketWrist.getPosition() == .9){
             telemetry.addData("MainThing", true);
             if (out && in){
                 telemetry.addData("Thing", true);
@@ -225,7 +251,18 @@ public class SwerveGen2 extends LinearOpMode
         }
 
         //inc extension
-        horizontalExtension.setPosition((gamepad1.right_trigger * 0.3)+ 0.125);
+        if(!converter){
+
+            horizontalExtension.setTargetPosition((int) (gamepad1.right_trigger * 975) + 250);
+            horizontalExtension.setPower(1);
+            horizontalExtension.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        }
+        else {
+            horizontalExtension.setTargetPosition(0);
+            horizontalExtension.setPower(1);
+            horizontalExtension.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        }
 
         //intake up and down
         if (gamepad1.left_trigger > .5 && buttonLT) {
@@ -234,7 +271,7 @@ public class SwerveGen2 extends LinearOpMode
             if (!upDown) {
                 extensionWrist.setPosition(robot.WRIST_DROP);//upPos
                 turret.setPosition(robot.TURRET_MIDDLE);
-                intake.setPower(0);
+                intake.setPower(1);
                 upDown = true;
                 out = true;
                 SPEED = 1;
@@ -341,26 +378,58 @@ public class SwerveGen2 extends LinearOpMode
     public void controller2(robotHardwarePinPoint robot){
 
         if(gamepad2.dpad_up){
+            if(converter){
 
-            slidesR.setTargetPosition(2300);
-            slidesL.setTargetPosition(2300);
-            slidesR.setPower(1);
-            slidesL.setPower(1);
+                motorMTConverter.setTargetPosition(5573 - MTCoffset);
+                motorMTConverter.setPower(1);
+                motorMTConverter.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            }
+
+            slidesR.setTargetPosition(1500);
+            slidesL.setTargetPosition(1500);
+            slidesR.setPower(.5);
+            slidesL.setPower(.5);
             slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+        }
+
+        if(gamepad2.dpad_right){
+            intake.setPower(0);
+            bucketWrist.setPosition(1);
+            bucketArm.setPosition(robot.BUCKET_ARM_DROP);
+            MTConverter.setPosition(.8);
+            turret.setPosition(.2);
+
+            specimenArm.setPosition(.1);
+            specimenClaw.setPosition(1);
+            specimenWrist.setPosition(.65);
+
+            MTCoffset = slidesR.getCurrentPosition();
+            converter = true;
         }
 
         if(gamepad2.dpad_down){
 
-            slidesR.setTargetPosition(1600);
-            slidesL.setTargetPosition(1600);
+            if(converter){
+
+                motorMTConverter.setTargetPosition(-MTCoffset);
+                motorMTConverter.setPower(1);
+                motorMTConverter.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            }
+            slidesR.setTargetPosition(0);
+            slidesL.setTargetPosition(0);
             slidesR.setPower(1);
             slidesL.setPower(1);
             slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         }
+
+
+
+
 
         if(gamepad2.a && button2A){//slides fine adjust
 
@@ -421,7 +490,7 @@ public class SwerveGen2 extends LinearOpMode
             }
 
 
-            if (robot.currentTime.milliseconds() > timeArray[12] + 2500) {
+            if (robot.currentTime.milliseconds() > timeArray[12] + 1000) {
 
                 timerArray[12] = false;//If must be last timer, and must reset boolean when done
 
@@ -430,7 +499,7 @@ public class SwerveGen2 extends LinearOpMode
 
 
             }
-            else if (robot.boolTimer(timeArray[12] + 2000)) {
+            else if (robot.boolTimer(timeArray[12] + 500)) {
                 SlidesPosition = 1500; //Position Not Correct
                 slidesR.setTargetPosition(SlidesPosition);
                 slidesL.setTargetPosition(SlidesPosition);
@@ -485,6 +554,12 @@ public class SwerveGen2 extends LinearOpMode
             slidesL.setPower(1);
             slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            specimenWrist.setPosition(robot.SPECIMEN_WRIST_SLIDES);
+
+            intake.setPower(0);
+            extensionWrist.setPosition(.2);
+
             buttonDU = false;
             SPEED = .5;
         }
@@ -497,6 +572,7 @@ public class SwerveGen2 extends LinearOpMode
             slidesL.setPower(1);
             slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            specimenWrist.setPosition(robot.SPECIMEN_WRIST_SLIDES);
             buttonDL = false;
             SPEED = .5;
         }
@@ -509,6 +585,7 @@ public class SwerveGen2 extends LinearOpMode
             slidesL.setPower(1);
             slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            specimenWrist.setPosition(robot.SPECIMEN_WRIST_SLIDES);
             buttonDD = false;
             SPEED = 1;
         }

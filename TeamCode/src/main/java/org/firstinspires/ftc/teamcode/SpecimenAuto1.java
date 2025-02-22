@@ -102,6 +102,7 @@ public class SpecimenAuto1 extends LinearOpMode {
         robot.changeAccuracy(.5, Math.toRadians(1));
         robot.changeSpeed(1, 1);
 
+        //drop off position
         x = -6;
         y = 29.25;
         finalAngle = Math.toRadians(0);
@@ -195,7 +196,7 @@ public class SpecimenAuto1 extends LinearOpMode {
 
         robot.changeAccuracy(1, Math.toRadians(1));
 
-        robot.goToPos(24, 1, Math.toRadians(180), Math.toRadians(90));
+        robot.goToPos(24, 1, Math.toRadians(180), Math.toRadians(90));//pick up
 
         time = robot.timerInit(300);
         while (!robot.boolTimer(time)) {

@@ -12,12 +12,12 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 @Autonomous(name="parkingAuto")
-@Disabled
+//@Disabled
 
 public class parkingAuto extends LinearOpMode {
     public Servo extensionWrist = null;
     public CRServo intake = null;
-    public Servo horizontalExtension = null;
+    //public Servo horizontalExtension = null;
     public Servo bucketArm = null;
     public Servo bucketWrist = null;
 
@@ -42,7 +42,7 @@ public class parkingAuto extends LinearOpMode {
 
         intake = hardwareMap.crservo.get("intake");
         extensionWrist = hardwareMap.servo.get("extensionWrist");
-        horizontalExtension = hardwareMap.servo.get("horizontalExtension");
+        //horizontalExtension = hardwareMap.servo.get("horizontalExtension");
         bucketWrist = hardwareMap.servo.get("bucketWrist");
         bucketArm = hardwareMap.servo.get("bucketArm");
 
@@ -60,15 +60,15 @@ public class parkingAuto extends LinearOpMode {
 
 
         while (!isStarted() && !isStopRequested()) {
-            horizontalExtension.setPosition(.1);
+            //horizontalExtension.setPosition(.1);
             extensionWrist.setPosition(.35);
             intake.setPower(0);
 
         }
 
-        robot.goToPos(0,5,Math.toRadians(0), Math.toRadians(90));
+        robot.goToPos(0,5,Math.toRadians(90), Math.toRadians(0));
 
-        robot.goToPos(30,5,Math.toRadians(0), Math.toRadians(0));
+        //robot.goToPos(30,5,Math.toRadians(0), Math.toRadians(0));
 
 
     }

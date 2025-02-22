@@ -84,6 +84,9 @@ public class BucketsideAuto extends LinearOpMode {
             robot.goToPosSingle(x, y, finalAngle, Math.toRadians(0));
 
 
+
+
+
             slidesR.setTargetPosition(2200);
             slidesR.setPower(1);
             slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);

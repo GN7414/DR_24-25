@@ -129,7 +129,7 @@ public class robotHardwarePinPoint extends LinearOpMode
     public final double SLIDE_INIT = 100;
 
     public final double WRIST_DROP = 0;
-    public final double WRIST_PICKUP = 0.65;
+    public final double WRIST_PICKUP = .65;
 
     public final double TURRET_RIGHT = 0.25;
     public final double TURRET_MIDDLE = 0.5;
@@ -143,6 +143,7 @@ public class robotHardwarePinPoint extends LinearOpMode
 
     public final double SPECIMEN_ARM_PLACE = 0.65;
     public final double SPECIMEN_ARM_PICKUP = .1;
+    public final double SPECIMEN_WRIST_SLIDES = .65;
 
     public final double SPECIMEN_CLAW_CLOSE = 0.1;
     public final double SPECIMEN_CLAW_OPEN = 0.45;
