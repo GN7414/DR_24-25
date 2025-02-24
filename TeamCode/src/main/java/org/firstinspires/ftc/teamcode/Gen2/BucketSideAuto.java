@@ -44,7 +44,6 @@ public class BucketSideAuto extends LinearOpMode
 
         intake = hardwareMap.crservo.get("intake");
         extensionWrist = hardwareMap.servo.get("extensionWrist");
-        horizontalExtension = hardwareMap.servo.get("horizontalExtension");
         bucketWrist = hardwareMap.servo.get("bucketWrist");
         bucketArm = hardwareMap.servo.get("bucketArm");
 

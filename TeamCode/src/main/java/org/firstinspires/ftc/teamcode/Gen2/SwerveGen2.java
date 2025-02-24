@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.RI30HV2;
 import java.util.Locale;
 
 
-@TeleOp(name="SwerveGen2")
+@TeleOp(name="TeleopGen2USETHISONE")
 //@Disabled
 
 public class SwerveGen2 extends LinearOpMode
@@ -75,7 +75,7 @@ public class SwerveGen2 extends LinearOpMode
     public double HEPosition =.1;
     public double APosition = .1;
     public double AWPosition = .35;
-    public double SPEED = .5;
+    public double SPEED = .75;
 
     double[] timeArray = new double[20];
 
@@ -157,12 +157,14 @@ public class SwerveGen2 extends LinearOpMode
 
         bucketWrist.setPosition(robot.BUCKET_WRIST_REST);
         bucketArm.setPosition(robot.BUCKET_ARM_REST);
+        turret.setPosition(robot.TURRET_MIDDLE);
+
 
 
         while (opModeIsActive()) {
 
-            robot.mecanumDrive(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, SPEED); //normal people
-            //robot.mecanumDrive(gamepad1.right_stick_y, -gamepad1.right_stick_x, -gamepad1.left_stick_x, SPEED); //nolan
+            //robot.mecanumDrive(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, SPEED); //normal people
+            robot.mecanumDrive(gamepad1.right_stick_y, -gamepad1.right_stick_x, -gamepad1.left_stick_x, SPEED); //nolan
 
             robot.refresh(robot.odometers);
 
@@ -215,7 +217,7 @@ public class SwerveGen2 extends LinearOpMode
 
         //intake
 
-        if((gamepad1.right_bumper && buttonRB)/** || timerArray[1]**/ /*Add this to a if to be able to use timer "OR"*/){
+        if((gamepad1.right_bumper && buttonRB)/* || timerArray[1]**/ /*Add this to a if to be able to use timer "OR"*/){
             intake.setPower(-intake.getPower());
             buttonRB = false;
 
@@ -398,7 +400,7 @@ public class SwerveGen2 extends LinearOpMode
         if(gamepad2.dpad_right){
             intake.setPower(0);
             bucketWrist.setPosition(1);
-            bucketArm.setPosition(robot.BUCKET_ARM_DROP);
+            bucketArm.setPosition(.45);
             MTConverter.setPosition(.8);
             turret.setPosition(.2);
 

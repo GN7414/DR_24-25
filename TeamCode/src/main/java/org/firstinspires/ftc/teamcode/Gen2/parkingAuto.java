@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 @Autonomous(name="parkingAuto")
-//@Disabled
+@Disabled
 
 public class parkingAuto extends LinearOpMode {
     public Servo extensionWrist = null;
