@@ -28,22 +28,31 @@ public class SwerveGen2 extends LinearOpMode
 
     public boolean buttonY = true;
     public boolean buttonX = true;
-    public boolean buttonLB = true;
-    public boolean buttonRB = true;
-    public boolean buttonDR = true;
-    public boolean buttonDL = true;
     public boolean buttonA = true;
     public boolean buttonB = true;
+    public boolean buttonLB = true;
+    public boolean buttonLT = true;
+    public boolean buttonRB = true;
+    public boolean buttonRT = true;
+    public boolean buttonDR = true;
+    public boolean buttonDL = true;
     public boolean buttonDU = true;
     public boolean buttonDD = true;
-    public boolean buttonRT = true;
-    public boolean buttonLT = true;
+
+
+
+    public boolean button2Y = true;
+    public boolean button2X = true;
     public boolean button2A = true;
     public boolean button2B = true;
-    public boolean button2X = true;
-    public boolean button2RT = true;
+    public boolean button2LB = true;
     public boolean button2LT = true;
-
+    public boolean button2RB = true;
+    public boolean button2RT = true;
+    public boolean button2DR = true;
+    public boolean button2DL = true;
+    public boolean button2DU = true;
+    public boolean button2DD = true;
 
     public boolean upDown = false;
     public boolean out = false;
@@ -171,8 +180,6 @@ public class SwerveGen2 extends LinearOpMode
 
             intake(robot);
 
-            turret(robot);
-
             bucket(robot);
 
             controller2(robot);
@@ -292,48 +299,6 @@ public class SwerveGen2 extends LinearOpMode
         }
 
     }
-    public void turret(robotHardwarePinPoint robot){
-
-
-       //if(extensionWrist.getPosition() == 0){
-
-       //    turret.setPosition(robot.TURRET_MIDDLE);
-       //}
-
-        if(gamepad1.b && buttonB){
-            turret.setPosition(robot.TURRET_RIGHT);
-            buttonB = false;
-        }
-
-        if(!gamepad1.b && !buttonB){
-            buttonB = true;
-
-        }
-
-        if(gamepad1.x && buttonX){
-            turret.setPosition(robot.TURRET_LEFT);
-            buttonX = false;
-
-        }
-
-        if(!gamepad1.x && !buttonX){
-            buttonX = true;
-
-        }
-
-
-        if((gamepad1.y && buttonY)){
-            turret.setPosition(robot.TURRET_MIDDLE);
-            buttonY = false;
-
-        }
-
-        if(!gamepad1.y && !buttonY){
-            buttonY = true;
-
-        }
-
-    }
 
     public void bucket(robotHardwarePinPoint robot){
 
@@ -379,7 +344,40 @@ public class SwerveGen2 extends LinearOpMode
     }
     public void controller2(robotHardwarePinPoint robot){
 
-        if(gamepad2.dpad_up){
+        if(gamepad2.dpad_right && button2DR){
+            turret.setPosition(robot.TURRET_RIGHT);
+            button2DR = false;
+        }
+
+        if(!gamepad2.dpad_right && !button2DR){
+            button2DR = true;
+
+        }
+
+        if(gamepad2.dpad_left && button2DL){
+            turret.setPosition(robot.TURRET_LEFT);
+            button2DL = false;
+
+        }
+
+        if(!gamepad2.dpad_left && !button2DL){
+            button2DL = true;
+
+        }
+
+
+        if((gamepad2.dpad_up && button2DU)){
+            turret.setPosition(robot.TURRET_MIDDLE);
+            button2DU = false;
+
+        }
+
+        if(!gamepad2.dpad_up && !button2DU){
+            button2DU = true;
+
+        }
+
+        if(gamepad2.y){
             if(converter){
 
                 motorMTConverter.setTargetPosition(5573 - MTCoffset);
@@ -397,7 +395,7 @@ public class SwerveGen2 extends LinearOpMode
 
         }
 
-        if(gamepad2.dpad_right){
+        if(gamepad2.b){
             intake.setPower(0);
             bucketWrist.setPosition(1);
             bucketArm.setPosition(.45);
@@ -412,7 +410,7 @@ public class SwerveGen2 extends LinearOpMode
             converter = true;
         }
 
-        if(gamepad2.dpad_down){
+        if(gamepad2.a){
 
             if(converter){
 
@@ -433,7 +431,27 @@ public class SwerveGen2 extends LinearOpMode
 
 
 
-        if(gamepad2.a && button2A){//slides fine adjust
+        //manual reset
+        if(gamepad2.left_bumper && button2LB){//slides fine adjust
+
+            SlidesPosition -= 100;
+            slidesR.setTargetPosition(SlidesPosition);
+            slidesL.setTargetPosition(SlidesPosition);
+            slidesR.setPower(1);
+            slidesL.setPower(1);
+            slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            button2LB = false;
+
+        }
+
+        if(!gamepad2.left_bumper && !button2LB){
+
+            button2LB = true;
+        }
+
+        if(gamepad2.right_bumper && button2RB){
 
             SlidesPosition += 100;
             slidesR.setTargetPosition(SlidesPosition);
@@ -442,6 +460,20 @@ public class SwerveGen2 extends LinearOpMode
             slidesL.setPower(1);
             slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            button2RB = false;
+
+        }
+
+        if(!gamepad2.right_bumper && !button2RB){
+
+            button2RB = true;
+        }
+
+        if(gamepad2.a && button2A){//resetting slide's encoder
+
+            slidesR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            slidesL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
             button2A = false;
 
@@ -452,38 +484,11 @@ public class SwerveGen2 extends LinearOpMode
             button2A = true;
         }
 
-        if(gamepad2.b && button2B){
 
-            SlidesPosition -= 100;
-            slidesR.setTargetPosition(SlidesPosition);
-            slidesL.setTargetPosition(SlidesPosition);
-            slidesR.setPower(1);
-            slidesL.setPower(1);
-            slidesR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            slidesL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            button2B = false;
 
-        }
 
-        if(!gamepad2.b && !button2B){
 
-            button2B = true;
-        }
-
-        if(gamepad2.x && button2X){//resetting slide's encoder
-
-            slidesR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            slidesL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-            button2X = false;
-
-        }
-
-        if(!gamepad2.x && !button2X){
-
-            button2X = true;
-        }
         // Pick up and place specimen
         if((gamepad2.right_trigger >.5 && button2RT) || timerArray[12] /*Add this to a if to be able to use timer "OR"*/){
             if (gamepad2.right_trigger >.5/*Boolean to start timer*/ && button2RT) {

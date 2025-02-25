@@ -117,7 +117,7 @@ public class robotHardwarePinPoint extends LinearOpMode
 
     public static boolean timerInitted = false;
 
-    public static ElapsedTime currentTime = new ElapsedTime();
+    public ElapsedTime currentTime = new ElapsedTime();
 
     //bigger number brings the arm higher
     public final int ARM_TOP = 110;
