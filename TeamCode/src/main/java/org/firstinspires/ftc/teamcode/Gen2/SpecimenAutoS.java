@@ -56,9 +56,9 @@ public class SpecimenAutoS extends LinearOpMode {
         robot.resetDriveEncoders();
         robot.odo.resetPosAndIMU();
 
+        //Servos
         intake = hardwareMap.crservo.get("intake");
         extensionWrist = hardwareMap.servo.get("extensionWrist");
-
         bucketWrist = hardwareMap.servo.get("bucketWrist");
         bucketArm = hardwareMap.servo.get("bucketArm");
         turret = hardwareMap.servo.get("turret");
@@ -67,6 +67,7 @@ public class SpecimenAutoS extends LinearOpMode {
         specimenClaw = hardwareMap.servo.get("specimenClaw");
         specimenWrist = hardwareMap.servo.get("specimenWrist");
 
+        //Motors
         slidesR = hardwareMap.dcMotor.get("slidesR");
         slidesL = hardwareMap.dcMotor.get("slidesL");
         motorMTConverter = hardwareMap.dcMotor.get("motorMTConverter");
